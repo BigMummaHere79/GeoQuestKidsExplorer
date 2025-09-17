@@ -10,6 +10,9 @@ import javafx.scene.layout.StackPane;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+// Please note that when you try to run these file in the GitHub action, it will cause an error
+//Unfortunately, this code should be commented out to test the others as Maven have troubles with
+//testing JavaFx - which is understandable
 
 class FlashCardsTest {
     //test test
@@ -29,7 +32,6 @@ class FlashCardsTest {
     @BeforeEach
     void setup() {
         controller = new FlashcardsController();
-
         //Create dummy UI nodes
         regionLabel = new Label();
         backTextLabel = new Label();
@@ -38,7 +40,7 @@ class FlashCardsTest {
         controller.testAttachNodes(regionLabel, imageView, backTextLabel, flashCardStack);
     }
 
-    // tiny 1x1 image using pure JavaFX (no AWT/ImageIO)
+    // tiny 1x1 image using pure JavaFX
     private static Image tinyImage() {
         return new WritableImage(1, 1);
     }

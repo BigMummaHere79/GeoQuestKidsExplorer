@@ -2,9 +2,7 @@ package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.database.DatabaseManager.CountryQuestion;
 import com.example.geoquestkidsexplorer.database.QuizDataSource;
-
-// Import JavaFx controls in order to mimick logic controls
-import javafx.application.Platform;
+import javafx.application.Platform; // Import JavaFx controls in order to mimick logic controls
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -13,10 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+// Please note that when you try to run these file in the GitHub action, it will cause an error
+//Unfortunately, this code should be commented out to test the others as Maven have troubles with
+//testing JavaFx - which is understandable
 // This test uses a mock that is created through mock objects
 //That siimulates the behaviour of real object
 
