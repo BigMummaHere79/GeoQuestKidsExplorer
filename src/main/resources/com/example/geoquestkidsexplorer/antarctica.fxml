@@ -8,77 +8,50 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane prefHeight="800.0" prefWidth="1200.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaController">
-    <!-- Top: Navigation Bar -->
+
+    <!-- Top navigation bar -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0"
+              style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
             <children>
-                <Button mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #60a5fa;
-                     -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
-                     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Continents" />
-                <Label alignment="CENTER_LEFT" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;
-                -fx-padding: 0 0 0 10px;"
+                <Button mnemonicParsing="false" onAction="#backToContinents"
+                        style="-fx-background-color: #60a5fa; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-background-radius: 25;
+                               -fx-padding: 10 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
+                        text="⬅️ Back to Continents" />
+                <Label alignment="CENTER_LEFT"
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;
+                              -fx-padding: 0 0 0 10px;"
                        text="Antarctica" />
                 <Region HBox.hgrow="ALWAYS" />
             </children>
         </HBox>
     </top>
 
-    <!-- Center: Main Content Container -->
+    <!-- Center: Fun Info + button to go home -->
     <center>
-        <VBox alignment="CENTER">
-            <children>
-                <VBox alignment="CENTER" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #ffffff;
-                    -fx-padding: 20px; -fx-background-radius: 20px; -fx-border-radius: 20px;
-                    -fx-effect: dropshadow(three-pass-light, rgba(0,0,0,0.2), 10, 0, 0, 0);">
-                    <children>
-                        <Label text="Choose your Game Mode">
-                            <font>
-                                <Font name="System Bold" size="36.0" />
-                            </font>
-                        </Label>
-                        <HBox alignment="CENTER" spacing="20.0">
-                            <!-- Practice Mode Quiz Tile -->
-                            <VBox fx:id="practiceModeTile" alignment="CENTER" onMouseClicked="#handleGameModeClick"
-                                  prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #a7f3d0;
-                                  -fx-background-radius: 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
-                                <children>
-                                    <Label style="-fx-font-size: 60px;" text="✍️" />
-                                    <Label text="Practice Mode Quiz" textAlignment="CENTER">
-                                        <font>
-                                            <Font name="System Bold" size="24.0" />
-                                        </font>
-                                    </Label>
-                                </children>
-                            </VBox>
+        <VBox alignment="CENTER" spacing="25.0" style="-fx-padding: 50;">
+            <Label text="🎉 Let’s Learn About Antarctica!"
+                   style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+            <Label text="Did you know?" style="-fx-font-size: 24px;"/>
 
+            <!-- Fun fact text; you can swap which fact appears or cycle among them -->
+            <Label text="🌨 Antarctica is technically a desert because it gets very little precipitation."
+                   wrapText="true"
+                   style="-fx-font-size: 20px; -fx-text-alignment: center;"/>
 
-                            <Button text="Flashcards" onAction="#handleFlashcards"
-                                    style="-fx-background-color: #ffcdd2; -fx-background-radius: 10; -fx-padding: 12; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-font-weight: bold;" />
+            <Label text="❄ About 98% of Antarctica is covered by ice, storing around 70% of Earth’s fresh water!"
+                   wrapText="true"
+                   style="-fx-font-size: 20px; -fx-text-alignment: center;"/>
 
-                            <!-- Test Mode Quiz Tile -->
-                            <VBox fx:id="testModeTile" alignment="CENTER" onMouseClicked="#handleGameModeClick" prefHeight="200.0"
-                                  prefWidth="250.0" style="-fx-background-color: #fed7aa; -fx-background-radius: 15;
-                                  -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
-                                <children>
-                                    <Label style="-fx-font-size: 60px;" text="📝" />
-                                    <Label text="Test Mode Quiz" textAlignment="CENTER">
-                                        <font>
-                                            <Font name="System Bold" size="24.0" />
-                                        </font>
-                                    </Label>
-                                </children>
-                            </VBox>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
-                    </VBox.margin>
-                </VBox>
-            </children>
+            <Button text="proceed to next level" onAction="#goHome"
+                    style="-fx-font-size: 18px; -fx-padding: 10 20;"/>
         </VBox>
     </center>
+
 </BorderPane>
