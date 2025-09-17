@@ -22,6 +22,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 20;" spacing="10">
             <children>
+<!--                Back Button-->
                 <Button onAction="#backToGameModes" style="-fx-background-color: #60a5fa; -fx-text-fill: white;
                                -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
                                -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
@@ -31,7 +32,14 @@
                     <Label fx:id="timerLabel" text="00:00" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />
                 </HBox>
 
-                <Region HBox.hgrow="ALWAYS" /> <!-- spacer(empty container) to push labels on the left and right -->
+<!--                Spacer to push title to center-->
+                <Region HBox.hgrow="ALWAYS" />
+
+<!--                Title Label-->
+                <Label fx:id="titleLabel" text="Antarctica Test" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 22px;" />
+
+                <!-- Another spacer to keep score on right -->
+                <Region HBox.hgrow="ALWAYS" />
 
 <!--                Score label on the right-->
                 <HBox alignment="CENTER" style="-fx-background-color: #60a5fa; -fx-background-radius: 25; -fx-padding: 10 15;">
@@ -44,43 +52,57 @@
         </HBox>
     </top>
 
-<!--    Center: Main Quiz Content-->
+    <!-- Center: Main Quiz Content -->
     <center>
         <VBox alignment="CENTER" spacing="20.0" style="-fx-padding:20;">
             <children>
 
-<!--                Question & Image Tile-->
+                <!-- Question & Image Tile -->
                 <VBox alignment="TOP_CENTER" prefWidth="800.0" prefHeight="480" spacing="15.0"
                       style="-fx-background-color: #ffffff; -fx-padding: 20px; -fx-background-radius: 15px;
-                             -fx-border-radius: 15px;">
+                         -fx-border-radius: 15px;">
                     <children>
                         <ImageView fx:id="countryImageView" fitWidth="400" fitHeight="250" preserveRatio="true"
                                    style="-fx-background-color:#f3f4f6; -fx-background-radius:8;" />
 
-                        <!-- Container to push the label to the bottom of white VBox-->
+                        <!-- Container to push the label to the bottom of white VBox -->
                         <Region VBox.vgrow="ALWAYS" />
 
                         <Label fx:id="questionLabel" text="What country is this?" wrapText="true"
                                style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" />
+
                         <VBox fx:id="quizOptionsContainer" spacing="15.0"/>
                     </children>
                 </VBox>
 
-<!--                TextField-->
+                <!-- Feedback goes here -->
+                <Label fx:id="feedbackLabel" text="" wrapText="true"
+                       style="-fx-text-fill: #dc2626; -fx-font-size: 18px;" />
+
+                <!-- TextField -->
                 <VBox alignment="TOP_CENTER" prefWidth="800.0" prefHeight="200.0" spacing="10.0"
                       style="-fx-background-color: #e0e0e0; -fx-padding: 15px; -fx-background-radius: 15px; -fx-border-radius: 15px;">
-
-                    <TextField fx:id="answerField" promptText="Type country name..." prefWidth="400" prefHeight="40"/>
-
+                    <children>
+                        <TextField fx:id="answerField" promptText="Type your answer.." prefWidth="400" prefHeight="50"/>
+                    </children>
                 </VBox>
 
-<!--                Next Question Button-->
-                <Button fx:id="nextQuestionButton" onAction="#nextQuestion" prefWidth="200.0" style="-fx-background-color: #4caf50;
-                            -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 5px;"
-                        text="Next Question" visible="false" />
+                <!-- Submit + Next Question buttons -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <!-- Submit Button -->
+                        <Button text="Submit" onAction="#handleSubmit">
+                            <HBox.margin>
+                                <Insets left="8"/>
+                            </HBox.margin>
+                        </Button>
+
+                        <!-- Next Question Button -->
+                        <Button fx:id="nextQuestionButton" text="Next Question" onAction="#nextQuestion"/>
+                    </children>
+                </HBox>
 
             </children>
         </VBox>
     </center>
-
 </BorderPane>

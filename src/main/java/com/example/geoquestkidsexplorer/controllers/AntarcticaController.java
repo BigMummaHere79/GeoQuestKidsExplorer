@@ -59,11 +59,50 @@ public class AntarcticaController {
      * @param event The event that triggered the action.
      * @throws IOException If the FXML file cannot be loaded.
      */
+//    private void loadScene(String fxmlPath, Event event) throws IOException {
+//        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+//        Scene scene = new Scene(root);
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        stage.setScene(scene);
+//        stage.show();
+//    }
+
+    //Changed the loadScene for now, to behave like Aaliyah's OpenQuiz
     private void loadScene(String fxmlPath, Event event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testModeAntarctica.fxml"));
+        Parent root = loader.load();
+
+        TestModeAntarcticaController controller = loader.getController();
+        controller.setContinent("Antarctica"); // this triggers nextQuestion()
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    //To open testPage for now = Aaliyah's code
+    private void openQuiz(Event event, String continent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml")
+        );
+        Parent root = loader.load();
+
+        // Reuse the existing window
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        if (stage.getScene() == null) {
+            stage.setScene(new Scene(root, 800, 600));
+        } else {
+            stage.getScene().setRoot(root);
+        }
+        stage.setTitle(continent + " Quiz");
+
+        // Pass data into the quiz controller (optional setStage if your controller uses it)
+        QuizController controller = loader.getController();
+        try {
+            controller.setStage(stage);   // keep Back actions working if your controller expects a Stage
+        } catch (NoSuchMethodError | Exception ignore) { /* ok if not present */ }
+        controller.setContinent(continent); // loads the first question inside controller
+
         stage.show();
     }
 
