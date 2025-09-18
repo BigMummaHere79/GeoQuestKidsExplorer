@@ -40,70 +40,56 @@ Are there too many failed attempts? */
 //Note to self:
 //I just want to test the login logic directly not it's UI, thus have to add another method in login controller
 
-/*
-
-class LoginControllerTest1 {
-
-    //Input Validation
-    //Call exceptions on controllers
-    void CheckInputEmpty(){
-
-    }
-
- //Credential Validation
- void wrongEmail(){
-  LoginController controller = new LoginController();
-  boolean result = controller.handleLogin("wrongEmail@gmail.com", "password123");     //check method for login
-  assertFalse(result, "Login should fail for email that doesn't exist");
-
- }
-
-    void CheckPassword(){
-
-    }
-
-    //Account Status Checks
-    void CheckAccountStatus(){
-
-    }
-
-    void CheckLoginAttempts(){
-
-    }
-
-
-} */
-
-class LoginValidationTest{
+class LoginControllerTest {
     private final LoginController controller = new LoginController();
 
+    //Credential Validation
+//Creating a LoginController object in each method to call the method
+    // for later to have a cleaner design: create a separate class that only handles the login logic.
+    //In this class methods will be static
+
     @Test
-    void testEmptyEmailErrorMessage(){
-        String err = controller.validateLoginInputs("","password");
-        assertEquals("Please enter both email and passwords", err);
+    void emptyEmail(){
+        LoginController controller = new LoginController();
+        boolean result = controller.validateLoginInputs("", "password123");
+        assertFalse(result, "Login should fail for empty email");
+
     }
 
     @Test
-    void testEmptyPasswordErrorMessage(){
-        String err = controller.validateLoginInputs("valid1@domain.com","");
-        assertEquals("Please enter both email and passwords", err);
+    void emptyPassword(){
+        LoginController controller = new LoginController();
+        boolean result = controller.validateLoginInputs("user@gmail.com", "");
+        assertFalse(result, "Login should fail for empty password");
     }
 
     @Test
-    void testWhenBothFieldsAreEmptyMessage(){
-        String err = controller.validateLoginInputs("","");
-        assertEquals("Please enter both email and passwords", err);
+    void wrongEmail(){
+        LoginController controller = new LoginController();
+        boolean result = controller.validateLoginInputs("wrongEmail@gmail.com", "test123");
+        assertFalse(result, "Login should fail for email that doesn't exist in DB");
     }
 
     @Test
-    void testWhenBothInputsAreValid(){
-        String err = controller.validateLoginInputs("email1@domain.com","Password123");
-        assertNull(err);
+    void wrongPassword(){
+        LoginController controller = new LoginController();
+        boolean result = controller.validateLoginInputs("nikki@gmail.com", "Cat432");
     }
 
     @Test
-    void testWhiteSpaceOnlyIsError(){
-        String err = controller.validateLoginInputs(" "," ");
-        assertEquals("Please enter both email and passwords", err);
+    void correctCredentials(){
+        LoginController controller = new LoginController();
+        boolean result = controller.validateLoginInputs("nikki@gmail.com", "test123");
+        assertTrue(result, "Login should succeed with valid credentials");
     }
+//
+//    @Test
+//    void testWhiteSpaceOnlyIsError(){
+//        controller.validateLoginInputs(" "," ");
+//        assertEquals("Please enter both email and passwords");
+//    }
+
+    //AccountStatus
+    //locked, disabled, verified
+    //Too many failed attempts
 }

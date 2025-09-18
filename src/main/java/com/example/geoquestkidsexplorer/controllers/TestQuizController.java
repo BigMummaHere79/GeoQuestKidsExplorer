@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class TestQuizSouthAmericaController {
+public class TestQuizController {
 
 //FXML UI elements
     @FXML public Label timerLabel;

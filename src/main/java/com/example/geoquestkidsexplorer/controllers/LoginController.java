@@ -109,18 +109,6 @@ public class LoginController {
         new Thread(loginTask, "login-task").start();
     }
 
-    //For unit testing --------Login - Tori
-    // Only for tests
-    protected String validateLoginInputs(String email, String password){
-        String mail = (email == null) ? "": email.trim();
-        String pass = (password == null) ? "": password.trim();
-
-        if(mail.isBlank() || pass.isBlank()){
-            return "Please enter both email and passwords";
-        }
-        return null;
-    }
-
     /** After successful login, fetch username & avatar asynchronously, then switch to home. */
     private void loadHomeAsync(ActionEvent event, String email) {
         Task<String[]> userTask = new Task<>() {
@@ -352,13 +340,13 @@ public class LoginController {
 // because the methods currently in this class also handle the UI, JavaFX, but I only need to test the logic part of this controller
 //
 
- //Validates login credentials against the database
+    //Validates login credentials against the database
     public boolean validateLoginInputs(String email, String password){
         if (email == null || email.isBlank() || password == null || password.isBlank()){
             return false;
         }
 
-        //checks if email/passowrd exists in database
+        //checks if email/password exists in database
         return DatabaseManager.validateLogin(email, password);
     }
 
