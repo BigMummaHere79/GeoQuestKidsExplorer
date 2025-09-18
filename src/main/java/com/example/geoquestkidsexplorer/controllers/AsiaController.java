@@ -41,7 +41,7 @@ public class AsiaController {
                 loadScene("/com/example/geoquestkidsexplorer/practicequizoceania.fxml", event);
             } else if ("testModeTile".equals(tileId)) {
                 // Nikki: insert testpage link and call openTestMethod
-                loadScene("/com/example/geoquestkidsexplorer/testModeAntarctica.fxml", event);
+                loadScene("/com/example/geoquestkidsexplorer/testModeSouthAmerica.fxml", event);
                 System.out.println("Test Mode Quiz selected!");
             }
         } catch (IOException e) {
@@ -89,10 +89,10 @@ public class AsiaController {
 //    }
     //Changed the loadScene for now, to behave like Aaliyah's OpenQuiz
     private void loadScene(String fxmlPath, Event event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testModeAntarctica.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testModeSouthAmerica.fxml"));
         Parent root = loader.load();
 
-        TestModeAntarcticaController controller = loader.getController();
+        TestQuizSouthAmericaController controller = loader.getController();
         controller.setContinent("South America"); // this triggers nextQuestion()
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

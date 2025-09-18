@@ -328,4 +328,24 @@ public class LoginController {
     private void clearMessage() {
         if (messageLabel != null) messageLabel.setText("");
     }
+
+
+// ================================
+// Methods for Register Unit Testing - (Nikki)
+// ================================
+// To make unit testing easier, I'm creating methods that only handle the logic aspect of login
+// because the methods currently in this class also handle the UI, JavaFX, but I only need to test the logic part of this controller
+//
+
+ //Validates login credentials against the database
+    public boolean validateLoginInputs(String email, String password){
+        if (email == null || email.isBlank() || password == null || password.isBlank()){
+            return false;
+        }
+
+        //checks if email/passowrd exists in database
+        return DatabaseManager.validateLogin(email, password);
+    }
+
+
 }

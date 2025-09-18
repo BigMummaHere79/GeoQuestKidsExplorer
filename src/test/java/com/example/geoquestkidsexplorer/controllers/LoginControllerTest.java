@@ -3,107 +3,89 @@ package com.example.geoquestkidsexplorer.controllers;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+/*Login Unit Testing
+
+ //Credential Validation
+ //Account Status Checks
+ //Security/Rate Limiting
+ //Optional/Edge Cases
+
+ //Need to test for (Note to self):
+ For each method/stimulation of user input:
+ True outcomes (success cases):
+  Ensures method does what it’s supposed to do in normal scenarios.
+  Confirms that users can actually log in when credentials are valid.
+ False outcomes (failure cases)
+  Ensures code doesn’t allow invalid operations.
+  Prevents security flaws (like letting someone log in with wrong credentials).
+  Confirms that errors/exceptions are handled correctly.
+
+
+// Explanation:
+Focuses on accessing an existing account:
+
+Are all required fields filled?  (similar to registration)
+
+Does the username/email exist?
+
+Does the password match the stored password?
+
+Is the account locked, disabled, or unverified? (an extension)
+
+Are there too many failed attempts?  (an extension) */
+
+// look into: regex
+
+
+//Note to self:
+//I just want to test the login logic directly not it's UI, thus have to add another method in login controller
+
+
+
 class LoginControllerTest {
 
-    // Registration Unit Testing ----------
-    /*
-    No DB Calls
-    * Verify empty fields -> "Please fill in all fields"
-    * Verify Password Mismatch -> "Passwords do not match"
-    * Avatar not chosen -> "Please pick an avatar"
+ //Credential Validation
+//Creating a LoginController object in each method to call the method
+ // for later to have a cleaner design: create a separate class that only handles the login logic.
+ //In this class methods will be static
 
-     Assertions used ---------------
-    * assertEquals = Asserts that the expected value is equal to the actual value
-    * assertNull = Asserts that the object is null
-    */
+ @Test
+ void emptyEmail(){
+  LoginController controller = new LoginController();
+  boolean result = controller.validateLoginInputs("", "password123");
+  assertFalse(result, "Login should fail for empty email");
 
-    private final LoginController controller = new LoginController();
+ }
 
-    // valid username = no error
-    @Test
-    void testValidUsername(){
-        // Calls the public registrationInput from Login controller into error
-        String user = controller.validateRegistrationInputs(
-                "wizard01","wizard01@domain.com","Student","wizard",
-                "wizard","👧 Explorer Girl"
-        );
-        assertNull(user); // Asserts condition is null
-    }
+ @Test
+ void emptyPassword(){
+  LoginController controller = new LoginController();
+  boolean result = controller.validateLoginInputs("user@gmail.com", "");
+  assertFalse(result, "Login should fail for empty password");
+ }
 
-    //Blank username counts as missing field
-    @Test
-    void  testInvalidUsername(){
-        String err = controller.validateRegistrationInputs( "","user@domain.com",
-                "student","pass","pass","👧 Explorer Girl");
-        assertEquals("Username is blank or invalid", err);
-    }
+@Test
+ void wrongEmail(){
+  LoginController controller = new LoginController();
+  boolean result = controller.validateLoginInputs("wrongEmail@gmail.com", "test123");
+  assertFalse(result, "Login should fail for email that doesn't exist in DB");
+ }
 
-    // Valid email with valid everything means no error
-    @Test
-    void testCorrectEmail(){
-        String err = controller.validateRegistrationInputs(
-                "alice","alice@example.com","Student",
-                "pass123","pass123","👦 Explorer Boy"
-        );
-        assertNull(err);
-    }
+ @Test
+ void wrongPassword(){
+  LoginController controller = new LoginController();
+  boolean result = controller.validateLoginInputs("nikki@gmail.com", "Cat432");
+ }
 
-    // Blank email shows missing fields message
-    @Test
-    void testInvalidEmail(){
-            String err = controller.validateRegistrationInputs(
-                    "alice","", "Student",
-                    "pass123","pass123","👦 Explorer Boy"
-            );
-            assertEquals("Email is blank or invalid", err);
-    }
+ @Test
+ void correctCredentials(){
+  LoginController controller = new LoginController();
+  boolean result = controller.validateLoginInputs("nikki@gmail.com", "test123");
+  assertTrue(result, "Login should succeed with valid credentials");
+ }
 
-    // No error shows for correct password matches
-    @Test
-    void testPasswordMatches(){
-        // Calls the public registrationInput from Login controller into error
-        String error = controller.validateRegistrationInputs("alice","a@example.com","Student",
-                "password123","password123","👧 Explorer Girl");
-        assertNull(error);
-    }
-
-    // Shows errors when passwords do not match
-    @Test
-    void showsErrorWhenPasswordsDoNotMatch(){
-        String error = controller.validateRegistrationInputs("alice","a@example.com","Student",
-                "password123","differrent","👧 Explorer Girl");
-        assertEquals("Passwords do not match", error);
-    }
-
-    // Test for Errors when Fields are Blank
-    @Test
-    void showErrorWhenFieldsAreBlank(){
-        // Calls the public registrationInput from Login controller into error
-        String error = controller.validateRegistrationInputs(
-                "","","","","",""
-        );
-        assertEquals("Please fill in all the fields", error);
-    }
-
-    //In the registration, show error when an Avatar is not chosen
-    @Test
-    void showErrorWhenAvatarNotChosen(){
-        String error = controller.validateRegistrationInputs(
-                "bob","b@example.com","Teacher","password123",
-                "password123", ""
-        );
-        assertEquals("Please pick an avatar", error);
-    }
-
-    //Asserts when an object is null when all inputs are valid
-    //If everything is filled in correctly , the system does not complain
-    @Test
-    void returnsNullWhenAllInputsValid(){
-        String error = controller.validateRegistrationInputs(
-                "carol","c@example.com","Teacher","password123",
-                "password123","👦 Explorer Boy"
-        );
-        assertNull(error, "Expected no validation error for valid inputs");
-    }
+ //AccountStatus
+ //locked, disabled, verified
+ //Too many failed attempts
 
 }
