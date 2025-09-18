@@ -5,8 +5,10 @@ import com.example.geoquestkidsexplorer.database.DatabaseManager;
 import com.example.geoquestkidsexplorer.database.QuizDataSource;
 import com.example.geoquestkidsexplorer.database.RealQuizDataSource;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -48,11 +50,11 @@ public class TestQuizController {
     private String currentAnswer;          // country name to check against
     private int totalAsked = 0;
     private int totalCorrect = 0;
-    private int numberOfQuestions = 10;
+    private int questionLimit = 10;
     private Stage stage;                   // optional: for Back
 
     //Timer
-    private int timeSeconds = 10; // 95 seconds countdown
+    private int timeSeconds = 90; // 95 seconds countdown
     private Timeline timeline;
 
     // For testing (This allows unit tests to implement fake UI nodes
@@ -79,16 +81,16 @@ public class TestQuizController {
     }
 
     // TOri - i changed it to protected for unit test, but might need to discuss
-    //
+    //Tweak this to put limit on the number of questions:
     @FXML
-    protected void handleSubmit(ActionEvent e) {
+    protected void handleSubmit(ActionEvent e) throws IOException {
         if (currentAnswer == null || currentAnswer.isBlank()) return;
 
         // Changed it to wire into interface but still calls DatabaseManager via RealQuizData - Tori
         String user = dataSource.normalise(answerField.getText());
         String target = dataSource.normalise(currentAnswer);
 
-        if
+
         if (user.equals(target)) {
             totalCorrect++;
             feedbackLabel.setStyle("-fx-text-fill: #16a34a;");
@@ -98,6 +100,32 @@ public class TestQuizController {
             feedbackLabel.setText("❌ Not quite. It was " + currentAnswer + ".");
         }
         updateScore();
+
+        if (timeSeconds <= 0){
+            endQuiz();
+        }else{
+            if (totalAsked >= questionLimit){
+                // End quiz after a brief pause so user sees feedback
+                feedbackLabel.setText("Congratulations you finished the quiz!");
+                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+                pause.setOnFinished(ev -> {
+                    showSummaryPage();
+                });
+                pause.play();
+            } else {
+                // Show feedback for 1.5 seconds before next question
+                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+                pause.setOnFinished(ev -> nextQuestion());
+                pause.play();
+            }
+
+        }
+
+
+    }
+
+    private void showSummaryPage(){
+
     }
 
     @FXML
@@ -187,15 +215,28 @@ public class TestQuizController {
     }
 
     private void endQuiz() throws IOException {
-        Parent root = FXMLLoader.load(
-                getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml")
-        );
-        Scene scene = new Scene(root);
+        // Show time-up message first
+        feedbackLabel.setText("⏰ You ran out of time!");
+        feedbackLabel.setStyle("-fx-text-fill: #dc2626; -fx-font-size: 18px;");
 
-        //  Use an existing node (timerLabel) to get the current Stage
-        Stage stage = (Stage) timerLabel.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        // Added a pause for user to see message
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(event -> {
+            try {
+                // Load summary page
+                Parent root = FXMLLoader.load(
+                        getClass().getResource("/com/example/geoquestkidsexplorer/antarctica.fxml")
+                );
+                Scene scene = new Scene(root);
+
+                Stage stage = (Stage) feedbackLabel.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        pause.play();
     }
 
 }
