@@ -80,24 +80,24 @@ public class AsiaController {
      * @param event The event that triggered the action.
      * @throws IOException If the FXML file cannot be loaded.
      */
-//    private void loadScene(String fxmlPath, Event event) throws IOException {
-//        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-//        Scene scene = new Scene(root);
-//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-    //Changed the loadScene for now, to behave like Aaliyah's OpenQuiz
     private void loadScene(String fxmlPath, Event event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
-        Parent root = loader.load();
-
-        TestQuizController controller = loader.getController();
-        controller.setContinent("South America"); // this triggers nextQuestion()
-
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+        Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
+        stage.setScene(scene);
         stage.show();
     }
+    //Changed the loadScene for now, to behave like Aaliyah's OpenQuiz
+//    private void loadScene(String fxmlPath, Event event) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
+//        Parent root = loader.load();
+//
+//        TestQuizController controller = loader.getController();
+//        controller.setContinent("South America"); // this triggers nextQuestion()
+//
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        stage.setScene(new Scene(root));
+//        stage.show();
+//    }
 
 }

@@ -95,7 +95,7 @@ public class SouthAmericaController {
         Parent root = loader.load();
 
         TestQuizController controller = loader.getController();
-        controller.setContinent("South America"); // this triggers nextQuestion()
+        //controller.setContinent("South America"); // this triggers nextQuestion()
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
