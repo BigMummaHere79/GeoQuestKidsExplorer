@@ -4,6 +4,8 @@ package com.example.geoquestkidsexplorer.controllers;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
 import com.example.geoquestkidsexplorer.database.QuizDataSource;
 import com.example.geoquestkidsexplorer.database.RealQuizDataSource;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -45,7 +48,12 @@ public class TestQuizController {
     private String currentAnswer;          // country name to check against
     private int totalAsked = 0;
     private int totalCorrect = 0;
+    private int numberOfQuestions = 10;
     private Stage stage;                   // optional: for Back
+
+    //Timer
+    private int timeSeconds = 10; // 95 seconds countdown
+    private Timeline timeline;
 
     // For testing (This allows unit tests to implement fake UI nodes
     // Without FXML or reflection || Package-private
@@ -62,6 +70,7 @@ public class TestQuizController {
         this.continent = continent;
         if (titleLabel != null) titleLabel.setText(continent + " Quiz");
         nextQuestion();
+        startTimer(); //start countdown when test begins
     }
 
     /** Optional: if you want Back button to close the quiz window. */
@@ -70,6 +79,7 @@ public class TestQuizController {
     }
 
     // TOri - i changed it to protected for unit test, but might need to discuss
+    //
     @FXML
     protected void handleSubmit(ActionEvent e) {
         if (currentAnswer == null || currentAnswer.isBlank()) return;
@@ -78,6 +88,7 @@ public class TestQuizController {
         String user = dataSource.normalise(answerField.getText());
         String target = dataSource.normalise(currentAnswer);
 
+        if
         if (user.equals(target)) {
             totalCorrect++;
             feedbackLabel.setStyle("-fx-text-fill: #16a34a;");
@@ -153,5 +164,38 @@ public class TestQuizController {
 
     }
 
+    public void startTimer() {
+        // Initialize label
+        timerLabel.setText("Time: " + timeSeconds + "s");
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timeSeconds--;
+            timerLabel.setText("Time: " + timeSeconds + "s");
+
+            if (timeSeconds <= 0) {
+                timeline.stop();
+                timerLabel.setText("Time's up!");
+                try {
+                    endQuiz(); // go back to homepage
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }));
+        timeline.setCycleCount(timeSeconds); // Run until 0
+        timeline.play();
+    }
+
+    private void endQuiz() throws IOException {
+        Parent root = FXMLLoader.load(
+                getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml")
+        );
+        Scene scene = new Scene(root);
+
+        //  Use an existing node (timerLabel) to get the current Stage
+        Stage stage = (Stage) timerLabel.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }
