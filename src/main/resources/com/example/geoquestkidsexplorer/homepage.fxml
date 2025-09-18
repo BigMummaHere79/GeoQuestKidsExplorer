@@ -89,7 +89,7 @@
                                   prefColumns="3"
                                   style="-fx-padding: 20;">
                             <!-- Antarctica -->
-                            <Button fx:id="btnAntarctica" onAction="#handleAntarcticaClick"
+                            <Button fx:id="btnAntarctica" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"
@@ -112,13 +112,13 @@
                             </Button>
 
                             <!-- Oceania -->
-                            <Button fx:id="btnOceania" onAction="#handleOceaniaClick"
+                            <Button fx:id="btnOceania" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"
                                           prefWidth="220" prefHeight="220"
                                           style="-fx-background-color: #ffcdd2; -fx-background-radius: 10; -fx-padding: 12;
-                         -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+                                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                         <children>
                                             <ImageView fitWidth="180" fitHeight="140" preserveRatio="true" smooth="true" cache="true">
                                                 <image>
@@ -135,7 +135,7 @@
                             </Button>
 
                             <!-- South America -->
-                            <Button fx:id="btnSouthAmerica" onAction="#handleSouthAmericaClick"
+                            <Button fx:id="btnSouthAmerica" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"
@@ -158,7 +158,7 @@
                             </Button>
 
                             <!-- North America -->
-                            <Button fx:id="btnNorthAmerica" onAction="#handleNorthAmericaClick"
+                            <Button fx:id="btnNorthAmerica" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"
@@ -181,7 +181,7 @@
                             </Button>
 
                             <!-- Europe -->
-                            <Button fx:id="btnEurope" onAction="#handleEuropeClick"
+                            <Button fx:id="btnEurope" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"
@@ -204,7 +204,7 @@
                             </Button>
 
                             <!-- Asia -->
-                            <Button fx:id="btnAsia" onAction="#handleAsiaClick"
+                            <Button fx:id="btnAsia" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"
@@ -227,7 +227,7 @@
                             </Button>
 
                             <!-- Africa -->
-                            <Button fx:id="btnAfrica" onAction="#handleAfricaClick"
+                            <Button fx:id="btnAfrica" onAction="#handleContinentClick"
                                     style="-fx-background-color: transparent; -fx-padding: 0;">
                                 <graphic>
                                     <VBox alignment="CENTER" spacing="10"

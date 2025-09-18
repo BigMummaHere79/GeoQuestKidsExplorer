@@ -16,7 +16,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
             <children>
-                <Button mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #60a5fa;
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #60a5fa;
                      -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
                      -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Continents" />
                 <Label alignment="CENTER_LEFT" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;
@@ -52,6 +52,7 @@
                                             <Font name="System Bold" size="24.0" />
                                         </font>
                                     </Label>
+                                    <Label text="Perfect your knowledge with endless questions." textFill="WHITE" />
                                 </children>
                             </VBox>
 
@@ -70,6 +71,7 @@
                                             <Font name="System Bold" size="24.0" />
                                         </font>
                                     </Label>
+                                    <Label text="Challenge yourself with 10 random questions." textFill="WHITE" />
                                 </children>
                             </VBox>
                         </HBox>

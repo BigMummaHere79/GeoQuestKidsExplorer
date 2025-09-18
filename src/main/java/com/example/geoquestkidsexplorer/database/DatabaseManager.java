@@ -389,4 +389,7 @@ public class DatabaseManager {
         }
         return countries; // Returns the list, even if it's empty
     }
+
+
+
 }
