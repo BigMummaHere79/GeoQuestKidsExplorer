@@ -1,18 +1,41 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class OceaniaController {
+/**
+ * Controller for the generic continent game mode page.
+ * This single controller handles all continents, replacing individual controllers like AfricaController, AsiaController, etc.
+ */
+public class ContinentsController {
+
+    @FXML
+    private Label continentLabel;
+    @FXML
+    private Button backButton;
+
+    private String continentName;
+
+    /**
+     * This method is called by the homepage controller to set the continent name.
+     * @param name The name of the continent (e.g., "Africa", "Asia", "Oceania").
+     */
+    public void setContinentName(String name) {
+        this.continentName = name;
+        continentLabel.setText(name); // Assuming you have a label to display the continent name
+        backButton.setText("⬅️ Back to Continents"); // Use a generic back button text
+    }
 
     @FXML
     private void backToContinents(ActionEvent event) {
@@ -27,9 +50,12 @@ public class OceaniaController {
         }
     }
 
+    /**
+     * Handles the click event for the Practice Mode tile.
+     * It loads the generic practice quiz page and passes the current continent name to it.
+     */
     @FXML
     private void handleGameModeClick(MouseEvent event) {
-        // Be robust if a child node inside the tile was clicked
         Node n = (Node) event.getTarget();
         while (n != null && n.getId() == null) n = n.getParent();
         String tileId = (n != null) ? n.getId() : null;
@@ -37,15 +63,13 @@ public class OceaniaController {
             System.out.println("handleGameModeClick: no tile id found");
             return;
         }
+
         try {
             if ("practiceModeTile".equals(tileId)) {
-                //loadScene("/com/example/geoquestkidsexplorer/practicequizoceania.fxml", event);
-                // Now we load the new, generic FXML and pass the continent name
-                openPracticeQuiz(event, "Oceania");
-
+                openPracticeQuiz(event, this.continentName);
             } else if ("testModeTile".equals(tileId)) {
-                // 👉 Open the quiz in the SAME window
-                openQuiz(event, "Oceania");
+                // Similarly, you would open the generic test quiz and pass the continent name.
+                openTestQuiz(event, this.continentName);
             } else {
                 System.out.println("handleGameModeClick: unknown tile id " + tileId);
             }
@@ -67,12 +91,12 @@ public class OceaniaController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Practice Quiz - " + continent);
+        stage.setTitle("Practice Quiz for: " + continent);
         stage.show();
     }
 
 
-    /** Open quiz_view.fxml in the SAME window (no new Stage) */
+    /* Open quiz_view.fxml in the SAME window (no new Stage)
     private void openQuiz(Event event, String continent) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml")
@@ -92,9 +116,26 @@ public class OceaniaController {
         QuizController controller = loader.getController();
         try {
             controller.setStage(stage);   // keep Back actions working if your controller expects a Stage
-        } catch (NoSuchMethodError | Exception ignore) { /* ok if not present */ }
+        } catch (NoSuchMethodError | Exception ignore) { *//* ok if not present *//* }
         controller.setContinent(continent); // loads the first question inside controller
 
+        stage.show();
+    }*/
+
+    /**
+     * Helper method to load the generic quiz page and set the continent.
+     */
+    private void openTestQuiz(Event event, String continentName) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
+        Parent root = loader.load();
+
+        QuizController quizController = loader.getController();
+        quizController.setContinent(continentName);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Quiz - " + continentName);
         stage.show();
     }
 

@@ -1,23 +1,18 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-import com.example.geoquestkidsexplorer.database.DatabaseManager;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HomePageController {
 
@@ -109,81 +104,56 @@ public class HomePageController {
         openQuiz("South America"); // or choose based on the user’s level/last choice
     }
 
-
+    /**
+     * Handles the "click" event for a continent button.
+     * This method now correctly retrieves the continent name from the Label inside the button's graphic.
+     */
     @FXML
-    private void handleOceaniaClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader((getClass().getResource(
-                "/com/example/geoquestkidsexplorer/oceania.fxml")));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
-        stage.show();
+    private void handleContinentClick(ActionEvent event) throws IOException {
+        Button clickedButton = (Button) event.getSource();
+        String continentName = null;
+
+        // Check if the button has a graphic and if it's a VBox
+        if (clickedButton.getGraphic() instanceof VBox graphicBox) {
+            // Iterate through the children of the VBox to find the Label
+            for (Node node : graphicBox.getChildren()) {
+                if (node instanceof Label continentLabel) {
+                    continentName = continentLabel.getText().trim();
+                    break; // Found the label, exit the loop
+                }
+            }
+        }
+
+        // Now, we can proceed with the logic using the extracted name
+        if (continentName != null && !continentName.isEmpty()) {
+            loadGameModePage(event, continentName);
+        } else {
+            System.out.println("Unknown continent clicked: Could not find a text label within the button's graphic.");
+        }
     }
 
-
-    @FXML
-    private void handleAntarcticaClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader((getClass().getResource(
-                "/com/example/geoquestkidsexplorer/antarctica.fxml")));
+    /**
+     * Loads the generic game mode page and passes the continent name to its controller.
+     *
+     * @param event The mouse event that triggered the method.
+     * @param continentName The name of the continent to display.
+     * @throws IOException if the FXML file cannot be loaded.
+     */
+    private void loadGameModePage(ActionEvent event, String continentName) throws IOException {
+        // Load the new generic FXML for the game mode page
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
         Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        // no resize, CSS stays the same
-        stage.getScene().setRoot(root);
-        stage.show();
-    }
 
-    @FXML
-    private void handleAfricaClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader((getClass().getResource(
-                "/com/example/geoquestkidsexplorer/africa.fxml")));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        // no resize, CSS stays the same
-        stage.getScene().setRoot(root);
-        stage.show();
-    }
+        // Get the controller and set the continent name
+        ContinentsController controller = loader.getController();
+        controller.setContinentName(continentName);
 
-    @FXML
-    private void handleAsiaClick(ActionEvent event) throws  IOException {
-        FXMLLoader loader = new FXMLLoader((getClass().getResource(
-                "/com/example/geoquestkidsexplorer/asia.fxml")));
-        Parent root = loader.load();
+        // Switch the scene to the new game mode view
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle(continentName + " Game Modes");
         stage.show();
-    }
-
-    @FXML
-    private void handleSouthAmericaClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader((getClass().getResource(
-                "/com/example/geoquestkidsexplorer/southamerica.fxml")));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
-        stage.show();
-        System.out.println("South America has been clicked");
-    }
-
-    @FXML
-    private void handleNorthAmericaClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader((getClass().getResource(
-            "/com/example/geoquestkidsexplorer/northamerica.fxml" )));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
-        stage.show();
-        System.out.println("North America has been clicked");
-    }
-
-    @FXML
-    private void handleEuropeClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader ((getClass().getResource(
-                "/com/example/geoquestkidsexplorer/europe.fxml")));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
-        stage.show();
-        System.out.println("Europe has been clicked");
     }
 
 }
