@@ -140,18 +140,31 @@ public class HomePageController {
      * @throws IOException if the FXML file cannot be loaded.
      */
     private void loadGameModePage(ActionEvent event, String continentName) throws IOException {
-        // Load the new generic FXML for the game mode page
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
+        // Default continent page
+        String fxml = "/com/example/geoquestkidsexplorer/continentview.fxml";
+
+        // Special case: Antarctica goes to its own file
+        if ("Antarctica".equalsIgnoreCase(continentName)) {
+            fxml = "/com/example/geoquestkidsexplorer/antarctica.fxml";
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
         Parent root = loader.load();
 
-        // Get the controller and set the continent name
-        ContinentsController controller = loader.getController();
-        controller.setContinentName(continentName);
+        // Pass the continent to controllers that accept it (generic or Antarctica-specific)
+        Object ctl = loader.getController();
+        try {
+            ctl.getClass().getMethod("setContinentName", String.class).invoke(ctl, continentName);
+        } catch (NoSuchMethodException ignored) {
+            // Controller doesn't need/accept the continent; that's fine.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // Switch the scene to the new game mode view
+        // Reuse the current window (preserves size)
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        if (stage.getScene() == null) stage.setScene(new Scene(root, 1000, 700));
+        else stage.getScene().setRoot(root);
         stage.setTitle(continentName + " Game Modes");
         stage.show();
     }
