@@ -3,7 +3,7 @@ package com.example.geoquestkidsexplorer.controllers;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-class LoginControllerTest {
+class RegisterValidationTest {
 
     // Registration Unit Testing ----------
     /*

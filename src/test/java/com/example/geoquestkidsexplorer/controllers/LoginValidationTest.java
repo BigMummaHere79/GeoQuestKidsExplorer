@@ -1,7 +1,7 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /*Login Unit Testing
 
@@ -40,36 +40,70 @@ Are there too many failed attempts? */
 //Note to self:
 //I just want to test the login logic directly not it's UI, thus have to add another method in login controller
 
-
+/*
 
 class LoginControllerTest1 {
 
- //Input Validation
- //Call exceptions on controllers
- void CheckInputEmpty(){
+    //Input Validation
+    //Call exceptions on controllers
+    void CheckInputEmpty(){
 
- }
-/*
+    }
+
  //Credential Validation
  void wrongEmail(){
   LoginController controller = new LoginController();
   boolean result = controller.handleLogin("wrongEmail@gmail.com", "password123");     //check method for login
   assertFalse(result, "Login should fail for email that doesn't exist");
 
- }*/
-
- void CheckPassword(){
-
  }
 
- //Account Status Checks
- void CheckAccountStatus(){
+    void CheckPassword(){
 
- }
+    }
 
- void CheckLoginAttempts(){
+    //Account Status Checks
+    void CheckAccountStatus(){
 
- }
+    }
+
+    void CheckLoginAttempts(){
+
+    }
 
 
+} */
+
+class LoginValidationTest{
+    private final LoginController controller = new LoginController();
+
+    @Test
+    void testEmptyEmailErrorMessage(){
+        String err = controller.validateLoginInputs("","password");
+        assertEquals("Please enter both email and passwords", err);
+    }
+
+    @Test
+    void testEmptyPasswordErrorMessage(){
+        String err = controller.validateLoginInputs("valid1@domain.com","");
+        assertEquals("Please enter both email and passwords", err);
+    }
+
+    @Test
+    void testWhenBothFieldsAreEmptyMessage(){
+        String err = controller.validateLoginInputs("","");
+        assertEquals("Please enter both email and passwords", err);
+    }
+
+    @Test
+    void testWhenBothInputsAreValid(){
+        String err = controller.validateLoginInputs("email1@domain.com","Password123");
+        assertNull(err);
+    }
+
+    @Test
+    void testWhiteSpaceOnlyIsError(){
+        String err = controller.validateLoginInputs(" "," ");
+        assertEquals("Please enter both email and passwords", err);
+    }
 }

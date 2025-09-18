@@ -64,15 +64,18 @@ public class LoginController {
     // Login (now async)
     // ===========================
     @FXML
-    private void handleLogin(ActionEvent event) {
+    protected void handleLogin(ActionEvent event) {
         String email = text(loginEmailField);
         String password = text(loginPasswordField);
 
-        if (email.isBlank() || password.isBlank()) {
-            error("Please enter both email and password.");
+        // use validator
+        // Refactoring validateLoginInput into here
+        // Extracting Method
+        String err = validateLoginInputs(email, password);
+        if (err != null){
+            error(err);
             return;
         }
-
         success("Signing you in…");
 
         Task<Boolean> loginTask = new Task<>() {
@@ -104,6 +107,18 @@ public class LoginController {
         });
 
         new Thread(loginTask, "login-task").start();
+    }
+
+    //For unit testing --------Login - Tori
+    // Only for tests
+    protected String validateLoginInputs(String email, String password){
+        String mail = (email == null) ? "": email.trim();
+        String pass = (password == null) ? "": password.trim();
+
+        if(mail.isBlank() || pass.isBlank()){
+            return "Please enter both email and passwords";
+        }
+        return null;
     }
 
     /** After successful login, fetch username & avatar asynchronously, then switch to home. */
