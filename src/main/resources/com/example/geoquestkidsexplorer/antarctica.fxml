@@ -20,11 +20,11 @@
         <HBox alignment="CENTER_LEFT" prefHeight="70.0"
               style="-fx-background-color: #0288D1; -fx-padding: 15 100;">
             <children>
-                <Button mnemonicParsing="false" onAction="#backToContinents"
+                <!--<Button mnemonicParsing="false" onAction="#backToContinents"
                         style="-fx-background-color: #03A9F4; -fx-text-fill: white;
                                -fx-font-weight: bold; -fx-background-radius: 30;
                                -fx-padding: 10 20;"
-                        text="⬅️ Back to Continents" />
+                        text="⬅️ Back to Continents" />-->
                 <Label alignment="CENTER_LEFT"
                        style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 28px;
                               -fx-padding: 0 0 0 15px;"
@@ -78,7 +78,8 @@
                               -fx-padding: 10 20; -fx-background-color: #F3E5F5; -fx-background-radius: 20;"/>
             </StackPane>
 
-            <Button text="Proceed to the Next Level!" onAction="#goHome"
+            <!-- Add more about content here -->
+            <Button fx:id="continueButton" text="Proceed to the Next Level!" onAction="#handleContinueButton"
                     style="-fx-font-size: 20px; -fx-padding: 12 30;
                            -fx-background-color: #0288D1; -fx-text-fill: white;
                            -fx-background-radius: 20;"/>

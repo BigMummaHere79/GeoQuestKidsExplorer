@@ -69,7 +69,8 @@ public class ContinentsController {
                 openPracticeQuiz(event, this.continentName);
             } else if ("testModeTile".equals(tileId)) {
                 // Similarly, you would open the generic test quiz and pass the continent name.
-                openTestQuiz(event, this.continentName);
+                //openTestQuiz(event, this.continentName);
+                System.out.println("Test Mode Quiz has been click! " + tileId);
             } else {
                 System.out.println("handleGameModeClick: unknown tile id " + tileId);
             }
@@ -122,22 +123,6 @@ public class ContinentsController {
         stage.show();
     }*/
 
-    /**
-     * Helper method to load the generic quiz page and set the continent.
-     */
-    private void openTestQuiz(Event event, String continentName) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
-        Parent root = loader.load();
-
-        QuizController quizController = loader.getController();
-        quizController.setContinent(continentName);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Quiz - " + continentName);
-        stage.show();
-    }
 
     // (unchanged) Opens country test page in a new window — not used by quiz branch
     private void openTestPage(String continent, String country) throws IOException {

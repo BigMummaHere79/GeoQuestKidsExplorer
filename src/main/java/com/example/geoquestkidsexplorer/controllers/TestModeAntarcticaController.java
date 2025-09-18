@@ -141,7 +141,7 @@ public class TestModeAntarcticaController {
     @FXML
     private void backToGameModes(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/antarctica.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
             Scene scene = new Scene(root);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

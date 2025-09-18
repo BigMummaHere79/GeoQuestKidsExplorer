@@ -3,7 +3,6 @@ package com.example.geoquestkidsexplorer.database;
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import com.example.geoquestkidsexplorer.models.UserProfile;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,8 +23,8 @@ public class DatabaseManager {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL);
         //Note: Added this for the sidebar navigation icons!
-    }
 
+    }
     // ===========================
     // Init / Schema
     // ===========================
@@ -390,6 +389,6 @@ public class DatabaseManager {
         return countries; // Returns the list, even if it's empty
     }
 
-
+    //---------------------------------------------------------------------------------------------------
 
 }

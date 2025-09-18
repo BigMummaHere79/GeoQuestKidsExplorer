@@ -17,10 +17,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PracticeQuizController {
 
@@ -34,29 +37,38 @@ public class PracticeQuizController {
     @FXML private Label feedbackMessageLabel;
     @FXML private Label funFactLabel;
     @FXML private Button nextQuestionButton;
-    @FXML private Button backButton; // We need this to change the text dynamically
-    @FXML private Label quizWelcomeLabel; // We need this to change the text dynamically
+    @FXML private Button backButton;
+    @FXML private Label quizWelcomeLabel;
+    @FXML private VBox option1Tile, option2Tile, option3Tile, option4Tile;
 
     private String continentName;
     private List<PracticeQuizQuestions> questions = new ArrayList<>();
     private int currentQuestionIndex = 0;
     private int score = 0;
+    private boolean answerChecked = false;
 
-    // This method is now called from the previous controller (e.g., OceaniaController)
+    // Set the number of practice questions to 25 as requested
+    private static final int NUMBER_OF_PRACTICE_QUESTIONS = 25;
+
+    // This method is now called from the previous controller (e.g., AfricaController)
     public void setContinentName(String continent) {
         this.continentName = continent;
-        // Update the hardcoded labels with the correct continent name
+        if (continentName == null || continentName.trim().isEmpty()) {
+            System.err.println("Continent name is null or empty. Skipping quiz load.");
+            quizWelcomeLabel.setText("Error: No continent selected.");
+            return;
+        }
         quizWelcomeLabel.setText("Practice your knowledge with the " + continentName + " Continent!");
         backButton.setText("⬅️ Back to " + continentName + " Game Mode");
-        // Now that we have the continent, load the questions from the database
         loadQuizQuestions();
     }
 
     @FXML
     public void initialize() {
         // The listener is attached once and for all.
+        // It checks if a radio button is selected and handles the answer.
         answerGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !((RadioButton) newValue).isDisable()) {
+            if (newValue != null && !answerChecked) {
                 checkAnswer((RadioButton) newValue);
             }
         });
@@ -66,25 +78,49 @@ public class PracticeQuizController {
     }
 
     private void loadQuizQuestions() {
+        // Ensure the continent name is set before attempting to load questions.
+        if (continentName == null || continentName.isEmpty()) {
+            System.err.println("Continent name is not set. Cannot load practice quiz questions.");
+            questionLabel.setText("No continent selected.");
+            return;
+        }
+
         questions.clear(); // Clear any previous questions
-        final int numberOfQuestions = 25;
-        for (int i = 0; i < numberOfQuestions; i++) {
+
+        // Loop to get the specified number of questions from the database
+        for (int i = 0; i < NUMBER_OF_PRACTICE_QUESTIONS; i++) {
             // This is where we use the dynamic continentName
             PracticeQuizQuestions q = DatabaseManager.getPracticeQuizQuestion(continentName);
             if (q != null) {
                 questions.add(q);
             }
         }
+
+        // If no questions were loaded, display an error and return
+        if (questions.isEmpty()) {
+            questionLabel.setText("No questions found for " + continentName + ". Please check your database.");
+            return;
+        }
+
         loadQuestion();
     }
 
     private void loadQuestion() {
+        answerChecked = false;
         if (currentQuestionIndex < questions.size()) {
             // Re-show radio buttons for the new question
             option1.setVisible(true);
             option2.setVisible(true);
             option3.setVisible(true);
             option4.setVisible(true);
+
+            // Detach radio buttons from the toggle group to prevent selection issues
+            option1.setToggleGroup(null);
+            option2.setToggleGroup(null);
+            option3.setToggleGroup(null);
+            option4.setToggleGroup(null);
+
+            // Re-attach them to the toggle group
             option1.setToggleGroup(answerGroup);
             option2.setToggleGroup(answerGroup);
             option3.setToggleGroup(answerGroup);
@@ -96,7 +132,8 @@ public class PracticeQuizController {
             questionLabel.setText(currentQuestion.questionText());
 
             List<String> options = new ArrayList<>(currentQuestion.getChoices());
-            Collections.shuffle(options);
+            Collections.shuffle(options, ThreadLocalRandom.current());
+
             option1.setText(options.get(0));
             option2.setText(options.get(1));
             option3.setText(options.get(2));
@@ -105,39 +142,16 @@ public class PracticeQuizController {
             resetStyles();
             answerGroup.selectToggle(null);
             disableRadioButtons(false);
-
-            funFactLabel.setText("");
             feedbackContainer.setVisible(false);
             nextQuestionButton.setVisible(false);
         } else {
-            // --- End of Quiz Logic ---
-
-            // Hide the radio buttons and their tiles
-            option1.setVisible(false);
-            option2.setVisible(false);
-            option3.setVisible(false);
-            option4.setVisible(false);
-
-            // Detach radio buttons from the toggle group to prevent selection issues
-            option1.setToggleGroup(null);
-            option2.setToggleGroup(null);
-            option3.setToggleGroup(null);
-            option4.setToggleGroup(null);
-
-            questionNumberLabel.setText("Quiz Complete!");
-            questionLabel.setText("You have finished the " + continentName + " practice quiz!");
-            feedbackContainer.setVisible(true);
-            feedbackMessageLabel.setText("Final Score: " + score);
-            funFactLabel.setText("You can now try the Test Mode Quiz!");
-            funFactLabel.setVisible(true);
-            nextQuestionButton.setVisible(false);
-            resetStyles();
-            //disableRadioButtons(true);
+            // End of Quiz Logic
+            endQuiz();
         }
     }
 
     // This method's ONLY job is to select the RadioButton when the user clicks the tile.
-    // The ToggleGroup listener in to initialize() method will then handle the rest of the logic.
+    // The ToggleGroup listener in initialize() will then handle the rest of the logic.
     @FXML
     private void handleTileSelection(MouseEvent event) {
         VBox clickedTile = (VBox) event.getSource();
@@ -154,9 +168,18 @@ public class PracticeQuizController {
     }
 
     private void checkAnswer(RadioButton selectedRadioButton) {
+        if (questions.isEmpty() || currentQuestionIndex >= questions.size()) {
+            System.err.println("No questions available to check.");
+            return;
+        }
+        answerChecked = true;
         PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
         String selectedAnswer = selectedRadioButton.getText();
         boolean isCorrect = selectedAnswer.equals(currentQuestion.getCorrectAnswer());
+
+        // Disable all radio buttons after an answer is selected
+        disableRadioButtons(true);
+
         if (isCorrect) {
             score++;
             scoreLabel.setText(String.valueOf(score));
@@ -164,30 +187,29 @@ public class PracticeQuizController {
             feedbackMessageLabel.setText("Awesome! That's a correct answer. 😊");
             feedbackMessageLabel.setTextFill(Color.web("#4caf50"));
         } else {
+            // Apply wrong answer style
             selectedRadioButton.setStyle("-fx-background-color: #ffccbc; -fx-background-radius: 5;");
+            // Find the correct answer and apply the right style
             for (RadioButton rb : new RadioButton[]{option1, option2, option3, option4}) {
                 if (rb.getText().equals(currentQuestion.getCorrectAnswer())) {
                     rb.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 5;");
+                    break;
                 }
             }
-            feedbackMessageLabel.setText("Good try! Keep exploring. 😟");
+            feedbackMessageLabel.setText("Good try! The correct answer is " + currentQuestion.getCorrectAnswer() + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
         }
-        disableRadioButtons(true);
-        funFactLabel.setText("Fun Facts about " + continentName + ":\n" + currentQuestion.getFunFact());
-        String funFact = questions.get(currentQuestionIndex).getFunFact();
-        // Show fun fact now that an answer has been selected
-        funFactLabel.setText(funFact);
-        funFactLabel.setVisible(true);
+
+        funFactLabel.setText(currentQuestion.getFunFact());
         feedbackContainer.setVisible(true);
         nextQuestionButton.setVisible(true);
     }
 
     private void resetStyles() {
-        option1.setStyle("");
-        option2.setStyle("");
-        option3.setStyle("");
-        option4.setStyle("");
+        option1Tile.setStyle(null);
+        option2Tile.setStyle(null);
+        option3Tile.setStyle(null);
+        option4Tile.setStyle(null);
     }
 
     private void disableRadioButtons(boolean disable) {
@@ -203,11 +225,23 @@ public class PracticeQuizController {
         loadQuestion();
     }
 
+    private void endQuiz() {
+        // Set the final score and message for the user
+        questionNumberLabel.setText("Quiz Complete!");
+        questionLabel.setText("You have finished the " + continentName + " practice quiz!");
+        countryImageView.setImage(null);
+        feedbackMessageLabel.setText("Final Score: " + score + " out of " + questions.size());
+        funFactLabel.setText("You can now try the Test Mode Quiz!");
+
+        // Hide UI elements that are no longer needed
+        feedbackContainer.setVisible(true);
+        nextQuestionButton.setVisible(false);
+        disableRadioButtons(true);
+    }
+
     @FXML
     private void backToGameModes(ActionEvent event) {
         try {
-            // NOTE: You will need to duplicate this method for each continent,
-            // as each one needs to go back to its specific FXML page.
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -218,4 +252,3 @@ public class PracticeQuizController {
         }
     }
 }
-
