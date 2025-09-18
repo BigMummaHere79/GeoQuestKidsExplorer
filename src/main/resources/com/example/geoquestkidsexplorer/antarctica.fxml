@@ -1,57 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <BorderPane prefHeight="800.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaController">
+            fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaController"
+            style="-fx-background-color: white;">
 
     <!-- Top navigation bar -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0"
-              style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
+        <HBox alignment="CENTER_LEFT" prefHeight="70.0"
+              style="-fx-background-color: #0288D1; -fx-padding: 15 100;">
             <children>
                 <Button mnemonicParsing="false" onAction="#backToContinents"
-                        style="-fx-background-color: #60a5fa; -fx-text-fill: white;
-                               -fx-font-weight: bold; -fx-background-radius: 25;
-                               -fx-padding: 10 15; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
+                        style="-fx-background-color: #03A9F4; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-background-radius: 30;
+                               -fx-padding: 10 20;"
                         text="⬅️ Back to Continents" />
                 <Label alignment="CENTER_LEFT"
-                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;
-                              -fx-padding: 0 0 0 10px;"
-                       text="Antarctica" />
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 28px;
+                              -fx-padding: 0 0 0 15px;"
+                       text="Antarctica Adventure!" />
                 <Region HBox.hgrow="ALWAYS" />
             </children>
         </HBox>
     </top>
 
-    <!-- Center: Fun Info + button to go home -->
+    <!-- Center: Fun Info + facts + proceed button -->
     <center>
-        <VBox alignment="CENTER" spacing="25.0" style="-fx-padding: 50;">
-            <Label text="🎉 Let’s Learn About Antarctica!"
-                   style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
-            <Label text="Did you know?" style="-fx-font-size: 24px;"/>
+        <VBox fx:id="centerVBox" alignment="CENTER" spacing="25.0" style="-fx-padding: 50;">
+            <Label text="🎉 Let’s Explore Antarctica!" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #01579B;"/>
+            <Label text="Did you know Antarctica is very special?" style="-fx-font-size: 26px; -fx-text-fill: #0277BD;"/>
 
-            <!-- Fun fact text; you can swap which fact appears or cycle among them -->
-            <Label text="🌨 Antarctica is technically a desert because it gets very little precipitation."
-                   wrapText="true"
-                   style="-fx-font-size: 20px; -fx-text-alignment: center;"/>
+            <!-- Fact 1 -->
+            <StackPane maxWidth="800.0">
+                <Label fx:id="fact1Label"
+                       wrapText="true"
+                       prefWidth="700"
+                       text="Antarctica is the only continent with no countries, so here are some fun facts instead!"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-text-fill: #006064;
+                              -fx-padding: 10 20; -fx-background-color: #b3e5fc; -fx-background-radius: 20;"/>
+            </StackPane>
 
-            <Label text="❄ About 98% of Antarctica is covered by ice, storing around 70% of Earth’s fresh water!"
-                   wrapText="true"
-                   style="-fx-font-size: 20px; -fx-text-alignment: center;"/>
+            <!-- Fact 2  -->
+            <StackPane maxWidth="800.0">
+                <Label fx:id="fact2Label"
+                       wrapText="true"
+                       prefWidth="700"
+                       text="Antarctica is home to unique wildlife like penguins, whales, and seals"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-text-fill: #006064;
+                              -fx-padding: 10 20; -fx-background-color: #FFEBEE; -fx-background-radius: 20;"/>
+            </StackPane>
 
-            <Button text="proceed to next level" onAction="#goHome"
-                    style="-fx-font-size: 18px; -fx-padding: 10 20;"/>
+
+
+            <!-- Fact 3 -->
+            <StackPane maxWidth="800.0">
+                <Label wrapText="true" prefWidth="700"
+                       text="Despite being covered in ice, it’s considered a desert!"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-text-fill: #006064;
+                              -fx-padding: 10 20; -fx-background-color: #FFF3E0; -fx-background-radius: 20;"/>
+            </StackPane>
+
+            <!-- Congratulations -->
+            <StackPane maxWidth="800.0">
+                <Label wrapText="true" prefWidth="700"
+                       text="🎉 Congratulations on learning about Antarctica!"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-text-fill: #006064;
+                              -fx-padding: 10 20; -fx-background-color: #F3E5F5; -fx-background-radius: 20;"/>
+            </StackPane>
+
+            <Button text="Proceed to the Next Level!" onAction="#goHome"
+                    style="-fx-font-size: 20px; -fx-padding: 12 30;
+                           -fx-background-color: #0288D1; -fx-text-fill: white;
+                           -fx-background-radius: 20;"/>
         </VBox>
     </center>
-
 </BorderPane>
