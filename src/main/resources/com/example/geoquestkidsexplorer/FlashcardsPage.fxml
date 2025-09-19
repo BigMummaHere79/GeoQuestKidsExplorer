@@ -20,9 +20,9 @@
                visible="false" />
     </StackPane>
 
-    <Button text="Next" onAction="#handleNextCountry"
+    <Button text="Next!" onAction="#handleNextCountry"
             style="-fx-background-color: #90caf9; -fx-background-radius: 10; -fx-padding: 12; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-font-weight: bold;" />
 
-    <Button text="Back to Home" onAction="#handleBackToHome"
+    <Button text="Take Me Back to Home" onAction="#handleBackToHome"
             style="-fx-background-color: #f48fb1; -fx-background-radius: 10; -fx-padding: 12; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-font-weight: bold;" />
 </VBox>
