@@ -89,9 +89,9 @@ public class PracticeQuizAfricaController {
                 radioButton.setToggleGroup(answerToggleGroup);
                 radioButton.setDisable(true); // Disable the radio button itself
 
-                Label choiceLabel = new Label(choice);
+                //Label choiceLabel = new Label(choice);
 
-                tile.getChildren().addAll(radioButton, choiceLabel);
+                //tile.getChildren().addAll(radioButton, choiceLabel);
 
                 // Add event handler to the tile itself
                 tile.setOnMouseClicked(event -> handleAnswerSelection(tile, radioButton));
@@ -116,13 +116,13 @@ public class PracticeQuizAfricaController {
         String selectedAnswer = selectedLabel.getText();
 
         String correctAnswer = questions.get(currentQuestionIndex).getCorrectAnswer();
-        String funFact = questions.get(currentQuestionIndex).getFunFact();
+        //String funFact = questions.get(currentQuestionIndex).getFunFact();
 
         // Disable click events on all tiles
         quizOptionsContainer.getChildren().forEach(node -> node.setDisable(true));
 
         // Show fun fact now that an answer has been selected
-        funFactLabel.setText(funFact);
+        //funFactLabel.setText(funFact);
         funFactLabel.setVisible(true);
 
         // Check if the selected answer is correct and apply styling

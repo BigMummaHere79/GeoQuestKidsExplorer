@@ -17,8 +17,4 @@ public class MockFlashcardDB {
         images.add(image);
         return this;
     }
-
-    public void fillInternalCountries(FlashcardsController controller) {
-        controller.testSeed(names, images);
-    }
 }

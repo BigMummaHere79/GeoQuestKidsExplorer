@@ -1,81 +1,47 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-import javafx.event.Event;
-import javafx.fxml.FXML;
+import com.example.geoquestkidsexplorer.GameStateManager;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class AntarcticaController {
 
-    @FXML
-    private void backToContinents(ActionEvent event) {
-        try {
-            // Load the StartAdventure.fxml file
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
-            Scene scene = new Scene(root);
+    @FXML private Button continueButton; // Bind to the "Continue" button in antarctica.fxml
 
-            // Get the current stage and set the new scene
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    @FXML
+    private void handleContinueButton(ActionEvent event) {
+        // Unlock next continent (Africa)
+        String nextContinent = GameStateManager.getInstance().getNextContinent("Antarctica");
+        if (nextContinent != null) {
+            GameStateManager.getInstance().unlockContinent(nextContinent);
+            System.out.println(nextContinent + " unlocked! Ready for adventure.");
+            // Optional: Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            // alert.setContentText(nextContinent + " unlocked!");
+            // alert.showAndWait();
+        } else {
+            System.out.println("Congratulations! You've completed all continents!");
+        }
+
+        // Navigate back to homepage
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
+            System.err.println("Error loading homepage.fxml: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleGameModeClick(MouseEvent event) {
-        // Get the source of the click, which is the VBox tile.
-        Node clickedTile = (Node) event.getSource();
-        String tileId = clickedTile.getId();
-
-        try {
-            // Use the ID to determine which game mode was selected and load the corresponding scene.
-            if ("practiceModeTile".equals(tileId)) {
-                loadScene("/com/example/geoquestkidsexplorer/practicequizoceania.fxml", event);
-            } else if ("testModeTile".equals(tileId)) {
-                System.out.println("Test Mode Quiz selected!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * A private helper method to load a new FXML scene and transition to it.
-     * This version is more flexible and can accept any type of Event.
-     *
-     * @param fxmlPath The path to the FXML file to load.
-     * @param event The event that triggered the action.
-     * @throws IOException If the FXML file cannot be loaded.
-     */
-    private void loadScene(String fxmlPath, Event event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    private void handleFlashcards(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml"));
-        Parent root = loader.load(); //Note: just modified this to use the default main frame window.
-
-        FlashcardsController controller = loader.getController();
-        controller.setRegion("Antarctica");
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        /*Scene scene = new Scene(root); //NOTE: commented this both to set a new logic
-        stage.setScene(scene);*/
-        stage.getScene().setRoot(root); //NOTE: add this line of codes to replace the first two line that has been commented.
-        stage.show();
+    public void setContinentName(String continentName) {
     }
 }
