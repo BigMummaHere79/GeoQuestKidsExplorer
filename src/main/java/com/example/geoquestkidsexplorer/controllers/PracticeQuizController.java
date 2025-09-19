@@ -1,6 +1,8 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
+import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,6 +51,48 @@ public class PracticeQuizController {
 
     // Set the number of practice questions to 25 as requested
     private static final int NUMBER_OF_PRACTICE_QUESTIONS = 25;
+
+    /**
+     * CREATED THESE METHODS FOR UNIT TESTING
+     * Like Flash Cards, I believe these can be refactored a lot more to seperate logic from UI
+     * into other classes.
+     * These will be done in the future
+     **/
+    private PracticeQuizQuestions current;
+    private final IQuizQuestionDAO quizDao;
+
+    // FXML/runtime
+    public PracticeQuizController(){
+        this(new DatabaseAdapter());
+    }
+    //Unit tests
+    public PracticeQuizController(IQuizQuestionDAO dao)
+    {
+        this.quizDao = dao;
+    }
+
+    // Used by tests (No fxml, no JavaFx
+    public PracticeQuizQuestions fetchPractise(String continent){
+        current = quizDao.getPractiseQuizQuestion(continent);
+        return current;
+    }
+    // Used by tests to compare chosen vs correct
+    public boolean evaluateChoice(String chosen){
+        return current != null && chosen != null && chosen.equals((current.getCorrectAnswer()));
+    }
+    //For unit-testing
+    public void loadQuestion(String continent){
+        var question = fetchPractise(continent);
+        if(questionLabel != null) questionLabel.setText(question.questionText());
+        if(countryImageView != null && question.getImage() != null) countryImageView.setImage(question.getImage());
+    }
+    //Helper for Assertions
+    public PracticeQuizQuestions getCurrent(){
+        return current;
+    }
+    /****
+     *
+     * ***/
 
     // This method is now called from the previous controller (e.g., AfricaController)
     public void setContinentName(String continent) {

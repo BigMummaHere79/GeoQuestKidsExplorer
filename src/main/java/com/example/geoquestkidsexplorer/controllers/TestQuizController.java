@@ -2,7 +2,9 @@ package com.example.geoquestkidsexplorer.controllers;
 
 //We don't need GameStateManger at the moment. This is for unlocking countries for later on.
 //import com.example.geoquestkidsexplorer.GameStateManager;
+import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
+import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -28,6 +30,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * As mentioned within Practise Quiz,
+ * this controller can be refactored similar to that of Flashcards
+ * This is in order to achieve easier code visibility and testing!
+ * **/
+
 public class TestQuizController {
 
     // You need to declare the quizBox as a member variable with @FXML
@@ -49,6 +57,9 @@ public class TestQuizController {
     @FXML private Label timerLabel;
     private Timeline timeline;
 
+    private final IQuizQuestionDAO quizDao;
+    private TestQuizQuestions current;
+
     private String continentName;
     private List<TestQuizQuestions> questions;
     private int currentQuestionIndex = 0;
@@ -56,6 +67,28 @@ public class TestQuizController {
     private final int QUESTIONS_PER_QUIZ = 10;
     private boolean isSubmitted = false;
     private int timeSeconds = 60;
+
+    /**
+     * As of now, because refactoring hasn't started
+     * Creating a more or less simple method to call within test
+     * Same thing, implements the same logic
+     * **/
+    public TestQuizController(){
+        this(new DatabaseAdapter());
+    }
+    public TestQuizController(IQuizQuestionDAO dao){
+        this.quizDao = dao;
+    }
+    public TestQuizQuestions fetchTest(String continent){
+        current = quizDao.getTestQuizQuestion(continent);
+        return current;
+    }
+    public boolean evaluateAnswer(String chosen){
+        return current != null && chosen != null && chosen.equals(current.getCorrectAnswer());
+    }
+    public TestQuizQuestions getCurrent(){
+        return current;
+    }
 
     /**
      * Sets the continent name to load the correct quiz data.

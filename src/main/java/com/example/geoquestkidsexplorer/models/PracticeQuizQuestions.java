@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.models;
 
 import javafx.scene.image.Image;
+
 import java.util.List;
 
 public record PracticeQuizQuestions(
@@ -10,6 +11,11 @@ public record PracticeQuizQuestions(
         String funFact,
         Image countryImage
 ) {
+
+    @Override
+    public String questionText() {
+        return questionText;
+    }
     public List<String> getChoices() {
         return choices;
     }
@@ -19,4 +25,7 @@ public record PracticeQuizQuestions(
     public String getFunFact() {
         return funFact;
     }
+    public Image getImage() {
+       return countryImage;
+   }
 }
