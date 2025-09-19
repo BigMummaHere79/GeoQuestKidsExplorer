@@ -1,7 +1,6 @@
 package com.example.geoquestkidsexplorer.database;
 
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
-import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
 import com.example.geoquestkidsexplorer.models.UserProfile;
 
 import java.util.ArrayList;
@@ -390,6 +389,7 @@ public class DatabaseManager {
         return countries; // Returns the list, even if it's empty
     }
 
+<<<<<<< HEAD
     // --- NEW: Added for Test Quiz with capital cities and fun facts.
     // This method will generate a complete quiz question with an image and multiple-choice options.
     public static TestQuizQuestions getTestQuizQuestion(String continent) {
@@ -408,5 +408,8 @@ public class DatabaseManager {
 
         return new TestQuizQuestions(questionText, correctAnswer, countryImage);
     }
+=======
+    //---------------------------------------------------------------------------------------------------
+>>>>>>> 4ff40f0253745a40cd2111518a26639520319430
 
 }

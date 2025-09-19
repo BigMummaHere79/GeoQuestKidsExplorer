@@ -123,6 +123,7 @@ public class ContinentsController {
         stage.show();
     }*/
 
+<<<<<<< HEAD
 //    /**
 //     * Helper method to load the generic quiz page and set the continent.
 //     */
@@ -154,6 +155,9 @@ public class ContinentsController {
         stage.setTitle("Quiz - " + continentName);
         stage.show();
     }
+=======
+>>>>>>> 4ff40f0253745a40cd2111518a26639520319430
+
 
     // (unchanged) Opens country test page in a new window — not used by quiz branch
     private void openTestPage(String continent, String country) throws IOException {
