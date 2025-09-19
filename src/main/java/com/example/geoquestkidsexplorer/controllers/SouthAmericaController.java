@@ -41,7 +41,7 @@ public class SouthAmericaController {
                 loadScene("/com/example/geoquestkidsexplorer/practicequizoceania.fxml", event);
             } else if ("testModeTile".equals(tileId)) {
                 // Nikki: insert testpage link and call openTestMethod
-                loadScene("/com/example/geoquestkidsexplorer/testModeAntarctica.fxml", event);
+                loadSceneTestPage("/com/example/geoquestkidsexplorer/testquiz.fxml", event);
                 //openQuiz(event, "South America");
             }
         } catch (IOException e) {
@@ -81,21 +81,21 @@ public class SouthAmericaController {
      * @param event The event that triggered the action.
      * @throws IOException If the FXML file cannot be loaded.
      */
-//    private void loadScene(String fxmlPath, Event event) throws IOException {
-//        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-//        Scene scene = new Scene(root);
-//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        stage.setScene(scene);
-//        stage.show();
-//    }
+    private void loadScene(String fxmlPath, Event event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 
     //Changed the loadScene for now, to behave like Aaliyah's OpenQuiz
-    private void loadScene(String fxmlPath, Event event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testModeAntarctica.fxml"));
+    private void loadSceneTestPage(String fxmlPath, Event event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
         Parent root = loader.load();
 
-        TestModeAntarcticaController controller = loader.getController();
-        controller.setContinent("South America"); // this triggers nextQuestion()
+        TestQuizController controller = loader.getController();
+        //controller.setContinent("South America"); // this triggers nextQuestion()
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));

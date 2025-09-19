@@ -121,6 +121,7 @@ public class LoginController {
         return null;
     }
 
+
     /** After successful login, fetch username & avatar asynchronously, then switch to home. */
     private void loadHomeAsync(ActionEvent event, String email) {
         Task<String[]> userTask = new Task<>() {
@@ -343,4 +344,24 @@ public class LoginController {
     private void clearMessage() {
         if (messageLabel != null) messageLabel.setText("");
     }
+
+
+// ================================
+// Methods for Register Unit Testing - (Nikki)
+// ================================
+// To make unit testing easier, I'm creating methods that only handle the logic aspect of login
+// because the methods currently in this class also handle the UI, JavaFX, but I only need to test the logic part of this controller
+//
+
+    //Validates login credentials against the database
+    public boolean validateLogin(String email, String password){
+        if (email == null || email.isBlank() || password == null || password.isBlank()){
+            return false;
+        }
+
+        //checks if email/password exists in database
+        return DatabaseManager.validateLogin(email, password);
+    }
+
+
 }
