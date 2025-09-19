@@ -1,20 +1,57 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomePageController {
+
+    // You will need to add an @FXML field for each continent tile you have in startadventure.fxml
+    @FXML
+    private Pane africaPane;
+    @FXML
+    private Pane asiaPane;
+    @FXML
+    private Pane northAmericaPane;
+    @FXML
+    private Pane southAmericaPane;
+    @FXML
+    private Pane antarcticaPane;
+    @FXML
+    private Pane europePane;
+    @FXML
+    private Pane oceaniaPane;
+
+    // You will also need a label to show the locked text
+    @FXML
+    private Label africaLockedLabel;
+    @FXML
+    private Label asiaLockedLabel;
+    @FXML
+    private Label northAmericaLockedLabel;
+    @FXML
+    private Label southAmericaLockedLabel;
+    @FXML
+    private Label antarcticaLockedLabel;
+    @FXML
+    private Label europeLockedLabel;
+    @FXML private Label oceaniaLockedLabel;
 
     @FXML
     private Label avatarLabel;
@@ -105,30 +142,121 @@ public class HomePageController {
     }
 
     /**
-     * Handles the "click" event for a continent button.
-     * This method now correctly retrieves the continent name from the Label inside the button's graphic.
+     * This method is called by HomePageController to set the lock status of each continent.
      */
-    @FXML
-    private void handleContinentClick(ActionEvent event) throws IOException {
-        Button clickedButton = (Button) event.getSource();
-        String continentName = null;
+    public void setContinentLocks(Map<String, Boolean> continents) {
+        // Map of continent names to their corresponding panes
+        Map<String, Pane> continentPanes = new HashMap<>();
+        continentPanes.put("Antarctica", antarcticaPane);
+        continentPanes.put("Oceania", oceaniaPane);
+        continentPanes.put("South America", southAmericaPane);
+        continentPanes.put("North America", northAmericaPane);
+        continentPanes.put("Europe", europePane);
+        continentPanes.put("Asia", asiaPane);
+        continentPanes.put("Africa", africaPane);
 
-        // Check if the button has a graphic and if it's a VBox
-        if (clickedButton.getGraphic() instanceof VBox graphicBox) {
-            // Iterate through the children of the VBox to find the Label
-            for (Node node : graphicBox.getChildren()) {
-                if (node instanceof Label continentLabel) {
-                    continentName = continentLabel.getText().trim();
-                    break; // Found the label, exit the loop
+        // Map of continent names to their corresponding locked labels
+        Map<String, Label> continentLabels = new HashMap<>();
+        continentLabels.put("Antarctica", antarcticaLockedLabel);
+        continentLabels.put("Oceania", oceaniaLockedLabel);
+        continentLabels.put("South America", southAmericaLockedLabel);
+        continentLabels.put("North America", northAmericaLockedLabel);
+        continentLabels.put("Europe", europeLockedLabel);
+        continentLabels.put("Asia", asiaLockedLabel);
+        continentLabels.put("Africa", africaLockedLabel);
+
+        // Iterate through the continents and set their state based on the map
+        for (Map.Entry<String, Boolean> entry : continents.entrySet()) {
+            String continentName = entry.getKey();
+            boolean isLocked = entry.getValue();
+
+            Pane pane = continentPanes.get(continentName);
+            Label label = continentLabels.get(continentName);
+
+            if (pane != null) {
+                if (isLocked) {
+                    pane.setOpacity(0.5); // Make it visually "locked"
+                    // Add an event filter to prevent clicks on locked tiles
+                    // Removed the event filter to handle it inside the method instead
+                    if (label != null) {
+                        label.setVisible(true); // Show a "locked" label
+                    }
+                } else {
+                    pane.setOpacity(1.0); // Make it visually "unlocked"
+                    if (label != null) {
+                        label.setVisible(false); // Hide the locked label
+                    }
                 }
             }
         }
+    }
 
-        // Now, we can proceed with the logic using the extracted name
-        if (continentName != null && !continentName.isEmpty()) {
-            loadGameModePage(event, continentName);
+    /**
+     * Handles the click event on a continent tile.
+     * Prevents action if the tile is locked.
+     */
+    @FXML
+    private void handleContinentClick(MouseEvent event) {
+
+        Pane clickedPane = (Pane) event.getSource();
+        String continentName = null;
+
+        // Determine which pane was clicked and check its lock status.
+        if (clickedPane.getId().equals("antarcticaPane")) {
+            continentName = "Antarctica";
+        } else if (clickedPane.getId().equals("oceaniaPane")) {
+            continentName = "Oceania";
+        } else if (clickedPane.getId().equals("southAmericaPane")) {
+            continentName = "South America";
+        } else if (clickedPane.getId().equals("northAmericaPane")) {
+            continentName = "North America";
+        } else if (clickedPane.getId().equals("europePane")) {
+            continentName = "Europe";
+        } else if (clickedPane.getId().equals("asiaPane")) {
+            continentName = "Asia";
+        } else if (clickedPane.getId().equals("africaPane")) {
+            continentName = "Africa";
+        }
+
+        System.out.println("handleContinentClick: continentName = " + continentName);
+
+        // Special case for Antarctica
+        if ("Antarctica".equals(continentName)) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/antarctica.fxml"));
+                if (loader.getLocation() == null) {
+                    System.err.println("Error: antarctica.fxml resource not found");
+                    return;
+                }
+                Parent root = loader.load();
+                // Assuming AntarcticaController exists; adjust if needed
+                AntarcticaController controller = loader.getController();
+                controller.setContinentName(continentName); // Uncomment if AntarcticaController needs continentName
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Antarctica");
+                stage.show();
+            } catch (IOException e) {
+                System.err.println("Error loading antarctica.fxml: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        // Handle other continents
+        else if (GameStateManager.getInstance().isContinentUnlocked(continentName)) {
+            try {
+                loadGameModePage(event, continentName);
+            } catch (IOException e) {
+                System.err.println("Error loading game mode page for " + continentName + ": " + e.getMessage());
+                e.printStackTrace();
+            }
         } else {
-            System.out.println("Unknown continent clicked: Could not find a text label within the button's graphic.");
+            System.out.println("This continent is locked! Please unlock it by completing a previous challenge.");
+            // Optionally show a dialog to the user
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Continent Locked");
+            alert.setHeaderText(null);
+            alert.setContentText("This continent is locked! Please unlock it by completing a previous challenge.");
+            alert.showAndWait();
         }
     }
 
@@ -139,7 +267,7 @@ public class HomePageController {
      * @param continentName The name of the continent to display.
      * @throws IOException if the FXML file cannot be loaded.
      */
-    private void loadGameModePage(ActionEvent event, String continentName) throws IOException {
+    private void loadGameModePage(MouseEvent event, String continentName) throws IOException {
         // Default continent page
         String fxml = "/com/example/geoquestkidsexplorer/continentview.fxml";
 
