@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>
+<!--<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>-->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -89,9 +88,9 @@
                                               -fx-background-radius: 25; -fx-border-radius: 25;
                                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                                             <children>
-                                                <StackPane prefHeight="230.0" prefWidth="185.0">
+                                                <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="200" fitHeight="200" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="185" fitHeight="150" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://t4.ftcdn.net/jpg/07/22/12/43/360_F_722124358_pmAyxjaWPEOX3pELDGzNOjsjHu2NcCfi.jpg"/>
@@ -114,7 +113,7 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="185" fitHeight="220" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="185" fitHeight="200" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://static.vecteezy.com/system/resources/previews/003/087/848/non_2x/outline-simple-map-of-oceania-free-vector.jpg"/>
@@ -151,7 +150,7 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="205" fitHeight="185" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="200" fitHeight="150" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://i.pinimg.com/564x/29/ed/fc/29edfcb9db4afce9630791fc13a5ef59.jpg"/>
@@ -189,7 +188,7 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="185" fitHeight="210" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="155" fitHeight="150" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://i.pinimg.com/originals/67/58/ac/6758acde861811f6d32e7a678d334562.png"/>
@@ -226,7 +225,7 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="170" fitHeight="170" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="145" fitHeight="145" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://img.freepik.com/premium-vector/outline-map-europe-white-background-vector-map-with-contour_652994-2550.jpg"/>
@@ -263,7 +262,7 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="185" fitHeight="210" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="175" fitHeight="185" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://i.pinimg.com/736x/5d/e5/1e/5de51e06c7410ae41d6cc0bc431d0e57.jpg"/>
@@ -300,7 +299,7 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="185" fitHeight="185" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitWidth="155" fitHeight="155" preserveRatio="true" smooth="true" cache="true">
                                                             <image>
                                                                 <Image backgroundLoading="true"
                                                                        url="https://gisgeography.com/wp-content/uploads/2023/12/Africa-Country-Blank-Map.jpg"/>
