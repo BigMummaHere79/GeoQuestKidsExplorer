@@ -41,7 +41,7 @@ public class SouthAmericaController {
                 loadScene("/com/example/geoquestkidsexplorer/practicequizoceania.fxml", event);
             } else if ("testModeTile".equals(tileId)) {
                 // Nikki: insert testpage link and call openTestMethod
-                loadSceneTestPage("/com/example/geoquestkidsexplorer/testquiz.fxml", event);
+                loadSceneTestPage("/com/example/geoquestkidsexplorer/testquiz_n.fxml", event);
                 //openQuiz(event, "South America");
             }
         } catch (IOException e) {
@@ -91,7 +91,7 @@ public class SouthAmericaController {
 
     //Changed the loadScene for now, to behave like Aaliyah's OpenQuiz
     private void loadSceneTestPage(String fxmlPath, Event event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz_n.fxml"));
         Parent root = loader.load();
 
         TestQuizController controller = loader.getController();

@@ -1,108 +1,97 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
+/**
+ * Controller for the quiz results dialog box.
+ */
 public class QuizResultsController {
 
-    @FXML private Label resultMessageLabel;
-    @FXML private Label scoreMessageLabel;
-    @FXML private Label passFailMessageLabel;
-    @FXML private Button continueButton;
-    @FXML private Button retryButton;
-    @FXML private Button practiceButton;
+    @FXML private Label scoreLabel;
+    @FXML private Label messageLabel;
+    @FXML private Button mainButton;
+    @FXML private Button secondaryButton;
 
     private Stage dialogStage;
-    private Stage mainStage;
+    private String currentContinent;
+    private Runnable onRetry;
+    private Runnable onContinue;
+    private Runnable onPractice;
 
-    // A new field to store the continent name
-    private String continentName;
-
-    // A new method to set the continent name
-    public void setContinentName(String continentName) {
-        this.continentName = continentName;
-    }
-
-    public void setMainStage(Stage stage) {
-        this.mainStage = stage;
-    }
-
-    private void handlePracticeMode() {
-        if (mainStage == null) {
-            System.err.println("Error: mainStage is null in handlePracticeMode");
-            return;
-        }
-        if (continentName == null || continentName.trim().isEmpty()) {
-            System.err.println("Error: continentName is null or empty in handlePracticeMode");
-            // Fallback to a default continent or show an error dialog
-            continentName = "Oceania"; // Default to Africa, or prompt user
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/practicequiz.fxml"));
-            Parent root = loader.load();
-
-            // Get the controller for the practice quiz
-            PracticeQuizController practiceQuizController = loader.getController();
-
-            // Pass the continent name to the new practice quiz controller
-            practiceQuizController.setContinentName(continentName);
-
-            mainStage.setScene(new Scene(root));
-            mainStage.show();
-
-            if (dialogStage != null) {
-                dialogStage.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void setActions(Runnable onRetry, Runnable onContinue, Runnable onPractice) {
-        if (retryButton != null) {
-            retryButton.setOnAction(event -> {
-                onRetry.run();
-                if (dialogStage != null) {
-                    dialogStage.close();
-                }
-            });
-        }
-        if (continueButton != null) {
-            continueButton.setOnAction(event -> {
-                onContinue.run();
-                if (dialogStage != null) {
-                    dialogStage.close();
-                }
-            });
-        }
-        if (practiceButton != null) {
-            practiceButton.setOnAction(event -> handlePracticeMode());
-        }
-    }
-
+    /**
+     * Sets the stage for this dialog, allowing it to be closed.
+     */
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
 
-    public void setResults(int score, int total, String continentName, boolean passed) {
-        setContinentName(continentName); // Make sure to set the continent name here
-        resultMessageLabel.setText("You have completed the " + continentName + " Test!");
-        scoreMessageLabel.setText("Your Score: " + score + "/" + total);
+    /**
+     * Sets the results and configures the buttons based on the score.
+     */
+    public void setResults(int score, int totalQuestions, String continent, boolean passed) {
+        this.currentContinent = continent;
+        double percentage = (double) score / totalQuestions * 100;
+        scoreLabel.setText(String.format("You scored %d/%d (%.0f%%)!", score, totalQuestions, percentage));
 
         if (passed) {
-            passFailMessageLabel.setText("Congratulations! You passed and unlocked the next continent!");
-            continueButton.setVisible(true);
+            messageLabel.setText("Congratulations! You've unlocked the next continent!");
+            mainButton.setText("Continue to next adventure!");
+            secondaryButton.setVisible(false); // Hide the second button for a passing score
         } else {
-            passFailMessageLabel.setText("You did not reach the passing score. You need to get 80% to pass this quiz.");
-            continueButton.setVisible(false);
+            messageLabel.setText("You can do it! Keep exploring to improve.");
+            mainButton.setText("Repeat test");
+            secondaryButton.setText("Go back to practice mode");
+            secondaryButton.setVisible(true);
+        }
+    }
+
+    /**
+     * Sets the actions to be performed when the buttons are clicked.
+     */
+    public void setActions(Runnable onRetry, Runnable onContinue, Runnable onPractice) {
+        this.onRetry = onRetry;
+        this.onContinue = onContinue;
+        this.onPractice = onPractice;
+    }
+
+    @FXML
+    private void handleMainButton(ActionEvent event) {
+        if (mainButton.getText().startsWith("Repeat test")) {
+            if (onRetry != null) {
+                onRetry.run();
+            }
+        } else {
+            if (onContinue != null) {
+                onContinue.run();
+            }
+        }
+        if (dialogStage != null) {
+            dialogStage.close();
+        }
+    }
+
+    @FXML
+    private void handleSecondaryButton(ActionEvent event) {
+        if (onPractice != null) {
+            onPractice.run();
+        }
+        if (dialogStage != null) {
+            dialogStage.close();
+        }
+    }
+
+    /**
+     * Handles the close button action to close the dialog window.
+     */
+    @FXML
+    private void handleCloseButton(ActionEvent event) {
+        if (dialogStage != null) {
+            dialogStage.close();
         }
     }
 }

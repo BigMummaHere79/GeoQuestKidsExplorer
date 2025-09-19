@@ -391,7 +391,7 @@ public class DatabaseManager {
         return countries; // Returns the list, even if it's empty
     }
 
-    // --- NEW: Added for Test Quiz integrated with Glenda's capital cities and fun facts.
+    // --- NEW: Added for Test Quiz with capital cities and fun facts.
     // This method will generate a complete quiz question with an image and multiple-choice options.
     public static TestQuizQuestions getTestQuizQuestion(String continent) {
         //Get the correct country and its image for the question

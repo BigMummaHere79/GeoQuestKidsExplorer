@@ -122,15 +122,30 @@ public class ContinentsController {
         stage.show();
     }*/
 
-    /**
-     * Helper method to load the generic quiz page and set the continent.
-     */
+//    /**
+//     * Helper method to load the generic quiz page and set the continent.
+//     */
+//    private void openTestQuiz(Event event, String continentName) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
+//        Parent root = loader.load();
+//
+//        QuizController quizController = loader.getController();
+//        quizController.setContinent(continentName);
+//
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//        Scene scene = new Scene(root);
+//        stage.setScene(scene);
+//        stage.setTitle("Quiz - " + continentName);
+//        stage.show();
+//    }
+
+      //* Helper method to load the generic quiz page and set the continent.
     private void openTestQuiz(Event event, String continentName) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
         Parent root = loader.load();
 
-        QuizController quizController = loader.getController();
-        quizController.setContinent(continentName);
+        TestQuizController quizController = loader.getController();
+        quizController.setContinentName(continentName);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
@@ -138,6 +153,7 @@ public class ContinentsController {
         stage.setTitle("Quiz - " + continentName);
         stage.show();
     }
+
 
     // (unchanged) Opens country test page in a new window — not used by quiz branch
     private void openTestPage(String continent, String country) throws IOException {

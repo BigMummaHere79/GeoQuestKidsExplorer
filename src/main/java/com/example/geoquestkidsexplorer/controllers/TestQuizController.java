@@ -1,6 +1,6 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-//Don't need for now.Just for unlocking and locking countries
+//We don't need GameStateManger at the moment. This is for unlocking countries for later on.
 //import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
@@ -20,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -29,7 +30,11 @@ import java.util.List;
 
 public class TestQuizController {
 
-    @FXML private VBox quizBox;
+    // You need to declare the quizBox as a member variable with @FXML
+    // so it can be accessed by any method in this class.
+    @FXML
+    private VBox quizBox;
+
     @FXML private Label questionNumberLabel;
     @FXML private Label scoreLabel;
     @FXML private ImageView countryImageView;
@@ -56,52 +61,29 @@ public class TestQuizController {
      * Sets the continent name to load the correct quiz data.
      */
     public void setContinentName(String continent) {
-        if (continent == null || continent.trim().isEmpty()) {
-            System.err.println("Error: Received null or empty continent name");
-            continent = "Oceania"; // Fallback to default continent
-        }
         this.continentName = continent;
+        // Update the hardcoded labels with the correct continent name
         quizWelcomeLabel.setText("Practice your knowledge with the " + continentName + " Continent!");
         backButton.setText("⬅️ Back to " + continentName + " Game Mode");
+
+        // --- CRITICAL FIX: Initialize and populate the questions list here ---
+        // This was the missing part that caused the NullPointerException.
         this.questions = new ArrayList<>();
         for (int i = 0; i < QUESTIONS_PER_QUIZ; i++) {
-            TestQuizQuestions question = DatabaseManager.getTestQuizQuestion(continentName);
-            if (question != null) { // Only add non-null questions
-                this.questions.add(question);
-            }
+            this.questions.add(DatabaseManager.getTestQuizQuestion(continent));
         }
-        if (questions.isEmpty()) {
-            System.err.println("No valid questions loaded for continent: " + continentName);
-            questionLabel.setText("No questions available for " + continentName);
-            return;
-        }
-        loadQuizQuestions();
+        // Now that we have the continent and the questions, load the first question.
+        loadQuestions();
     }
 
-    private void loadQuizQuestions() {
-        if (questions.isEmpty()) {
-            questionLabel.setText("No questions available.");
-            countryImageView.setVisible(false);
-            countryImagePlaceholder.setText("No questions available.");
-            countryImagePlaceholder.setVisible(true);
-            return;
-        }
+    private void loadQuestions() {
         if (currentQuestionIndex < questions.size()) {
             TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
-            if (currentQuestion == null) {
-                System.err.println("Null question at index: " + currentQuestionIndex);
-                return;
-            }
-            Image quizImage = currentQuestion.countryImage();
-            if (quizImage != null) {
-                countryImageView.setImage(quizImage);
-                countryImageView.setVisible(true);
-                countryImagePlaceholder.setVisible(false);
-            } else {
-                countryImageView.setVisible(false);
-                countryImagePlaceholder.setText("No Image Available");
-                countryImagePlaceholder.setVisible(true);
-            }
+
+            questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
+            countryImageView.setImage(currentQuestion.countryImage());
+            questionLabel.setText(currentQuestion.questionText());
+
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             questionLabel.setText(currentQuestion.getQuestionText());
             answerField.setText("");
@@ -110,10 +92,12 @@ public class TestQuizController {
             nextQuestionButton.setVisible(false);
             feedbackMessageLabel.setText("");
             isSubmitted = false;
+
             startTimer();
+
         } else {
-            // End quiz if no more questions
-            handleNextQuestion(new ActionEvent(nextQuestionButton, null));
+            // End of Quiz logic
+            showResults();
         }
     }
 
@@ -129,6 +113,7 @@ public class TestQuizController {
                     timerLabel.setText(String.format("%02d:%02d", timeSeconds / 60, timeSeconds % 60));
                     if (timeSeconds <= 0) {
                         timeline.stop();
+                        // Auto-submit a wrong answer on time out
                         handleSubmit();
                     }
                 })
@@ -136,16 +121,19 @@ public class TestQuizController {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
-
     @FXML
     private void handleSubmit() {
         if (isSubmitted) return;
+
         isSubmitted = true;
         timeline.stop();
+
         TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
         String userAnswer = answerField.getText().trim();
         String correctAnswer = currentQuestion.getCorrectAnswer().trim();
+
         boolean isCorrect = userAnswer.equalsIgnoreCase(correctAnswer);
+
         if (isCorrect) {
             score++;
             scoreLabel.setText(String.valueOf(score));
@@ -155,88 +143,101 @@ public class TestQuizController {
             feedbackMessageLabel.setText("Good try! The correct answer is " + correctAnswer + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
         }
+
         answerField.setDisable(true);
         submitButton.setVisible(false);
         nextQuestionButton.setVisible(true);
     }
 
-    // --- CRITICAL FIX: The FXML method must receive the ActionEvent ---
     @FXML
     private void handleNextQuestion(ActionEvent event) {
-        if (currentQuestionIndex < questions.size() - 1) {
-            currentQuestionIndex++;
-            loadQuizQuestions();
-        } else {
-            // Pass the event to endQuiz
-            endQuiz(event);
-        }
+        currentQuestionIndex++;
+        loadQuestions();
     }
 
-    private void endQuiz(ActionEvent event) {
-        showQuizResults(event);
-    }
-
-    private void showQuizResults(ActionEvent event) {
+    private void showResults() {
         try {
-            if (continentName == null || continentName.trim().isEmpty()) {
-                System.err.println("Error: continentName is null or empty in showQuizResults");
-                return; // Prevent proceeding if continentName is invalid
-            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quizresults.fxml"));
             Parent root = loader.load();
-            QuizResultsController controller = loader.getController();
-            int totalQuestions = questions.size();
-            boolean passed = score >= (totalQuestions * 0.8);
+            QuizResultsController resultsController = loader.getController();
 
-            controller.setResults(score, totalQuestions, continentName, passed);
-
-            // Get the main stage from the event source, which is guaranteed to be a valid node
-            Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            if (mainStage == null) {
-                System.err.println("Error: mainStage is null in showQuizResults");
-                return;
-            }
-            controller.setMainStage(mainStage);
-
-            controller.setActions(
-                    () -> { // onRetry
-                        currentQuestionIndex = 0;
-                        score = 0;
-                        loadQuizQuestions();
-                    },
-                    () -> { // onContinue
-                        if (passed) {
-                            //GameStateManager.getInstance().unlockContinent(GameStateManager.getInstance().getNextContinent(continentName));
-                            backToHomePage(event);
-                        }
-                    },
-                    () -> { // onPractice
-                        // The action is handled by QuizResultsController
-                    }
-            );
-
+            Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Quiz Results");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(stage);
             dialogStage.setScene(new Scene(root));
-            controller.setDialogStage(dialogStage);
+            dialogStage.setTitle("Quiz Results");
+
+            double passingScorePercentage = 80.0;
+            boolean passed = ((double) score / questions.size() * 100) >= passingScorePercentage;
+
+            resultsController.setDialogStage(dialogStage);
+            resultsController.setResults(score, questions.size(), continentName, passed);
+
+            // Set the actions for the buttons in the results dialog
+//            resultsController.setActions(
+//                    this::retryQuiz,
+//                    () -> {
+//                        String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
+//                        if (nextContinent != null) {
+//                            GameStateManager.getInstance().unlockContinent(nextContinent);
+//                            // Reload the StartAdventure page to show the unlocked continent
+//                            try {
+//                                backToHomePage();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    },
+//                    this::loadPracticeQuiz
+//            );
+
             dialogStage.showAndWait();
 
+            if (!passed) {
+                // If the user did not pass, let's reset the quiz state for a retry or practice
+                resetQuiz();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void backToHomePage(ActionEvent event) {
+    private void resetQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        scoreLabel.setText("0");
+        loadQuestions();
+    }
+
+    private void retryQuiz() {
+        resetQuiz();
+    }
+
+    // You will need to add this new method to your TestQuizController
+    // It will be responsible for loading the practice quiz view
+    private void loadPracticeQuiz() {
+        System.out.println("Redirecting to the practice quiz...");
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Update backToHomePage to not require ActionEvent:
+    private void backToHomePage() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -254,6 +255,5 @@ public class TestQuizController {
             e.printStackTrace();
         }
     }
-
-
 }
+

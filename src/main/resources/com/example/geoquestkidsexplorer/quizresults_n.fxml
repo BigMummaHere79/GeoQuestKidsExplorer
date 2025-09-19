@@ -14,13 +14,13 @@
       fx:controller="com.example.geoquestkidsexplorer.controllers.QuizResultsController">
 
     <children>
-        <Label fx:id="messageLabel" text="You've completed the quiz!" wrapText="true">
+        <Label fx:id="resultMessageLabel" text="You've completed the quiz!" wrapText="true">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
 
-        <Label fx:id="scoreLabel" text="Your Score: 0/10" wrapText="true">
+        <Label fx:id="scoreMessageLabel" text="Your Score: 0/10" wrapText="true">
             <font>
                 <Font size="18.0" />
             </font>
@@ -33,20 +33,11 @@
         </Label>
 
         <VBox alignment="CENTER" spacing="10.0">
-            <Button fx:id="mainButton" mnemonicParsing="false" onAction="#handleMainButton"
-                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;"
-                    text="Continue to Next Adventure" />
-            <Button fx:id="secondaryButton" mnemonicParsing="false" onAction="#handleSecondaryButton"
-                    style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;"
-                    text="Try the Practice Mode Again for more enjoyable journey!" />
-        </VBox>
-
-        <VBox alignment="CENTER" spacing="10.0">
-            <!--<children>
+            <children>
                 <Button fx:id="continueButton" mnemonicParsing="false" text="Continue to next Continent" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" />
                 <Button fx:id="retryButton" mnemonicParsing="false" text="Retry Quiz" style="-fx-background-color: #FFC107; -fx-text-fill: white; -fx-font-weight: bold;" />
                 <Button fx:id="practiceButton" mnemonicParsing="false" text="Go to Practice Mode" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" />
-            </children>-->
+            </children>
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
