@@ -39,6 +39,7 @@ public class MainApp extends Application {
      *
      * @param args Command-line arguments.
      */
+    //create database
     public static void main(String[] args) {
         DatabaseManager.createNewDatabase();
         launch();
