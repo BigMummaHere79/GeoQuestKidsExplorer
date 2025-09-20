@@ -1,6 +1,8 @@
 module com.example.geoquestkidsexplorer {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
+
     requires java.sql;
     requires java.desktop;
 
@@ -11,5 +13,6 @@ module com.example.geoquestkidsexplorer {
     exports com.example.geoquestkidsexplorer.controllers;
     exports com.example.geoquestkidsexplorer.database;
     exports com.example.geoquestkidsexplorer.models;
+    opens com.example.geoquestkidsexplorer.models;
     opens com.example.geoquestkidsexplorer.database to javafx.fxml;
 }
