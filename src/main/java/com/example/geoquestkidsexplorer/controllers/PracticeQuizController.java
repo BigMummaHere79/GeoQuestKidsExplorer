@@ -15,11 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,13 +76,13 @@ public class PracticeQuizController {
     }
     // Used by tests to compare chosen vs correct
     public boolean evaluateChoice(String chosen){
-        return current != null && chosen != null && chosen.equals((current.getCorrectAnswer()));
+        return current != null && chosen != null && chosen.equals((current.correctAnswer()));
     }
     //For unit-testing
     public void loadQuestion(String continent){
         var question = fetchPractise(continent);
         if(questionLabel != null) questionLabel.setText(question.questionText());
-        if(countryImageView != null && question.getImage() != null) countryImageView.setImage(question.getImage());
+        if(countryImageView != null && question.countryImage() != null) countryImageView.setImage(question.countryImage());
     }
     //Helper for Assertions
     public PracticeQuizQuestions getCurrent(){
@@ -109,13 +107,6 @@ public class PracticeQuizController {
 
     @FXML
     public void initialize() {
-        // The listener is attached once and for all.
-        // It checks if a radio button is selected and handles the answer.
-        answerGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !answerChecked) {
-                checkAnswer((RadioButton) newValue);
-            }
-        });
         // Hide feedback container and next question button initially
         feedbackContainer.setVisible(false);
         nextQuestionButton.setVisible(false);
@@ -152,30 +143,25 @@ public class PracticeQuizController {
     private void loadQuestion() {
         answerChecked = false;
         if (currentQuestionIndex < questions.size()) {
-            // Re-show radio buttons for the new question
-            option1.setVisible(true);
-            option2.setVisible(true);
-            option3.setVisible(true);
-            option4.setVisible(true);
-
-            // Detach radio buttons from the toggle group to prevent selection issues
-            option1.setToggleGroup(null);
-            option2.setToggleGroup(null);
-            option3.setToggleGroup(null);
-            option4.setToggleGroup(null);
-
-            // Re-attach them to the toggle group
-            option1.setToggleGroup(answerGroup);
-            option2.setToggleGroup(answerGroup);
-            option3.setToggleGroup(answerGroup);
-            option4.setToggleGroup(answerGroup);
 
             PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
+            // Reset and re-enable all radio buttons
+            RadioButton[] radioButtons = new RadioButton[]{option1, option2, option3, option4};
+            for (RadioButton rb : radioButtons) {
+                rb.setSelected(false);
+                rb.setDisable(false); // Re-enable the buttons
+                rb.setStyle(null); // Clear any styles
+                // Make sure they are visible, just in case
+                rb.setVisible(true);
+            }
+            // Make sure the toggle group is cleared
+            answerGroup.selectToggle(null);
+
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             countryImageView.setImage(currentQuestion.countryImage());
             questionLabel.setText(currentQuestion.questionText());
 
-            List<String> options = new ArrayList<>(currentQuestion.getChoices());
+            List<String> options = new ArrayList<>(currentQuestion.choices());
             Collections.shuffle(options, ThreadLocalRandom.current());
 
             option1.setText(options.get(0));
@@ -194,20 +180,11 @@ public class PracticeQuizController {
         }
     }
 
-    // This method's ONLY job is to select the RadioButton when the user clicks the tile.
-    // The ToggleGroup listener in initialize() will then handle the rest of the logic.
+    // New method to handle direct RadioButton selection
     @FXML
-    private void handleTileSelection(MouseEvent event) {
-        VBox clickedTile = (VBox) event.getSource();
-        for (Node node : clickedTile.getChildren()) {
-            if (node instanceof RadioButton) {
-                RadioButton selectedRadioButton = (RadioButton) node;
-                // Check if the button is not already selected and not disabled
-                if (!selectedRadioButton.isSelected() && !selectedRadioButton.isDisable()) {
-                    selectedRadioButton.setSelected(true);
-                }
-                break;
-            }
+    private void handleAnswerSelection(ActionEvent event) {
+        if (!answerChecked) {
+            checkAnswer((RadioButton) event.getSource());
         }
     }
 
@@ -219,7 +196,7 @@ public class PracticeQuizController {
         answerChecked = true;
         PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
         String selectedAnswer = selectedRadioButton.getText();
-        boolean isCorrect = selectedAnswer.equals(currentQuestion.getCorrectAnswer());
+        boolean isCorrect = selectedAnswer.equals(currentQuestion.correctAnswer());
 
         // Disable all radio buttons after an answer is selected
         disableRadioButtons(true);
@@ -235,16 +212,16 @@ public class PracticeQuizController {
             selectedRadioButton.setStyle("-fx-background-color: #ffccbc; -fx-background-radius: 5;");
             // Find the correct answer and apply the right style
             for (RadioButton rb : new RadioButton[]{option1, option2, option3, option4}) {
-                if (rb.getText().equals(currentQuestion.getCorrectAnswer())) {
+                if (rb.getText().equals(currentQuestion.correctAnswer())) {
                     rb.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 5;");
                     break;
                 }
             }
-            feedbackMessageLabel.setText("Good try! The correct answer is " + currentQuestion.getCorrectAnswer() + ". 😟");
+            feedbackMessageLabel.setText("Good try! The correct answer is " + currentQuestion.correctAnswer() + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
         }
 
-        funFactLabel.setText(currentQuestion.getFunFact());
+        funFactLabel.setText(currentQuestion.funFact());
         feedbackContainer.setVisible(true);
         nextQuestionButton.setVisible(true);
     }
@@ -281,12 +258,21 @@ public class PracticeQuizController {
         feedbackContainer.setVisible(true);
         nextQuestionButton.setVisible(false);
         disableRadioButtons(true);
+
+        // New: Hide the radio button tiles at the end of the quiz
+        option1Tile.setVisible(false);
+        option2Tile.setVisible(false);
+        option3Tile.setVisible(false);
+        option4Tile.setVisible(false);
     }
 
     @FXML
     private void backToGameModes(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
+            Parent root = loader.load();
+            ContinentsController controller = loader.getController();
+            controller.setContinentName(this.continentName);
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

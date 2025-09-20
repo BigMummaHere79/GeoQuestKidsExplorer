@@ -1,7 +1,7 @@
 package com.example.geoquestkidsexplorer.controllers;
 
 //We don't need GameStateManger at the moment. This is for unlocking countries for later on.
-//import com.example.geoquestkidsexplorer.GameStateManager;
+import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
 import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
@@ -18,7 +18,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -208,22 +207,22 @@ public class TestQuizController {
             resultsController.setResults(score, questions.size(), continentName, passed);
 
             // Set the actions for the buttons in the results dialog
-//            resultsController.setActions(
-//                    this::retryQuiz,
-//                    () -> {
-//                        String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
-//                        if (nextContinent != null) {
-//                            GameStateManager.getInstance().unlockContinent(nextContinent);
-//                            // Reload the StartAdventure page to show the unlocked continent
-//                            try {
-//                                backToHomePage();
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    },
-//                    this::loadPracticeQuiz
-//            );
+            resultsController.setActions(
+                   this::retryQuiz,
+                   () -> {
+                       String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
+                       if (nextContinent != null) {
+                           GameStateManager.getInstance().unlockContinent(nextContinent);
+                           // Reload the StartAdventure page to show the unlocked continent
+                           try {
+                               backToHomePage();
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                   },
+                    this::loadPracticeQuiz
+            );
 
             dialogStage.showAndWait();
 

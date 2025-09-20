@@ -51,8 +51,6 @@
                 <!-- Welcome Container -->
                 <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1000.0" style="-fx-padding: 10px;">
                     <children>
-
-
                         <HBox alignment="CENTER" spacing="15.0">
                             <children>
                                 <VBox alignment="CENTER_LEFT" spacing="15.0">
@@ -100,33 +98,33 @@
                                         <Insets top="10.0" />
                                     </VBox.margin>
                                     <children>
-                                        <VBox fx:id="option1Tile" styleClass="option-tile" onMouseClicked="#handleTileSelection">
+                                        <VBox fx:id="option1Tile" styleClass="option-tile">
                                             <children>
-                                                <RadioButton fx:id="option1" mnemonicParsing="false" text="RadioButton">
+                                                <RadioButton fx:id="option1" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton">
                                                     <toggleGroup>
                                                         <ToggleGroup fx:id="answerGroup" />
                                                     </toggleGroup>
                                                 </RadioButton>
                                             </children>
                                         </VBox>
-                                        <VBox fx:id="option2Tile" styleClass="option-tile" onMouseClicked="#handleTileSelection"
+                                        <VBox fx:id="option2Tile" styleClass="option-tile"
                                               GridPane.columnIndex="1">
                                             <children>
-                                                <RadioButton fx:id="option2" mnemonicParsing="false" text="RadioButton"
+                                                <RadioButton fx:id="option2" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton"
                                                              toggleGroup="$answerGroup" />
                                             </children>
                                         </VBox>
-                                        <VBox fx:id="option3Tile" styleClass="option-tile" onMouseClicked="#handleTileSelection"
+                                        <VBox fx:id="option3Tile" styleClass="option-tile"
                                               GridPane.rowIndex="1">
                                             <children>
-                                                <RadioButton fx:id="option3" mnemonicParsing="false" text="RadioButton"
+                                                <RadioButton fx:id="option3" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton"
                                                              toggleGroup="$answerGroup" />
                                             </children>
                                         </VBox>
-                                        <VBox fx:id="option4Tile" styleClass="option-tile" onMouseClicked="#handleTileSelection"
+                                        <VBox fx:id="option4Tile" styleClass="option-tile"
                                               GridPane.columnIndex="1" GridPane.rowIndex="1">
                                             <children>
-                                                <RadioButton fx:id="option4" mnemonicParsing="false" text="RadioButton"
+                                                <RadioButton fx:id="option4" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton"
                                                              toggleGroup="$answerGroup" />
                                             </children>
                                         </VBox>
