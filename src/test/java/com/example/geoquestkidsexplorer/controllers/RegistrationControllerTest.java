@@ -105,5 +105,4 @@ class RegistrationControllerTest {
         );
         assertNull(error, "Expected no validation error for valid inputs");
     }
-
 }

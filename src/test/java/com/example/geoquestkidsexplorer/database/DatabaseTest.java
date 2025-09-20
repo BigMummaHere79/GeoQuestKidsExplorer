@@ -8,6 +8,11 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Simple database connection test
+ * Provided in modules
+ * **/
+
 public class DatabaseTest {
 
     //Test Database Connection

@@ -1,8 +1,11 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager.CountryQuestion;
+import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.database.QuizDataSource;
 import com.example.geoquestkidsexplorer.database.RealQuizDataSource;
+import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -22,6 +25,31 @@ public class QuizController {
     @FXML private Label feedbackLabel;
     @FXML private ImageView countryImageView;
     @FXML private TextField answerField;
+    @FXML private Label questionLabel;
+    @FXML private ImageView countryImage;
+
+    private final IQuizQuestionDAO quizDao;
+    private PracticeQuizQuestions current;
+    // FXML/runtime
+    public QuizController(){
+        this(new DatabaseAdapter());
+    }
+    //Unit tests
+    public QuizController(IQuizQuestionDAO dao)
+    {
+        this.quizDao = dao;
+    }
+
+    // Used by tests (No fxml, no JavaFx
+    public PracticeQuizQuestions fetchPractise(String continent){
+        current = quizDao.getPractiseQuizQuestion(continent);
+        return current;
+    }
+    // Used by tests to compare chosen vs correct
+    public boolean evaluateChoice(String chosen){
+        return current != null && chosen != null && chosen.equals((current.getCorrectAnswer()));
+    }
+
 
     // New dependency that defaults real implementation
     private QuizDataSource dataSource = new RealQuizDataSource();
@@ -43,6 +71,16 @@ public class QuizController {
         this.feedbackLabel = feedback;
         this.countryImageView = imageView;
         this.answerField = answer;
+    }
+    //For unit-testing
+    public void loadQuestion(String continent){
+        var question = fetchPractise(continent);
+        if(questionLabel != null) questionLabel.setText(question.questionText());
+        if(countryImage != null && question.getImage() != null) countryImage.setImage(question.getImage());
+    }
+    //Helper for Assertions
+    public PracticeQuizQuestions getCurrent(){
+        return current;
     }
 
     /** Call this immediately after loading the FXML. */
