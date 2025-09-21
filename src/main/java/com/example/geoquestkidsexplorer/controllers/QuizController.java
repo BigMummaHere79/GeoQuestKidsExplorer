@@ -5,7 +5,7 @@ import com.example.geoquestkidsexplorer.database.DatabaseManager.CountryQuestion
 import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.database.QuizDataSource;
 import com.example.geoquestkidsexplorer.database.RealQuizDataSource;
-import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
+import com.example.geoquestkidsexplorer.models.PrimaryQuizQuestions;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -29,7 +29,7 @@ public class QuizController {
     @FXML private ImageView countryImage;
 
     private final IQuizQuestionDAO quizDao;
-    private PracticeQuizQuestions current;
+    private PrimaryQuizQuestions current;
     // FXML/runtime
     public QuizController(){
         this(new DatabaseAdapter());
@@ -41,7 +41,7 @@ public class QuizController {
     }
 
     // Used by tests (No fxml, no JavaFx
-    public PracticeQuizQuestions fetchPractise(String continent){
+    public PrimaryQuizQuestions fetchPractise(String continent){
         current = quizDao.getPractiseQuizQuestion(continent);
         return current;
     }
@@ -75,11 +75,11 @@ public class QuizController {
     //For unit-testing
     public void loadQuestion(String continent){
         var question = fetchPractise(continent);
-        if(questionLabel != null) questionLabel.setText(question.questionText());
-        if(countryImage != null && question.getImage() != null) countryImage.setImage(question.getImage());
+        if(questionLabel != null) questionLabel.setText(question.getQuestionText());
+        if(countryImage != null && question.getCountryImage() != null) countryImage.setImage(question.getCountryImage());
     }
     //Helper for Assertions
-    public PracticeQuizQuestions getCurrent(){
+    public PrimaryQuizQuestions getCurrent(){
         return current;
     }
 
@@ -164,7 +164,7 @@ public class QuizController {
     @FXML
     private void backToGameModes(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/southamerica.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
             Scene scene = new Scene(root);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

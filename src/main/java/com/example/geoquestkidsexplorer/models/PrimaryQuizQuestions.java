@@ -1,26 +1,22 @@
 package com.example.geoquestkidsexplorer.models;
 
+import javafx.scene.image.Image;
 import java.util.List;
 
-public class QuizQuestions {
-    private String countryCode;
+public class PrimaryQuizQuestions {
     private String questionText;
     private List<String> choices;
     private String correctAnswer;
-    private String funFact;
+    private Image countryImage;
 
-    public QuizQuestions(String countryCode, String questionText, List<String> choices, String correctAnswer, String funFact) {
-        this.countryCode = countryCode;
+    public PrimaryQuizQuestions (String questionText, List<String> choices, String correctAnswer, Image countryImage) {
         this.questionText = questionText;
         this.choices = choices;
         this.correctAnswer = correctAnswer;
-        this.funFact = funFact;
+        this.countryImage = countryImage;
     }
 
-    public String getCountryCode() {
-        return countryCode;
-    }
-
+    // Getters for all properties
     public String getQuestionText() {
         return questionText;
     }
@@ -33,7 +29,7 @@ public class QuizQuestions {
         return correctAnswer;
     }
 
-    public String getFunFact() {
-        return funFact;
+    public Image getCountryImage() {
+        return countryImage;
     }
 }

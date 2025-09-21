@@ -113,8 +113,8 @@ public class TestQuizController {
             TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
 
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
-            countryImageView.setImage(currentQuestion.countryImage());
-            questionLabel.setText(currentQuestion.questionText());
+            countryImageView.setImage(currentQuestion.getCountryImage());
+            questionLabel.setText(currentQuestion.getCorrectAnswer());
 
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             questionLabel.setText(currentQuestion.getQuestionText());

@@ -76,13 +76,13 @@ public class PracticeQuizController {
     }
     // Used by tests to compare chosen vs correct
     public boolean evaluateChoice(String chosen){
-        return current != null && chosen != null && chosen.equals((current.correctAnswer()));
+        return current != null && chosen != null && chosen.equals((current.getCorrectAnswer()));
     }
     //For unit-testing
     public void loadQuestion(String continent){
         var question = fetchPractise(continent);
-        if(questionLabel != null) questionLabel.setText(question.questionText());
-        if(countryImageView != null && question.countryImage() != null) countryImageView.setImage(question.countryImage());
+        if(questionLabel != null) questionLabel.setText(question.getQuestionText());
+        if(countryImageView != null && question.getCountryImage() != null) countryImageView.setImage(question.getCountryImage());
     }
     //Helper for Assertions
     public PracticeQuizQuestions getCurrent(){
@@ -136,7 +136,6 @@ public class PracticeQuizController {
             questionLabel.setText("No questions found for " + continentName + ". Please check your database.");
             return;
         }
-
         loadQuestion();
     }
 
@@ -158,10 +157,10 @@ public class PracticeQuizController {
             answerGroup.selectToggle(null);
 
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
-            countryImageView.setImage(currentQuestion.countryImage());
-            questionLabel.setText(currentQuestion.questionText());
+            countryImageView.setImage(currentQuestion.getCountryImage());
+            questionLabel.setText(currentQuestion.getQuestionText());
 
-            List<String> options = new ArrayList<>(currentQuestion.choices());
+            List<String> options = new ArrayList<>(currentQuestion.getChoices());
             Collections.shuffle(options, ThreadLocalRandom.current());
 
             option1.setText(options.get(0));
@@ -196,7 +195,7 @@ public class PracticeQuizController {
         answerChecked = true;
         PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
         String selectedAnswer = selectedRadioButton.getText();
-        boolean isCorrect = selectedAnswer.equals(currentQuestion.correctAnswer());
+        boolean isCorrect = selectedAnswer.equals(currentQuestion.getCorrectAnswer());
 
         // Disable all radio buttons after an answer is selected
         disableRadioButtons(true);
@@ -212,16 +211,16 @@ public class PracticeQuizController {
             selectedRadioButton.setStyle("-fx-background-color: #ffccbc; -fx-background-radius: 5;");
             // Find the correct answer and apply the right style
             for (RadioButton rb : new RadioButton[]{option1, option2, option3, option4}) {
-                if (rb.getText().equals(currentQuestion.correctAnswer())) {
+                if (rb.getText().equals(currentQuestion.getCorrectAnswer())) {
                     rb.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 5;");
                     break;
                 }
             }
-            feedbackMessageLabel.setText("Good try! The correct answer is " + currentQuestion.correctAnswer() + ". 😟");
+            feedbackMessageLabel.setText("Good try! The correct answer is " + currentQuestion.getCorrectAnswer() + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
         }
 
-        funFactLabel.setText(currentQuestion.funFact());
+        funFactLabel.setText(currentQuestion.getFunFact());
         feedbackContainer.setVisible(true);
         nextQuestionButton.setVisible(true);
     }

@@ -3,16 +3,17 @@ package com.example.geoquestkidsexplorer.models;
 import javafx.scene.image.Image;
 import java.util.List;
 
-public record TestQuizQuestions(
-        String questionText,
-        String correctAnswer,
-        Image countryImage
-) {
-    public String getCorrectAnswer() {
-        return correctAnswer;
+public class TestQuizQuestions extends PrimaryQuizQuestions {
+    private int scoreValue;
+
+    public TestQuizQuestions(String questionText, List<String> choices, String correctAnswer, int scoreValue, Image countryImage) {
+        // Calls the constructor of the parent class
+        super(questionText, choices, correctAnswer, countryImage);
+        this.scoreValue = scoreValue;
     }
 
-    public String getQuestionText() {
-        return questionText;
+    // Getter for the unique scoreValue property
+    public int getScoreValue() {
+        return scoreValue;
     }
 }

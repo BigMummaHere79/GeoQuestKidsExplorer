@@ -132,7 +132,6 @@
                                 </GridPane>
                             </children>
                         </VBox>
-
                         <!-- Right Side: Image Container -->
                         <VBox alignment="CENTER" HBox.hgrow="ALWAYS" style="-fx-background-color: #d1d5db; -fx-background-radius: 10px; -fx-border-radius: 10px;">
                             <children>
@@ -142,7 +141,6 @@
                         </VBox>
                     </children>
                 </HBox>
-
                 <!-- Feedback and Fun Facts Container (hidden initially) -->
                 <VBox fx:id="feedbackContainer" alignment="CENTER" prefWidth="800.0" spacing="10.0"
                       style="-fx-background-color: #e0e0e0; -fx-padding: 15px; -fx-background-radius: 15; -fx-padding: 15px;"

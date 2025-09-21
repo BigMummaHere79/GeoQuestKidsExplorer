@@ -8,6 +8,7 @@ import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
  * Implements the interface
  * **/
 
+import java.util.ArrayList;
 import java.util.List;
 /**This fake test **/
 
@@ -22,6 +23,6 @@ public class FakeQuizDao implements IQuizQuestionDAO {
     @Override
     public TestQuizQuestions getTestQuizQuestion(String continent) {
         return (
-                new TestQuizQuestions("What country is this?", "Australia", null));
+                new TestQuizQuestions("What country is this?", new ArrayList<>(), "Australia", 10, null));
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PracticeQuizQuestionsTest {
+class PracticePrimaryQuizQuestionsTest {
     @Test
     void testConstructorsSetsAndGets(){
         Image dummyImage = null;
@@ -18,7 +18,7 @@ class PracticeQuizQuestionsTest {
                 dummyImage
         );
 
-        assertEquals("What country is this?", questions.questionText());
+        assertEquals("What country is this?", questions.getQuestionText());
     }
 
     @Test
@@ -98,7 +98,7 @@ class PracticeQuizQuestionsTest {
                 "New Caledonia","French overseas territory, famous for lagoons and reefs",
                 dummyImage);
 
-        assertNull(choices.getImage());
+        assertNull(choices.getCountryImage());
     }
 
     @Test

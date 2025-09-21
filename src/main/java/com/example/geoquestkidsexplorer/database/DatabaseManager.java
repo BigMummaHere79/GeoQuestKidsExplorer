@@ -406,6 +406,13 @@ public class DatabaseManager {
         String correctAnswer = correctQuestion.countryName;
         Image countryImage = correctQuestion.image;
 
-        return new TestQuizQuestions(questionText, correctAnswer, countryImage);
+        // Create an empty list for choices, since the test mode doesn't have them
+        List<String> choices = new ArrayList<>();
+
+        // Provide the score value for the test question
+        int scoreValue = 10; // Or whatever value you want to assign
+
+        // Return a new TestQuizQuestions object with all required arguments
+        return new TestQuizQuestions(questionText, choices, correctAnswer, scoreValue, countryImage);
     }
 }
