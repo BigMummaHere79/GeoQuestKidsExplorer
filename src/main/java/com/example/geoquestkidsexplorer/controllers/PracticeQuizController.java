@@ -105,7 +105,7 @@ public class PracticeQuizController {
         loadQuizQuestions();
     }
 
-    //Used for the Hint button
+    //This is for the Hint button
     @FXML
     private Button hintButton;
     private boolean hintUsed = false;

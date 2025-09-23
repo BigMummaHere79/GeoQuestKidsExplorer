@@ -177,8 +177,8 @@
                     </children>
                 </VBox>
 
-                <!-- Hint Button -->
-                <Button fx:id="hintButton" text="Hint" onAction="#handleHint"
+                <!-- Hint Button! -->
+                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint"
                         prefHeight="40.0" prefWidth="200.0"
                         style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
                         textFill="WHITE">
