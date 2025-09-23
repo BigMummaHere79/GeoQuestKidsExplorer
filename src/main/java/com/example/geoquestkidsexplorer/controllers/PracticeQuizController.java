@@ -170,8 +170,6 @@ public class PracticeQuizController {
             return;
         }
         loadQuestion();
-
-
     }
 
     private void loadQuestion() {

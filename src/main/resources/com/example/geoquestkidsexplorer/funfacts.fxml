@@ -38,7 +38,7 @@
                                                 <Font size="25.0" />
                                             </font>
                                         </Label>
-                                        <Label style="-fx-text-fill: white; -fx-font-weight: italic;"
+                                        <Label style="-fx-text-fill: white; -fx-font-weight: bold;"
                                                text="Discover fascinating fun facts from around the World!">
                                             <font>
                                                 <Font size="16.0" />
