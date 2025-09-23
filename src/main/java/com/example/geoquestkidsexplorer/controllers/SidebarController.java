@@ -126,11 +126,11 @@ public class SidebarController {
         String username = UserSession.getUsername();
         String avatar = UserSession.getAvatar();
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement("SELECT explorer_name, avatar FROM users WHERE username = ?")) {
+             PreparedStatement pstmt = conn.prepareStatement("SELECT username, avatar FROM users WHERE username = ?")) {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                explorerName = rs.getString("explorer_name");
+                explorerName = rs.getString("username");
                 avatar = rs.getString("avatar");
             }
         } catch (SQLException e) {

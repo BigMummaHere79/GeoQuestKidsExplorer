@@ -46,7 +46,7 @@
     <center>
         <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0" style="-fx-background-color: #ffffff;
                     -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
-                    -fx-effect: dropshadow(three-pass-light, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
             <children>
                 <!-- Welcome Container -->
                 <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1000.0" style="-fx-padding: 10px;">
@@ -70,7 +70,7 @@
                 <!-- This HBox now arranges the content side-by-side -->
                 <HBox alignment="TOP_CENTER" prefHeight="445" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #f0f0f0;
                     -fx-padding: 20px; -fx-background-radius: 20px; -fx-border-radius: 20px;
-                    -fx-effect: dropshadow(three-pass-light, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
                         <!-- Left Side: Question and Radio Buttons -->
                         <VBox alignment="CENTER" spacing="15.0" HBox.hgrow="ALWAYS" style="-fx-background-color: #ffffff;

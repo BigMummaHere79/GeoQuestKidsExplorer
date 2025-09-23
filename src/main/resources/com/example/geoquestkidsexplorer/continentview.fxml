@@ -36,7 +36,7 @@
                 <!-- Main Content Container -->
                 <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0" style="-fx-background-color: #ffffff;
                     -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
-                    -fx-effect: dropshadow(three-pass-light, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
                         <!-- Welcome Container -->
                         <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1000.0" style="-fx-padding: 10px;">
@@ -71,7 +71,8 @@
                                     </VBox>
 
                                     <Button fx:id="flashcardsButton" text="Flashcards" onAction="#handleFlashcards"
-                                            style="-fx-background-color: #ffcdd2; -fx-background-radius: 10; -fx-padding: 12; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                            style="-fx-background-color: #ffcdd2; -fx-background-radius: 10; -fx-padding: 12;
+                                            -fx-text-fill: #000000; -fx-font-size: 14px; -fx-font-weight: bold;"/>
 
 
                                     <!-- Test Mode Quiz Tile -->

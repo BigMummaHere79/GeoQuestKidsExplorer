@@ -39,30 +39,28 @@ public class ProfileCreatedController {
 
     /**
      * Handles the "Start Adventure" button action.
-     * This method will transition to the home page.
+     * This method will transition to the home page, passing profile data.
+     *
+     * @param event The ActionEvent from the button click.
+     * @throws IOException If the FXML file cannot be loaded.
      */
     @FXML
-    private void startAdventure(ActionEvent event) {
-        try {
-            // Load the main application layout
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/sidebar.fxml"));
-            Parent root = loader.load();
+    private void startAdventure(ActionEvent event) throws IOException {
+        // Create the loader for the next scene
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+        Parent root = loader.load();
 
-            // Get a reference to the MainController
-            SidebarController mainAppController = loader.getController();
+        // Get the controller of the new scene and pass the profile data to it
+        HomePageController homePageController = loader.getController();
+        homePageController.setProfileData(explorerName, selectedAvatar);
 
-            // Pass the user's data to the MainController
-            mainAppController.setProfileData(this.explorerName, this.selectedAvatar);
+        // Get the stage from the current event's source node
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
 
-            // Use the stored stage to set the new scene
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Failed to load the main layout. Check your FXML file path.");
-        }
+        // Set the new scene on the stage and show it
+        stage.setScene(scene);
+        stage.show();
     }
 }
 

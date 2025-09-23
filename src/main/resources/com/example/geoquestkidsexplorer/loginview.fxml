@@ -109,7 +109,8 @@
                         </VBox>
 
                         <!-- Simple Avatar Picker -->
-                        <VBox spacing="6.0" style="-fx-alignment: CENTER; -fx-background-color: #f9fafb; -fx-padding: 10; -fx-background-radius: 8;">
+                        <VBox spacing="6.0" style="-fx-alignment: CENTER; -fx-background-color: #f9fafb; -fx-padding: 10;
+                            -fx-background-radius: 8;">
                             <children>
                                 <ComboBox fx:id="avatarCombo" promptText="Pick an avatar" prefWidth="220">
                                     <items>
