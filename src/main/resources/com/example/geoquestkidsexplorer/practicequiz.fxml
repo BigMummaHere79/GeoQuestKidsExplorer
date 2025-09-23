@@ -42,6 +42,12 @@
         </HBox>
     </top>
 
+
+
+
+
+
+
     <!-- Center: Main Content Container -->
     <center>
         <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0" style="-fx-background-color: #ffffff;
@@ -170,6 +176,20 @@
                         </HBox>
                     </children>
                 </VBox>
+
+                <!-- Hint Button -->
+                <Button fx:id="hintButton" text="Hint" onAction="#handleHint"
+                        prefHeight="40.0" prefWidth="200.0"
+                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
+                        textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="10.0" bottom="10.0" />
+                    </VBox.margin>
+                </Button>
+
 
                 <!-- Next Question Button (hidden initially) -->
                 <Button fx:id="nextQuestionButton" mnemonicParsing="false" onAction="#handleNextQuestion"

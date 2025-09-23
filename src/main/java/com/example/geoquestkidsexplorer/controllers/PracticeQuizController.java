@@ -105,6 +105,39 @@ public class PracticeQuizController {
         loadQuizQuestions();
     }
 
+    //Used for the Hint button
+    @FXML
+    private Button hintButton;
+    private boolean hintUsed = false;
+
+    @FXML
+    private void handleHint(ActionEvent event) {
+        if (hintUsed || currentQuestionIndex >= questions.size()) {
+            return;
+        }
+
+        hintUsed = true;             // Mark hint as used
+        hintButton.setDisable(true); // Disable the button right away
+
+        PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
+        String correctAnswer = currentQuestion.getCorrectAnswer();
+
+        List<RadioButton> incorrectOptions = new ArrayList<>();
+        for (RadioButton rb : new RadioButton[]{option1, option2, option3, option4}) {
+            if (!rb.isDisable() && !rb.getText().equals(correctAnswer)) {
+                incorrectOptions.add(rb);
+            }
+        }
+
+        if (!incorrectOptions.isEmpty()) {
+            RadioButton toRemove = incorrectOptions.get(ThreadLocalRandom.current().nextInt(incorrectOptions.size()));
+            toRemove.setDisable(true);
+            toRemove.setVisible(false); // Hide the wrong answer
+        }
+    }
+
+
+
     @FXML
     public void initialize() {
         // Hide feedback container and next question button initially
@@ -137,6 +170,8 @@ public class PracticeQuizController {
             return;
         }
         loadQuestion();
+
+
     }
 
     private void loadQuestion() {
@@ -173,6 +208,10 @@ public class PracticeQuizController {
             disableRadioButtons(false);
             feedbackContainer.setVisible(false);
             nextQuestionButton.setVisible(false);
+
+            hintUsed = false;
+            hintButton.setDisable(false);
+
         } else {
             // End of Quiz Logic
             endQuiz();
@@ -199,6 +238,9 @@ public class PracticeQuizController {
 
         // Disable all radio buttons after an answer is selected
         disableRadioButtons(true);
+
+        hintButton.setDisable(true);   // Disables hint after an answer is selected
+
 
         if (isCorrect) {
             score++;
