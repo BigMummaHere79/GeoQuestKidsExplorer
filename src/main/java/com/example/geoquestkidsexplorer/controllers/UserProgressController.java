@@ -61,7 +61,8 @@ public class UserProgressController {
                     if (rs.next()) {
                         int level = rs.getInt("level");
                         if (rs.wasNull() || level < 1) {
-                            System.err.println("setProfileData: User " + explorerName + " has null or invalid level (" + (rs.wasNull() ? "NULL" : level) + "), updating to 1");
+                            System.err.println("setProfileData: User " + explorerName + " has null or invalid level ("
+                                    + (rs.wasNull() ? "NULL" : level) + "), updating to 1");
                             updateUserLevel(explorerName, 1); // Fix NULL or invalid level
                             continentsUnlocked = 1;
                         } else {
@@ -69,7 +70,8 @@ public class UserProgressController {
                             System.out.println("setProfileData: User " + explorerName + " found with level: " + level);
                         }
                     } else {
-                        System.err.println("setProfileData: No user found for username: " + explorerName + ", defaulting to level 1");
+                        System.err.println("setProfileData: No user found for username: " + explorerName
+                                + ", defaulting to level 1");
                     }
                 }
             } catch (SQLException e) {
@@ -106,7 +108,8 @@ public class UserProgressController {
         correctAnswersLabel.setText("" + correctAnswers);
         levelsCompletedTileLabel.setText("" + totalLevelsCompleted);
         continentsUnlockedTileLabel.setText("" + continentsUnlocked);
-        System.out.println("setProfileData: Updated UI - Continents Unlocked: " + continentsUnlocked + ", Perfect Scores: " + perfectScores + ", Correct Answers: " + correctAnswers);
+        System.out.println("setProfileData: Updated UI - Continents Unlocked: " + continentsUnlocked + ", Perfect Scores: "
+                + perfectScores + ", Correct Answers: " + correctAnswers);
     }
 
     /**
@@ -128,24 +131,6 @@ public class UserProgressController {
             e.printStackTrace();
         }
     }
-
-
-
-    /*public void setProfileData(String explorerName, String explorerAvatar, int continentsUnlocked, int perfectScores, int correctAnswers) {
-        // Update the avatar label with the user's selected avatar
-        avatarLabel.setText(explorerAvatar);
-
-        int totalLevelsCompleted = perfectScores + correctAnswers; // Placeholder logic
-        continentsUnlockedLabel.setText("Continents Unlocked: " + continentsUnlocked + "/7");
-        levelsCompletedLabel.setText("Total Levels Completed: " + totalLevelsCompleted + "/7");
-
-        // Update the stats tiles with the provided data
-        perfectScoresLabel.setText("" + perfectScores);
-        correctAnswersLabel.setText("" + correctAnswers);
-        levelsCompletedTileLabel.setText("" + totalLevelsCompleted);
-        // Update the progress labels.
-        continentsUnlockedTileLabel.setText("" + continentsUnlocked);
-    }*/
 
     /**
      * Handles the logout action.

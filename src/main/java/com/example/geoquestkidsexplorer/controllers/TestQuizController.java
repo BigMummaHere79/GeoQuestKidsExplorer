@@ -194,11 +194,8 @@ public class TestQuizController {
 
     private void showResults() {
         try {
-            // Calculate score as a percentage
             double scorePercentage = (double) score / questions.size() * 100;
-
-            // Get the level for the current continent
-            int currentLevel = 1;
+            int currentLevel = 0;
             String sql = "SELECT level FROM continents WHERE continent = ?";
             try (Connection conn = DatabaseManager.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -206,111 +203,100 @@ public class TestQuizController {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         currentLevel = rs.getInt("level");
+                    } else {
+                        System.err.println("showResults: No level found for continent: " + continentName);
                     }
                 }
             } catch (SQLException e) {
-                System.err.println("getContinentLevel error: " + e.getMessage());
+                System.err.println("showResults: Error fetching level for " + continentName + ": " + e.getMessage());
+                e.printStackTrace();
+                return;
             }
 
-            // Save quiz result and update level if passed
-            boolean unlocked = DatabaseManager.saveQuizResultAndUpdateLevel(
-                    UserSession.getUsername(), currentLevel, scorePercentage
-            );
+            // Save result and update level
+            String username = UserSession.getUsername();
+            if (username == null || username.isEmpty()) {
+                System.err.println("showResults: No user logged in, cannot save results");
+                return;
+            }
 
-            // Load the results dialog
+            boolean levelUpdated = DatabaseManager.saveQuizResultAndUpdateLevel(username, currentLevel, scorePercentage);
+            boolean passed = scorePercentage >= 80.0;
+            if (passed && levelUpdated) {
+                String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
+                if (nextContinent != null) {
+                    GameStateManager.getInstance().unlockContinent(nextContinent);
+                    GameStateManager.getInstance().saveState();
+                    System.out.println("showResults: Unlocked " + nextContinent + " for user " + username);
+                } else {
+                    System.out.println("showResults: No next continent available for " + continentName);
+                }
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quizresults.fxml"));
             Parent root = loader.load();
             QuizResultsController resultsController = loader.getController();
 
-            Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(stage);
-            dialogStage.setScene(new Scene(root, 400, 300)); // Set a reasonable size
+            dialogStage.initOwner(questionNumberLabel.getScene().getWindow());
+            dialogStage.setScene(new Scene(root, 400, 300));
             dialogStage.setTitle("Quiz Results");
 
-            boolean passed = scorePercentage >= 80.0;
             resultsController.setDialogStage(dialogStage);
             resultsController.setResults(score, questions.size(), continentName, passed);
 
-            // Update the actions for the results dialog
             resultsController.setActions(
                     this::retryQuiz,
                     () -> {
-                        if (unlocked) {
-                            String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
-                            if (nextContinent != null) {
-                                try {
-                                    backToHomePage();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                        dialogStage.close();
+                        if (passed && levelUpdated) {
+                            try {
+                                backToHomePage();
+                            } catch (IOException e) {
+                                System.err.println("backToHomePage error: " + e.getMessage());
+                                e.printStackTrace();
                             }
                         }
                     },
-                    this::loadPracticeQuiz
+                    () -> {
+                        loadPracticeQuiz();
+                        dialogStage.close();
+                    }
             );
 
             dialogStage.showAndWait();
 
             if (!passed) {
                 resetQuiz();
-            } /*else {
-                stage.close(); // Close the quiz window if passed
-            }*/
+            } else if (levelUpdated) {
+                Stage quizStage = (Stage) questionNumberLabel.getScene().getWindow();
+                quizStage.close();
+                try {
+                    backToHomePage();
+                } catch (IOException e) {
+                    System.err.println("backToHomePage error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
         } catch (IOException e) {
+            System.err.println("showResults error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-
-    /*private void showResults() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quizresults.fxml"));
-            Parent root = loader.load();
-            QuizResultsController resultsController = loader.getController();
-
-            Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
-            Stage dialogStage = new Stage();
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(stage);
-            dialogStage.setScene(new Scene(root));
-            dialogStage.setTitle("Quiz Results");
-
-            double passingScorePercentage = 80.0;
-            boolean passed = ((double) score / questions.size() * 100) >= passingScorePercentage;
-
-            resultsController.setDialogStage(dialogStage);
-            resultsController.setResults(score, questions.size(), continentName, passed);
-
-            // Set the actions for the buttons in the results dialog
-            resultsController.setActions(
-                   this::retryQuiz,
-                   () -> {
-                       String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
-                       if (nextContinent != null) {
-                           GameStateManager.getInstance().unlockContinent(nextContinent);
-                           // Reload the StartAdventure page to show the unlocked continent
-                           try {
-                               backToHomePage();
-                           } catch (IOException e) {
-                               e.printStackTrace();
-                           }
-                       }
-                   },
-                    this::loadPracticeQuiz
-            );
-
-            dialogStage.showAndWait();
-
-            if (!passed) {
-                // If the user did not pass, let's reset the quiz state for a retry or practice
-                resetQuiz();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
+    private void backToHomePage() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+        Parent root = loader.load();
+        HomePageController controller = loader.getController();
+        controller.refreshContinentLocks();
+        Scene scene = new Scene(root, 1200.0, 800.0);
+        Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        System.out.println("backToHomePage: Navigated to homepage, refreshed locks");
+    }
 
     private void resetQuiz() {
         currentQuestionIndex = 0;
@@ -338,17 +324,6 @@ public class TestQuizController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // Update backToHomePage to not require ActionEvent:
-    private void backToHomePage() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
-        Scene scene = new Scene(root, 1200.0, 800.0);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
     }
 
     @FXML

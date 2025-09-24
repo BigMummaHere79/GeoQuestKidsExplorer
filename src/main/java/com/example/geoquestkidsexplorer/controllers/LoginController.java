@@ -67,52 +67,6 @@ public class LoginController {
     // ===========================
     // Login (now async)
     // ===========================
-    /*@FXML
-    protected void handleLogin(ActionEvent event) {
-        String email = text(loginEmailField);
-        String password = text(loginPasswordField);
-
-        // use validator
-        // Refactoring validateLoginInput into here
-        // Extracting Method
-        String err = validateLoginInputs(email, password);
-        if (err != null){
-            error(err);
-            return;
-        }
-        success("Signing you in…");
-
-        Task<Boolean> loginTask = new Task<>() {
-            @Override protected Boolean call() {
-                // NOTE: It is better to get the user ID here as part of a single query
-                // that also validates the login. This avoids a second call.
-                return DatabaseManager.validateLogin(email, password);
-            }
-        };
-
-        loginTask.setOnSucceeded(e -> {
-            boolean ok = Boolean.TRUE.equals(loginTask.getValue());
-            if (!ok) {
-                error("Invalid email or password.");
-                return;
-            }
-            // Adding this line below to set the user ID in the session!
-            // Will need a new method in DatabaseManager to get the user's ID by email.
-            String username = DatabaseManager.getUsernameByEmail(email);
-            UserSession.setUsername(username);
-
-            // Chain: fetch username/avatar off the UI thread too
-            loadHomeAsync(event, email);
-        });
-
-        loginTask.setOnFailed(e -> {
-            Throwable ex = loginTask.getException();
-            error("Login error: " + (ex != null ? ex.getMessage() : "unknown"));
-        });
-
-        new Thread(loginTask, "login-task").start();
-    }*/
-
     @FXML
     private void handleLogin(ActionEvent event) {
         String email = text(loginEmailField);
@@ -159,15 +113,20 @@ public class LoginController {
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
+            System.out.println("fixUserLevel: Checking level for username: " + username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    int level = rs.getInt("level"); // Access level column first
                     if (rs.wasNull()) {
                         System.out.println("fixUserLevel: User " + username + " has null level, updating to 1");
                         String updateSql = "UPDATE users SET level = 1 WHERE username = ?";
                         try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
                             updatePs.setString(1, username);
-                            updatePs.executeUpdate();
+                            int rows = updatePs.executeUpdate();
+                            System.out.println("fixUserLevel: Updated level to 1 for user " + username + ", rows affected: " + rows);
                         }
+                    } else {
+                        System.out.println("fixUserLevel: User " + username + " has level: " + level);
                     }
                 } else {
                     System.err.println("fixUserLevel: No user found for username: " + username);
@@ -178,9 +137,6 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
-
-
 
     //For unit testing --------Login - Tori
     // Only for tests

@@ -20,49 +20,41 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class HomePageController {
 
     // You will need to add an @FXML field for each continent tile you have in startadventure.fxml
-    @FXML
-    private Pane africaPane;
-    @FXML
-    private Pane asiaPane;
-    @FXML
-    private Pane northAmericaPane;
-    @FXML
-    private Pane southAmericaPane;
-    @FXML
-    private Pane antarcticaPane;
-    @FXML
-    private Pane europePane;
-    @FXML
-    private Pane oceaniaPane;
+    @FXML private Pane africaPane;
+    @FXML private Pane asiaPane;
+    @FXML private Pane northAmericaPane;
+    @FXML private Pane southAmericaPane;
+    @FXML private Pane antarcticaPane;
+    @FXML private Pane europePane;
+    @FXML private Pane oceaniaPane;
 
     // You will also need a label to show the locked text
-    @FXML
-    private Label africaLockedLabel;
-    @FXML
-    private Label asiaLockedLabel;
-    @FXML
-    private Label northAmericaLockedLabel;
-    @FXML
-    private Label southAmericaLockedLabel;
-    @FXML
-    private Label antarcticaLockedLabel;
-    @FXML
-    private Label europeLockedLabel;
+    @FXML private Label africaLockedLabel;
+    @FXML private Label asiaLockedLabel;
+    @FXML private Label northAmericaLockedLabel;
+    @FXML private Label southAmericaLockedLabel;
+    @FXML private Label antarcticaLockedLabel;
+    @FXML private Label europeLockedLabel;
     @FXML private Label oceaniaLockedLabel;
 
-    @FXML
-    private Label avatarLabel;
-    @FXML
-    private Label welcomeLabel;
-    @FXML
-    private Label subWelcomeLabel;
+    @FXML private Label africaLockedTextLabel;
+    @FXML private Label asiaLockedTextLabel;
+    @FXML private Label northAmericaLockedTextLabel;
+    @FXML private Label southAmericaLockedTextLabel;
+    @FXML private Label antarcticaLockedTextLabel;
+    @FXML private Label europeLockedTextLabel;
+    @FXML private Label oceaniaLockedTextLabel;
 
-    @FXML
-    private SidebarController mySidebarController; // FXML loader automatically injects this.
+    @FXML private Label avatarLabel;
+    @FXML private Label welcomeLabel;
+    @FXML private Label subWelcomeLabel;
+
+    @FXML private SidebarController mySidebarController; // FXML loader automatically injects this.
     // A private field to hold the explorer's avatar string
     private String explorerAvatar;
     private String explorerName;
@@ -93,13 +85,7 @@ public class HomePageController {
             avatarLabel.setText("🙂");
             subWelcomeLabel.setText("Ready for a new adventure!");
         }
-        // Set continent lock status
-        Map<String, Boolean> continents = new HashMap<>();
-        GameStateManager gsm = GameStateManager.getInstance();
-        for (String continent : Arrays.asList("Antarctica", "Oceania", "South America", "North America", "Europe", "Asia", "Africa")) {
-            continents.put(continent, !gsm.isContinentUnlocked(continent));
-        }
-        setContinentLocks(continents);
+        refreshContinentLocks();
     }
 
     /**
@@ -117,6 +103,19 @@ public class HomePageController {
         if (mySidebarController != null) {
             mySidebarController.setProfileData(username, avatar);
         }
+        refreshContinentLocks();
+    }
+
+    public void refreshContinentLocks() {
+        GameStateManager.getInstance().loadState();
+        Set<String> unlockedContinents = GameStateManager.getInstance().getUnlockedContinents();
+        System.out.println("refreshContinentLocks: Unlocked continents = " + unlockedContinents);
+
+        Map<String, Boolean> continents = new HashMap<>();
+        for (String continent : Arrays.asList("Antarctica", "Oceania", "South America", "North America", "Europe", "Asia", "Africa")) {
+            continents.put(continent, !unlockedContinents.contains(continent));
+        }
+        setContinentLocks(continents);
     }
 
     /**
@@ -165,37 +164,51 @@ public class HomePageController {
         continentPanes.put("Africa", africaPane);
 
         // Map of continent names to their corresponding locked labels
-        Map<String, Label> continentLabels = new HashMap<>();
-        continentLabels.put("Antarctica", antarcticaLockedLabel);
-        continentLabels.put("Oceania", oceaniaLockedLabel);
-        continentLabels.put("South America", southAmericaLockedLabel);
-        continentLabels.put("North America", northAmericaLockedLabel);
-        continentLabels.put("Europe", europeLockedLabel);
-        continentLabels.put("Asia", asiaLockedLabel);
-        continentLabels.put("Africa", africaLockedLabel);
+        Map<String, Label> continentLockLabels = new HashMap<>();
+        continentLockLabels.put("Antarctica", antarcticaLockedLabel);
+        continentLockLabels.put("Oceania", oceaniaLockedLabel);
+        continentLockLabels.put("South America", southAmericaLockedLabel);
+        continentLockLabels.put("North America", northAmericaLockedLabel);
+        continentLockLabels.put("Europe", europeLockedLabel);
+        continentLockLabels.put("Asia", asiaLockedLabel);
+        continentLockLabels.put("Africa", africaLockedLabel);
+
+        // Map of continent names to their corresponding lock/unlock text label.
+        Map<String, Label> continentTextLabels = new HashMap<>();
+        continentTextLabels.put("Antarctica", antarcticaLockedTextLabel);
+        continentTextLabels.put("Oceania", oceaniaLockedTextLabel);
+        continentTextLabels.put("South America", southAmericaLockedTextLabel);
+        continentTextLabels.put("North America", northAmericaLockedTextLabel);
+        continentTextLabels.put("Europe", europeLockedTextLabel);
+        continentTextLabels.put("Asia", asiaLockedTextLabel);
+        continentTextLabels.put("Africa", africaLockedTextLabel);
 
         // Iterate through the continents and set their state based on the map
         for (Map.Entry<String, Boolean> entry : continents.entrySet()) {
             String continentName = entry.getKey();
             boolean isLocked = entry.getValue();
-
             Pane pane = continentPanes.get(continentName);
-            Label label = continentLabels.get(continentName);
+            Label lockLabel = continentLockLabels.get(continentName);
+            Label textLabel = continentTextLabels.get(continentName);
 
-            if (pane != null) {
+            if (pane != null && lockLabel != null && textLabel != null) {
                 if (isLocked) {
-                    pane.setOpacity(0.5); // Make it visually "locked"
-                    // Add an event filter to prevent clicks on locked tiles
-                    // Removed the event filter to handle it inside the method instead
-                    if (label != null) {
-                        label.setVisible(true); // Show a "locked" label
-                    }
+                    pane.setOpacity(0.5);
+                    lockLabel.setVisible(isLocked);
+                    textLabel.setText("This continent is locked. Complete previous level to unlock.");
+                    textLabel.setVisible(true);
+                    textLabel.setStyle("-fx-text-fill: red;");
+                    System.out.println("setContinentLocks: Locked " + continentName);
                 } else {
-                    pane.setOpacity(1.0); // Make it visually "unlocked"
-                    if (label != null) {
-                        label.setVisible(false); // Hide the locked label
-                    }
+                    pane.setOpacity(1.0);
+                    lockLabel.setVisible(false);
+                    textLabel.setText("This continent is now unlocked.");
+                    textLabel.setVisible(true);
+                    textLabel.setStyle("-fx-text-fill: green;");
+                    System.out.println("setContinentLocks: Unlocked " + continentName);
                 }
+            } else {
+                System.err.println("setContinentLocks: Missing pane or label for " + continentName);
             }
         }
     }
@@ -305,5 +318,4 @@ public class HomePageController {
         stage.setTitle(continentName + " Game Modes");
         stage.show();
     }
-
 }

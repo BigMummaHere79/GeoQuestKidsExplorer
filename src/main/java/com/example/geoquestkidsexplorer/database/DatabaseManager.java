@@ -248,6 +248,7 @@ public class DatabaseManager {
     }
 
     //NOTE: Just commented out as users table does not have id column, but leaving this as we might need to add id oin the future.
+    //If decided to add the userId column, we can still use this method, but then we will have to modify most of all our method. Glenda.
     // Adding this new method to DatabaseManager.java file for fetching userID.
     /*public static int getUserIdByEmail(String email) {
         final String sql = "SELECT id FROM users WHERE email = ? LIMIT 1"; // assuming your users table has an 'id' column
@@ -470,49 +471,46 @@ public class DatabaseManager {
      * Saves a test mode quiz result and updates the user's level if they pass with 80% or higher.
      * @param username The user's username.
      * @param level The continent level (1 to 7).
-     * @param score The quiz score (percentage, e.g., 85.0 for 85%).
+     * @param scorePercentage The quiz score (percentage, e.g., 85.0 for 85%).
      * @return true if the continent was unlocked, false otherwise.
      */
-    public static boolean saveQuizResultAndUpdateLevel(String username, int level, double score) {
-        boolean passed = score >= 80.0;
-        String status = passed ? "Pass" : "Fail";
+    public static boolean saveQuizResultAndUpdateLevel(String username, int level, double scorePercentage) {
+        boolean isPassing = scorePercentage >= 80.0;
+        String status = isPassing ? "Pass" : "Fail";
 
-        // Insert result into the results table
-        String insertSql = "INSERT INTO results (username, level, grades, status) VALUES (?, ?, ?, ?)";
+        // Insert result into results table
+        String resultSql = "INSERT INTO results (username, level, grades, status) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(insertSql)) {
+             PreparedStatement ps = conn.prepareStatement(resultSql)) {
             ps.setString(1, username);
             ps.setInt(2, level);
-            ps.setDouble(3, score);
+            ps.setDouble(3, scorePercentage);
             ps.setString(4, status);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            System.out.println("saveQuizResultAndUpdateLevel: Inserted result for user " + username + ", level "
+                    + level + ", score " + scorePercentage + ", status " + status + ", rows affected: " + rows);
         } catch (SQLException e) {
-            System.err.println("saveQuizResult error: " + e.getMessage());
+            System.err.println("saveQuizResultAndUpdateLevel: Error inserting result for user " + username + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
 
-        // If passed, update the user's level to the next continent
-        if (passed) {
+        // Update user level if passing
+        if (isPassing) {
             String updateSql = "UPDATE users SET level = ? WHERE username = ?";
             try (Connection conn = getConnection();
                  PreparedStatement ps = conn.prepareStatement(updateSql)) {
-                int nextLevel = level + 1;
-                if (nextLevel > 7) {
-                    nextLevel = 7; // Cap at max level (Africa)
-                }
-                ps.setInt(1, nextLevel);
+                ps.setInt(1, level + 1); // Move to next level
                 ps.setString(2, username);
-                ps.executeUpdate();
-
-                // Unlock the next continent in GameStateManager
-                String nextContinent = getContinentByLevel(nextLevel);
-                if (nextContinent != null) {
-                    GameStateManager.getInstance().unlockContinent(nextContinent);
-                    GameStateManager.getInstance().saveState();
-                    return true;
-                }
+                int rows = ps.executeUpdate();
+                System.out.println("saveQuizResultAndUpdateLevel: Updated level to " + (level + 1) + " for user "
+                        + username + ", rows affected: " + rows);
+                return rows > 0;
             } catch (SQLException e) {
-                System.err.println("updateUserLevel error: " + e.getMessage());
+                System.err.println("saveQuizResultAndUpdateLevel: Error updating level for user " + username + ": "
+                        + e.getMessage());
+                e.printStackTrace();
+                return false;
             }
         }
         return false;
@@ -530,19 +528,13 @@ public class DatabaseManager {
             ps.setInt(1, level);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String continent = rs.getString("continent");
-                    System.out.println("getContinentByLevel: Found continent " + continent + " for level " + level);
-                    return continent;
-                } else {
-                    System.err.println("getContinentByLevel: No continent found for level: " + level);
-                    return null;
+                    return rs.getString("continent");
                 }
             }
         } catch (SQLException e) {
             System.err.println("getContinentByLevel error: " + e.getMessage());
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
-
 }

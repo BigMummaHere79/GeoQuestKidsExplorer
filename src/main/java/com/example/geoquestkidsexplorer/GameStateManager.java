@@ -157,16 +157,40 @@ public class GameStateManager {
     }
 
     /**
-     * Unlocks a continent, making it available for future adventures.
-     *
-     * @param continentName The name of the continent to unlock.
+     * Gets the next continent based on the current continent.
      */
-    public void unlockContinent(String continentName) {
-        if (continentName != null && !unlockedContinents.contains(continentName)) {
-            unlockedContinents.add(continentName);
-            System.out.println(continentName + " unlocked!"); // Debug log
-            // Optional: Save state to DB/file here
-            // saveState();
+    public String getNextContinent(String currentContinent) {
+        String sql = "SELECT c2.continent FROM continents c1 " +
+                "JOIN continents c2 ON c2.level = c1.level + 1 " +
+                "WHERE c1.continent = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, currentContinent);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String nextContinent = rs.getString("continent");
+                    System.out.println("getNextContinent: Found " + nextContinent + " as next continent after " + currentContinent);
+                    return nextContinent;
+                } else {
+                    System.out.println("getNextContinent: No next continent found for " + currentContinent);
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("getNextContinent error: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Unlocks a continent by adding it to the unlocked list.
+     *  @param continent The name of the continent to unlock.
+     */
+    public void unlockContinent(String continent) {
+        if (!unlockedContinents.contains(continent)) {
+            unlockedContinents.add(continent);
+            System.out.println("unlockContinent: Added " + continent + " to unlocked continents");
         }
     }
 
@@ -192,26 +216,11 @@ public class GameStateManager {
     }
 
     /**
-     * Gets the next continent in the progression list.
-     * @param currentContinent The name of the current continent.
-     * @return The name of the next continent, or null if it's the last one.
+     * Gets the list of unlocked continents.
+     *
+     * @return A new Set containing the unlocked continents.
      */
-    public String getNextContinent(String currentContinent) {
-        int currentIndex = CONTINENT_ORDER.indexOf(currentContinent);
-        if (currentIndex != -1 && currentIndex < CONTINENT_ORDER.size() - 1) {
-            return CONTINENT_ORDER.get(currentIndex + 1);
-        }
-        return null; // Last continent
+    public Set<String> getUnlockedContinents() {
+        return new HashSet<>(unlockedContinents);
     }
-
-    // Optional: For persistence (stub for now)
-    /*public void saveState() {
-        // TODO: Save unlockedContinents to DB or file
-        System.out.println("State saved: Unlocked = " + unlockedContinents);
-    }*/
-
-    /*public void loadState() {
-        // TODO: Load unlockedContinents from DB or file
-        System.out.println("State loaded.");
-    }*/
 }

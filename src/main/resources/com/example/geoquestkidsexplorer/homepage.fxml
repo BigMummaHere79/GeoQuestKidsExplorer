@@ -87,8 +87,8 @@
                                     <children>
                                         <Pane fx:id="antarcticaPane" onMouseClicked="#handleContinentClick" prefHeight="200.0"
                                               prefWidth="200.0" styleClass="continent-tile" style="-fx-background-color: #c8e6c9;
-                                              -fx-background-radius: 25; -fx-border-radius: 25;
-                                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                                                -fx-background-radius: 25; -fx-border-radius: 25;
+                                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
@@ -98,6 +98,17 @@
                                                                        url="https://t4.ftcdn.net/jpg/07/22/12/43/360_F_722124358_pmAyxjaWPEOX3pELDGzNOjsjHu2NcCfi.jpg"/>
                                                             </image>
                                                         </ImageView>
+                                                        <VBox fx:id="antarcticaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                                            <children>
+                                                                <Label fx:id="antarcticaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
+                                                                <Label fx:id="antarcticaLockedTextLabel" text="This Continent is locked. Complete previous level to unlock!"
+                                                                       textAlignment="CENTER" wrapText="true">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
                                                     </children>
                                                 </StackPane>
                                             </children>
@@ -105,6 +116,9 @@
                                         <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Antarctica" />
                                     </children>
                                 </VBox>
+
+
+
                                 <!-- Oceania Tile and Label -->
                                 <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.columnIndex="1">
                                     <children>
@@ -127,7 +141,7 @@
                                                         <VBox fx:id="oceaniaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                                             <children>
                                                                 <Label fx:id="oceaniaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label text="This Continent is locked.&#10;Complete the 1st level to unlock!"
+                                                                <Label fx:id="oceaniaLockedTextLabel" text="This Continent is locked.&#10;Complete previous level to unlock!"
                                                                        textAlignment="CENTER" wrapText="true">
                                                                     <font>
                                                                         <Font size="14.0" />
@@ -165,7 +179,7 @@
                                                               prefWidth="200.0">
                                                             <children>
                                                                 <Label fx:id="southAmericaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label text="This Continent is locked.&#10;Complete the 1st level to unlock!"
+                                                                <Label fx:id="southAmericaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
                                                                        textAlignment="CENTER" wrapText="true">
                                                                     <font>
                                                                         <Font size="14.0" />
@@ -202,7 +216,7 @@
                                                         <VBox fx:id="northAmericaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                                             <children>
                                                                 <Label fx:id="northAmericaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label text="This Continent is locked.&#10;Complete the 1st level to unlock!"
+                                                                <Label fx:id="northAmericaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
                                                                        textAlignment="CENTER" wrapText="true">
                                                                     <font>
                                                                         <Font size="14.0" />
@@ -239,7 +253,7 @@
                                                         <VBox fx:id="europeLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                                             <children>
                                                                 <Label fx:id="europeLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label text="This Continent is locked.&#10;Complete the 1st level to unlock!"
+                                                                <Label fx:id="europeLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
                                                                        textAlignment="CENTER" wrapText="true">
                                                                     <font>
                                                                         <Font size="14.0" />
@@ -276,7 +290,7 @@
                                                         <VBox fx:id="asiaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                                             <children>
                                                                 <Label fx:id="asiaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label text="This Continent is locked.&#10;Complete the 1st level to unlock!"
+                                                                <Label fx:id="asiaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
                                                                        textAlignment="CENTER" wrapText="true">
                                                                     <font>
                                                                         <Font size="14.0" />
@@ -313,7 +327,7 @@
                                                         <VBox fx:id="africaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                                             <children>
                                                                 <Label fx:id="africaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label text="This Continent is locked.&#10;Complete the 1st level to unlock!"
+                                                                <Label fx:id="africaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
                                                                        textAlignment="CENTER" wrapText="true">
                                                                     <font>
                                                                         <Font size="14.0" />
