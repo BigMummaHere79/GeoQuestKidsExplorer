@@ -1,5 +1,6 @@
 package com.example.geoquestkidsexplorer.database;
 
+import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
 import com.example.geoquestkidsexplorer.models.UserProfile;
@@ -141,7 +142,9 @@ public class DatabaseManager {
     // Users API
     // ===========================
 
-    /** Duplicate-safe insert used by Register. */
+
+    //NOTE: Commented out due to needed to modify for the implementation of the user progress. Glenda!
+    /** Duplicate-safe insert used by Register.
     public static void insertUser(String username, String email, String password,
                                   String avatar, Integer level, String role) {
         // Pre-check for duplicates
@@ -164,6 +167,49 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Insert user error: " + e.getMessage());
             throw new RuntimeException(e);
+        }
+    }*/
+
+    /** Duplicate-safe insert used by Register. */
+    /** Duplicate-safe insert used by Register. */
+    public static void insertUser(String username, String email, String password, String avatar, String role) {
+        if (userExists(username, email)) {
+            throw new RuntimeException("Username or email already exists.");
+        }
+
+        String sql = "INSERT INTO users(username, email, password, avatar, level, role) VALUES (?,?,?,?,1,?)";
+        try (Connection conn = getConnection()) {
+            enableForeignKeys(conn);
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, username);
+                ps.setString(2, email);
+                ps.setString(3, password);
+                ps.setString(4, avatar != null ? avatar : "🙂"); // Ensure non-null avatar
+                ps.setString(5, role != null ? role : "user"); // Ensure non-null role
+                int rows = ps.executeUpdate();
+                System.out.println("insertUser: User " + username + " inserted with level 1, rows affected: " + rows);
+
+                // Verify insertion
+                try (PreparedStatement verifyPs = conn.prepareStatement("SELECT level FROM users WHERE username = ?")) {
+                    verifyPs.setString(1, username);
+                    try (ResultSet rs = verifyPs.executeQuery()) {
+                        if (rs.next()) {
+                            int level = rs.getInt("level");
+                            if (rs.wasNull() || level != 1) {
+                                System.err.println("insertUser: User " + username + " has unexpected level: " + (rs.wasNull() ? "NULL" : level));
+                            } else {
+                                System.out.println("insertUser: Verified user " + username + " has level: 1");
+                            }
+                        } else {
+                            System.err.println("insertUser: User " + username + " not found after insertion");
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("insertUser: Error inserting user " + username + ": " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to insert user: " + e.getMessage());
         }
     }
 
@@ -416,4 +462,87 @@ public class DatabaseManager {
         // Return a new TestQuizQuestions object with all required arguments
         return new TestQuizQuestions(questionText, choices, correctAnswer, scoreValue, countryImage);
     }
+
+    //---------------------------------------------------------------------------------------------------------------
+    // NOTE: Adding this for UserProgress method and logic
+
+    /**
+     * Saves a test mode quiz result and updates the user's level if they pass with 80% or higher.
+     * @param username The user's username.
+     * @param level The continent level (1 to 7).
+     * @param score The quiz score (percentage, e.g., 85.0 for 85%).
+     * @return true if the continent was unlocked, false otherwise.
+     */
+    public static boolean saveQuizResultAndUpdateLevel(String username, int level, double score) {
+        boolean passed = score >= 80.0;
+        String status = passed ? "Pass" : "Fail";
+
+        // Insert result into the results table
+        String insertSql = "INSERT INTO results (username, level, grades, status) VALUES (?, ?, ?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(insertSql)) {
+            ps.setString(1, username);
+            ps.setInt(2, level);
+            ps.setDouble(3, score);
+            ps.setString(4, status);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("saveQuizResult error: " + e.getMessage());
+            return false;
+        }
+
+        // If passed, update the user's level to the next continent
+        if (passed) {
+            String updateSql = "UPDATE users SET level = ? WHERE username = ?";
+            try (Connection conn = getConnection();
+                 PreparedStatement ps = conn.prepareStatement(updateSql)) {
+                int nextLevel = level + 1;
+                if (nextLevel > 7) {
+                    nextLevel = 7; // Cap at max level (Africa)
+                }
+                ps.setInt(1, nextLevel);
+                ps.setString(2, username);
+                ps.executeUpdate();
+
+                // Unlock the next continent in GameStateManager
+                String nextContinent = getContinentByLevel(nextLevel);
+                if (nextContinent != null) {
+                    GameStateManager.getInstance().unlockContinent(nextContinent);
+                    GameStateManager.getInstance().saveState();
+                    return true;
+                }
+            } catch (SQLException e) {
+                System.err.println("updateUserLevel error: " + e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper method to get continent name by level.
+     * @param level The continent level (1 to 7).
+     * @return The continent name or null if invalid.
+     */
+    public static String getContinentByLevel(int level) {
+        String sql = "SELECT continent FROM continents WHERE level = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, level);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String continent = rs.getString("continent");
+                    System.out.println("getContinentByLevel: Found continent " + continent + " for level " + level);
+                    return continent;
+                } else {
+                    System.err.println("getContinentByLevel: No continent found for level: " + level);
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("getContinentByLevel error: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

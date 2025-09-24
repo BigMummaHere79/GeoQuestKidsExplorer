@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,6 +75,7 @@ public class HomePageController {
     public void initialize() {
         // Get user data directly from the UserSession
         String explorerName = UserSession.getUsername();
+        System.out.println("HomePageController: Current username = " + explorerName);
         String explorerAvatar = UserSession.getAvatar();
 
         if (explorerName != null && !explorerName.isEmpty()) {
@@ -91,6 +93,13 @@ public class HomePageController {
             avatarLabel.setText("🙂");
             subWelcomeLabel.setText("Ready for a new adventure!");
         }
+        // Set continent lock status
+        Map<String, Boolean> continents = new HashMap<>();
+        GameStateManager gsm = GameStateManager.getInstance();
+        for (String continent : Arrays.asList("Antarctica", "Oceania", "South America", "North America", "Europe", "Asia", "Africa")) {
+            continents.put(continent, !gsm.isContinentUnlocked(continent));
+        }
+        setContinentLocks(continents);
     }
 
     /**

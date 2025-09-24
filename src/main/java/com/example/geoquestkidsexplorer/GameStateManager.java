@@ -1,5 +1,12 @@
 package com.example.geoquestkidsexplorer;
 
+import com.example.geoquestkidsexplorer.database.DatabaseManager;
+import com.example.geoquestkidsexplorer.models.UserSession;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -25,10 +32,116 @@ public class GameStateManager {
     );
 
     private GameStateManager() {
-        // Initialize with a default state.
-        // For a full game, this would be loaded from a save file.
         this.unlockedContinents = new HashSet<>();
-        this.unlockedContinents.add("Antarctica"); // Africa is unlocked by default
+        // Load state from database
+        loadState();
+    }
+
+    /**
+     * Loads the unlocked continents based on the user's current level.
+     */
+    public void loadState() {
+        String username = UserSession.getUsername();
+        unlockedContinents.clear(); // Clear existing state
+        if (username == null || username.isEmpty()) {
+            System.err.println("loadState: No user logged in (username is null or empty), defaulting to Antarctica");
+            unlockedContinents.add("Antarctica");
+            return;
+        }
+
+        String sql = "SELECT level FROM users WHERE username = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            System.out.println("loadState: Querying level for username: " + username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int level = rs.getInt("level");
+                    if (rs.wasNull() || level < 1) {
+                        System.err.println("loadState: User " + username + " has null or invalid level (" + (rs.wasNull() ? "NULL" : level) + "), updating to 1");
+                        updateUserLevel(username, 1); // Fix NULL or invalid level
+                        unlockedContinents.add("Antarctica");
+                    } else {
+                        System.out.println("loadState: User " + username + " found with level: " + level);
+                        for (int i = 1; i <= level; i++) {
+                            String continent = DatabaseManager.getContinentByLevel(i);
+                            if (continent != null) {
+                                unlockedContinents.add(continent);
+                            } else {
+                                System.err.println("loadState: No continent found for level: " + i);
+                            }
+                        }
+                    }
+                } else {
+                    System.err.println("loadState: No user found for username: " + username + ", defaulting to Antarctica");
+                    unlockedContinents.add("Antarctica");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("loadState error: " + e.getMessage());
+            e.printStackTrace();
+            unlockedContinents.add("Antarctica"); // Fallback
+        }
+        System.out.println("loadState: Unlocked continents = " + unlockedContinents);
+    }
+
+    /**
+     * Updates the user's level in the database.
+     */
+    private void updateUserLevel(String username, int level) {
+        String sql = "UPDATE users SET level = ? WHERE username = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, level);
+            ps.setString(2, username);
+            int rows = ps.executeUpdate();
+            System.out.println("updateUserLevel: Updated level to " + level + " for user " + username + ", rows affected: " + rows);
+            if (rows == 0) {
+                System.err.println("updateUserLevel: No user found for username: " + username);
+            }
+        } catch (SQLException e) {
+            System.err.println("updateUserLevel error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Saves the current state of unlocked continents to the database.
+     */
+    public void saveState() {
+        String username = UserSession.getUsername();
+        if (username != null) {
+            // Determine the highest unlocked level
+            int highestLevel = 0;
+            for (String continent : unlockedContinents) {
+                String sql = "SELECT level FROM continents WHERE continent = ?";
+                try (Connection conn = DatabaseManager.getConnection();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setString(1, continent);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            int level = rs.getInt("level");
+                            if (level > highestLevel) {
+                                highestLevel = level;
+                            }
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.err.println("saveState error: " + e.getMessage());
+                }
+            }
+            // Update user's level in the database
+            String updateSql = "UPDATE users SET level = ? WHERE username = ?";
+            try (Connection conn = DatabaseManager.getConnection();
+                 PreparedStatement ps = conn.prepareStatement(updateSql)) {
+                ps.setInt(1, highestLevel);
+                ps.setString(2, username);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("saveState error: " + e.getMessage());
+            }
+        }
+        System.out.println("State saved: Unlocked = " + unlockedContinents);
     }
 
     /**
@@ -92,13 +205,13 @@ public class GameStateManager {
     }
 
     // Optional: For persistence (stub for now)
-    public void saveState() {
+    /*public void saveState() {
         // TODO: Save unlockedContinents to DB or file
         System.out.println("State saved: Unlocked = " + unlockedContinents);
-    }
+    }*/
 
-    public void loadState() {
+    /*public void loadState() {
         // TODO: Load unlockedContinents from DB or file
         System.out.println("State loaded.");
-    }
+    }*/
 }

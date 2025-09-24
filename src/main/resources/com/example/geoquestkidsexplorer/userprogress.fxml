@@ -60,13 +60,13 @@
                                             </font>
                                         </Label>
                                         <Label fx:id="continentsUnlockedLabel" style="-fx-text-fill: #777777;"
-                                               text="Continents Unlocked: 1/6">
+                                               text="Continents Unlocked: 1/7">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
                                         <Label fx:id="levelsCompletedLabel" style="-fx-text-fill: #777777;"
-                                               text="Total Levels Completed: 0/54">
+                                               text="Total Levels Completed: 0/7">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>

@@ -14,16 +14,16 @@ class UserSessionTest {
     }
 
     @Test
-    // test that user ID is minus 1
-    void testUserIDMinusOne(){
-        assertEquals(-1,UserSession.getUserId());
+    // test that username is minus 1
+    void testUsernameMinusOne(){
+        assertEquals(-1,UserSession.getUsername());
     }
 
     // Test that user id updates to a specific number
     @Test
-    void testSetUserIdUpdates(){
-        UserSession.setUserId(20);
-        assertEquals(20,UserSession.getUserId());
+    void testSetUsernamepdates(){
+        UserSession.setUsername("");
+        assertEquals(20,UserSession.getUsername());
     }
 
     // Test that default username is null
@@ -39,8 +39,10 @@ class UserSessionTest {
         assertEquals("👧 Explorer Girl",UserSession.getAvatar());
     }
 
+    //NOTE: Had to comment out as i am currently doing the user progress saving state, and we dont have id in user's table
+    // we use username instead for primary key. Sorry Tori for modifying some of your method. Glenda!
     // test that Id is cleared
-    @Test
+    /*@Test
     void testClearUserId(){
         UserSession.setUserId(100);
         UserSession.setUsername("Tori");
@@ -49,12 +51,12 @@ class UserSessionTest {
         UserSession.clear();
 
         assertEquals(-1, UserSession.getUserId());
-    }
+    }*/
 
     // test username is cleared
     @Test
     void testClearUsername(){
-        UserSession.setUserId(100);
+        //UserSession.setUserId(100);
         UserSession.setUsername("Tori");
         UserSession.setAvatar("👧 Explorer Girl");
 
@@ -65,7 +67,7 @@ class UserSessionTest {
     // test avatar is cleared
     @Test
     void testClearAvatar(){
-        UserSession.setUserId(100);
+        //UserSession.setUserId(100);
         UserSession.setUsername("Tori");
         UserSession.setAvatar("👧 Explorer Girl");
 

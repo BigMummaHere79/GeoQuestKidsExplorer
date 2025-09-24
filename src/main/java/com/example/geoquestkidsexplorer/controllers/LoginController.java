@@ -15,6 +15,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginController {
 
@@ -63,7 +67,7 @@ public class LoginController {
     // ===========================
     // Login (now async)
     // ===========================
-    @FXML
+    /*@FXML
     protected void handleLogin(ActionEvent event) {
         String email = text(loginEmailField);
         String password = text(loginPasswordField);
@@ -107,7 +111,76 @@ public class LoginController {
         });
 
         new Thread(loginTask, "login-task").start();
+    }*/
+
+    @FXML
+    private void handleLogin(ActionEvent event) {
+        String email = text(loginEmailField);
+        String password = text(loginPasswordField);
+
+        if (email.isEmpty() || password.isEmpty()) {
+            error("Please enter both email and password.");
+            return;
+        }
+
+        try {
+            if (DatabaseManager.validateLogin(email, password)) {
+                String username = DatabaseManager.getUsernameByEmail(email);
+                String avatar = DatabaseManager.getAvatarByEmail(email);
+                if (username == null) {
+                    error("User not found.");
+                    return;
+                }
+                UserSession.setUser(username, avatar);
+                System.out.println("handleLogin: Logged in user: " + username + ", avatar: " + avatar);
+                fixUserLevel(username); // Fix NULL level
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root, 1200.0, 800.0);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            } else {
+                error("Invalid email or password.");
+            }
+        } catch (Exception e) {
+            System.err.println("Login error: " + e.getMessage());
+            e.printStackTrace();
+            error("Login error: " + e.getMessage());
+        }
     }
+
+    /**
+     * Ensures the user's level is not NULL, setting it to 1 if needed.
+     */
+    private void fixUserLevel(String username) {
+        String sql = "SELECT level FROM users WHERE username = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    if (rs.wasNull()) {
+                        System.out.println("fixUserLevel: User " + username + " has null level, updating to 1");
+                        String updateSql = "UPDATE users SET level = 1 WHERE username = ?";
+                        try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+                            updatePs.setString(1, username);
+                            updatePs.executeUpdate();
+                        }
+                    }
+                } else {
+                    System.err.println("fixUserLevel: No user found for username: " + username);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("fixUserLevel error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     //For unit testing --------Login - Tori
     // Only for tests
@@ -195,7 +268,7 @@ public class LoginController {
             }
 
             // Insert user: (username, email, password, avatar(emoji), level, role)
-            DatabaseManager.insertUser(username, email, password, avatarEmoji, null, role);
+            DatabaseManager.insertUser(username, email, password, avatarEmoji, role);
 
             success("Registration successful! Please login.");
             clearRegisterFields();

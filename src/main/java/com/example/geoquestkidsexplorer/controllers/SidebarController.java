@@ -121,6 +121,17 @@ public class SidebarController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/userprogress.fxml"));
         Parent root = loader.load();
         UserProgressController progressController = loader.getController();
+        String username = UserSession.getUsername();
+        String avatar = UserSession.getAvatar();
+        progressController.setProfileData(username, avatar);
+        loadScene(event, root);
+    }
+
+    /*@FXML
+    private void openMyProgress(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/userprogress.fxml"));
+        Parent root = loader.load();
+        UserProgressController progressController = loader.getController();
         // Pass profile data (retrieve from database)
         //int userId = UserSession.getUserId();
         String username = UserSession.getUsername();
@@ -141,7 +152,7 @@ public class SidebarController {
         int correctAnswers = 0; // Placeholder
         progressController.setProfileData(explorerName, avatar, continentsUnlocked, perfectScores, correctAnswers);
         loadScene(event, root);
-    }
+    }*/
 
     /**
      * Opens My Achievements page.
