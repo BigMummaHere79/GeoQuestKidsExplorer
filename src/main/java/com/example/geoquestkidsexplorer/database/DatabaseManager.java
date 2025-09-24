@@ -201,8 +201,9 @@ public class DatabaseManager {
         }
     }
 
+    //NOTE: Just commented out as users table does not have id column, but leaving this as we might need to add id oin the future.
     // Adding this new method to DatabaseManager.java file for fetching userID.
-    public static int getUserIdByEmail(String email) {
+    /*public static int getUserIdByEmail(String email) {
         final String sql = "SELECT id FROM users WHERE email = ? LIMIT 1"; // assuming your users table has an 'id' column
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:geoquest.db");
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -214,7 +215,7 @@ public class DatabaseManager {
             System.err.println("getUserIdByEmail error: " + e.getMessage());
         }
         return -1; // Return -1 if not found
-    }
+    }*/
 
 
     /** Optional helper to load a profile by username. */

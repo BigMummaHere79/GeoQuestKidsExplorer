@@ -41,8 +41,8 @@ public class UserProgressController {
         avatarLabel.setText(explorerAvatar);
 
         int totalLevelsCompleted = perfectScores + correctAnswers; // Placeholder logic
-        continentsUnlockedLabel.setText("Continents Unlocked: " + continentsUnlocked + "/6");
-        levelsCompletedLabel.setText("Total Levels Completed: " + totalLevelsCompleted + "/54");
+        continentsUnlockedLabel.setText("Continents Unlocked: " + continentsUnlocked + "/7");
+        levelsCompletedLabel.setText("Total Levels Completed: " + totalLevelsCompleted + "/7");
 
         // Update the stats tiles with the provided data
         perfectScoresLabel.setText("" + perfectScores);

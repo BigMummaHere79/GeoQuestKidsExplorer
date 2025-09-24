@@ -94,8 +94,8 @@ public class LoginController {
             }
             // Adding this line below to set the user ID in the session!
             // Will need a new method in DatabaseManager to get the user's ID by email.
-            int userId = DatabaseManager.getUserIdByEmail(email);
-            UserSession.setUserId(userId);
+            String username = DatabaseManager.getUsernameByEmail(email);
+            UserSession.setUsername(username);
 
             // Chain: fetch username/avatar off the UI thread too
             loadHomeAsync(event, email);
