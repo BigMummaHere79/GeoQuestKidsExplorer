@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class TestPrimaryQuizQuestionsTest {
 
@@ -19,7 +20,7 @@ class TestPrimaryQuizQuestionsTest {
     @Test
     void testCorrectAnswer(){
         var answer = new TestQuizQuestions("What country is this?", new ArrayList<>(), "Australia", 10, null);
-        assertEquals("New Zealand", answer.getCorrectAnswer());
+        assertEquals("Australia", answer.getCorrectAnswer());
     }
 
     // test that if image is null, still show
@@ -29,10 +30,13 @@ class TestPrimaryQuizQuestionsTest {
         assertNull(image.getCountryImage());
     }
 
+
+    // Need to recheckk the asser
     // Added a new test to demonstrate proper testing of the new countryCode field
     @Test
     void testChoice() {
         var choices = new TestQuizQuestions("What country is this?", new ArrayList<>(), "Australia", 10, null);
-        assertEquals("Australia", choices.getChoices());
+        //assertTrue(choices.getChoices().contains("What country"));
+        assertEquals(List.of(), choices.getChoices());
     }
 }
