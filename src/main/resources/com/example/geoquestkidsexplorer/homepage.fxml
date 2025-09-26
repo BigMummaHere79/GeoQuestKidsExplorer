@@ -24,7 +24,12 @@
     </stylesheets>
     <!-- Left: Sidebar (collapsible) -->
     <left>
-        <fx:include source="sidebar.fxml" />
+        <StackPane>
+            <BorderPane.margin>
+                <Insets top="0" left="0" bottom="10" right="0" />
+            </BorderPane.margin>
+            <fx:include source="sidebar.fxml" />
+        </StackPane>
     </left>
 
     <!-- Center: Main Content -->
@@ -49,9 +54,10 @@
                     </children>
                 </HBox>
                 <!-- Main Content Container -->
-                <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
-                      style="-fx-background-color: #ffffff; -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
-                      -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                <VBox alignment="CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
+                      style="-fx-background-color: linear-gradient(to top, #63acbe, #B2D5D8, #f9f4ec);
+                      -fx-background-radius: 20px; -fx-border-radius: 20px;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
                         <!-- Welcome Container -->
                         <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1000.0" style="-fx-padding: 10px;">
