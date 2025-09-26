@@ -116,9 +116,6 @@
                                         <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Antarctica" />
                                     </children>
                                 </VBox>
-
-
-
                                 <!-- Oceania Tile and Label -->
                                 <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.columnIndex="1">
                                     <children>

@@ -42,12 +42,6 @@
         </HBox>
     </top>
 
-
-
-
-
-
-
     <!-- Center: Main Content Container -->
     <center>
         <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0" style="-fx-background-color: #ffffff;
@@ -88,8 +82,10 @@
                                     <font>
                                         <Font name="System Bold" size="24.0" />
                                     </font>
+                                    <VBox.margin>
+                                        <Insets top="60.0" bottom="50.0" />
+                                    </VBox.margin>
                                 </Label>
-
                                 <!-- Radio Button Tiles Grid -->
                                 <GridPane fx:id="optionsGrid" alignment="CENTER" hgap="10.0" vgap="10.0">
                                     <columnConstraints>
@@ -136,6 +132,18 @@
                                         </VBox>
                                     </children>
                                 </GridPane>
+                                <!-- Hint Button! -->
+                                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint"
+                                        prefHeight="30.0" prefWidth="200.0"
+                                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
+                                        textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="15.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets top="60.0" bottom="10.0" />
+                                    </VBox.margin>
+                                </Button>
                             </children>
                         </VBox>
                         <!-- Right Side: Image Container -->
@@ -176,21 +184,6 @@
                         </HBox>
                     </children>
                 </VBox>
-
-                <!-- Hint Button! -->
-                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint"
-                        prefHeight="40.0" prefWidth="200.0"
-                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
-                        textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets top="10.0" bottom="10.0" />
-                    </VBox.margin>
-                </Button>
-
-
                 <!-- Next Question Button (hidden initially) -->
                 <Button fx:id="nextQuestionButton" mnemonicParsing="false" onAction="#handleNextQuestion"
                         prefHeight="40.0" prefWidth="200.0"

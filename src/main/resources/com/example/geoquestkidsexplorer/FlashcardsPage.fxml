@@ -1,64 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
+<BorderPane prefHeight="800.0" prefWidth="1200.0" style="-fx-padding: 0;" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.geoquestkidsexplorer.controllers.FlashcardsController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+    <!-- Top: Navigation Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="1200.0" style="-fx-background-color: #3b82f6; -fx-padding: 0 100 10 100;">
+            <children>
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackToContinent"
+                        style="-fx-background-color: #60a5fa; -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-background-radius: 25; -fx-padding: 10 15;
+                               -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
+                        text="⬅️ Back to Game Modes" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="regionLabel" text=""
+                       style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;" >
+                    <font>
+                        <Font name="System Bold" size="30.0" />
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </top>
 
-
-<VBox xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.geoquestkidsexplorer.controllers.FlashcardsController"
-      alignment="TOP_CENTER" spacing="20.0"
-      prefHeight="400.0" prefWidth="600.0">
-
-
-
-    <HBox alignment="CENTER_LEFT" prefHeight="65.0"
-          style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
-        <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackToHome"
-                    style="-fx-background-color: #60a5fa; -fx-text-fill: white; -fx-font-weight: bold;
-                           -fx-background-radius: 25; -fx-padding: 10 15;
-                           -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
-                    text=" Back to the Homepage  " />
-            <Region HBox.hgrow="ALWAYS" />
-            <Label fx:id="questionNumberLabel"
-                   style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;"
-                   text="Question 1 of 10" />
-            <Region HBox.hgrow="ALWAYS" />
-            <HBox alignment="CENTER"
-                  style="-fx-background-color: #60a5fa; -fx-background-radius: 25; -fx-padding: 10 15;
-                         -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);">
-                <children>
-                    <Label text="Score:"
-                           style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />
-                    <Label fx:id="scoreLabel"
-                           style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"
-                           text="0" />
-                </children>
-            </HBox>
-        </children>
-    </HBox>
-
-
-    <Label fx:id="regionLabel" text="Flashcards"
-           style="-fx-font-size: 36px; -fx-font-weight: bold;" />
-
-    <StackPane fx:id="flashcardStack" alignment="CENTER" prefWidth="600" prefHeight="400">
-        <ImageView fx:id="countryImageView" fitWidth="600" fitHeight="400" preserveRatio="true" />
-        <Label fx:id="backTextLabel" text=""
-               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-background-color: white;
-                  -fx-alignment: center; -fx-padding: 30;"
-               visible="false" />
-    </StackPane>
-
-
-    <Button text="Next" onAction="#handleNextCountry"
-            style="-fx-background-color: #90caf9; -fx-background-radius: 10; -fx-padding: 12; -fx-text-fill: #000000;
-            -fx-font-size: 14px; -fx-font-weight: bold;" />
-
-    <Button text="Back to Home" onAction="#handleBackToHome"
-            style="-fx-background-color: #f48fb1; -fx-background-radius: 10; -fx-padding: 12; -fx-text-fill: #000000;
-            -fx-font-size: 14px; -fx-font-weight: bold;" />
-</VBox>
+    <!-- Center: Main Content Container -->
+    <center>
+        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1150.0" style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
+            <children>
+                <!-- Main Content Container -->
+                <VBox alignment="CENTER" prefHeight="695.0" prefWidth="800.0" spacing="20.0"
+                      style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-radius: 20px;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                    <padding>
+                        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
+                    </padding>
+                    <children>
+                        <Label text="Get familiar with Flashcards and have fun gaming!"
+                               style="-fx-font-size: 36px; -fx-font-weight: bold;">
+                            <font>
+                                <Font name="System Bold" size="30.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="20.0" />
+                            </VBox.margin>
+                        </Label>
+                        <StackPane fx:id="flashcardStack" alignment="CENTER" prefWidth="600.0" prefHeight="400.0">
+                            <children>
+                                <ImageView fx:id="countryImageView" fitWidth="600.0" fitHeight="400.0" preserveRatio="true" />
+                                <Label fx:id="backTextLabel" text=""
+                                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-background-color: white;
+                                              -fx-alignment: center; -fx-padding: 30;"
+                                       visible="false" />
+                            </children>
+                        </StackPane>
+                        <HBox alignment="CENTER" spacing="20.0">
+                            <children>
+                                <Button fx:id="flipCardButton" text="Flip the card and take a guess" onAction="#handleCardAction"
+                                        prefHeight="40.0" prefWidth="400.0"
+                                        style="-fx-background-color: #90caf9; -fx-background-radius: 25;
+                                               -fx-text-fill: #000000; -fx-font-size: 20px; -fx-font-weight: bold;">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="nextCardButton" text="Next Flash Card" onAction="#handleCardAction" prefHeight="40.0"
+                                        prefWidth="400.0" style="-fx-background-color: #ffcdd2; -fx-background-radius: 25;
+                                        -fx-text-fill:#000000; -fx-font-size:20px; -fx-font-weight: bold;">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                            <HBox.margin>
+                                <Insets top="20.0" />
+                            </HBox.margin>
+                        </HBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
+                    </VBox.margin>
+                </VBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
