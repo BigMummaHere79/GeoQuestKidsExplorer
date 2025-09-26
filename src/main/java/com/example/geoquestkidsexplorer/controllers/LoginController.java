@@ -27,6 +27,10 @@ public class LoginController {
     @FXML private VBox registerForm;
 
     // ---- Shared message label ----
+    @FXML
+    private VBox loginWelcomeMessage;
+    @FXML
+    private VBox registerWelcomeMessage;
     @FXML private Label messageLabel;
 
     // ---- Login fields ----
@@ -49,6 +53,10 @@ public class LoginController {
     public void initialize() {
         // Default view: Login visible, Register hidden
         togglePanels(false);
+        loginWelcomeMessage.setVisible(true);
+        loginWelcomeMessage.setManaged(true);
+        registerWelcomeMessage.setVisible(false);
+        registerWelcomeMessage.setManaged(false);
 
         // Ensure options exist programmatically (safe even if FXML already set items)
         if (roleCombo != null && (roleCombo.getItems() == null || roleCombo.getItems().isEmpty())) {
@@ -284,12 +292,20 @@ public class LoginController {
     private void switchToRegister(ActionEvent event) {
         togglePanels(true);
         clearMessage();
+        registerWelcomeMessage.setVisible(true);
+        registerWelcomeMessage.setManaged(true);
+        loginWelcomeMessage.setVisible(false);
+        loginWelcomeMessage.setManaged(false);
     }
 
     @FXML
     private void switchToLogin(ActionEvent event) {
         togglePanels(false);
         clearMessage();
+        loginWelcomeMessage.setVisible(true);
+        loginWelcomeMessage.setManaged(true);
+        registerWelcomeMessage.setVisible(false);
+        registerWelcomeMessage.setManaged(false);
     }
 
     private void togglePanels(boolean showRegister) {
@@ -391,6 +407,4 @@ public class LoginController {
         //checks if email/password exists in database
         return DatabaseManager.validateLogin(email, password);
     }
-
-
 }
