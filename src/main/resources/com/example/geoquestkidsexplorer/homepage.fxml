@@ -55,7 +55,7 @@
                 </HBox>
                 <!-- Main Content Container -->
                 <VBox alignment="CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
-                      style="-fx-background-color: linear-gradient(to top, #63acbe, #B2D5D8, #f9f4ec);
+                      style="-fx-background-color: linear-gradient(to top, #63acbe, #B2D5D8, #F9F9F9);
                       -fx-background-radius: 20px; -fx-border-radius: 20px;
                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
