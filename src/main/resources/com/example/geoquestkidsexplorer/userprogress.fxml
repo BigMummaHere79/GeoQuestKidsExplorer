@@ -25,7 +25,7 @@
         <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1150.0" style="-fx-background-color: #f0f0f0; -fx-padding: 0 7.5 0 7.5px;">
             <children>
                 <!-- Navigation Bar -->
-                <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1150.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
+                <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1150.0" style="-fx-background-color: #63acbe; -fx-padding: 10 100;">
                     <children>
                         <!--<Button mnemonicParsing="false" onAction="#goBackToMenu" style="-fx-background-color: #60a5fa;
                         -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;

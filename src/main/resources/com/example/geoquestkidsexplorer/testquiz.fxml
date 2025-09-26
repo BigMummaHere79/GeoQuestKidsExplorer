@@ -21,15 +21,15 @@
 
     <!-- Navigation Bar-->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 20;" spacing="10">
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #63acbe; -fx-padding: 10 20;" spacing="10">
             <children>
                 <!-- Back Button-->
-                <Button fx:id="backButton" onAction="#backToContinentView" style="-fx-background-color: #60a5fa; -fx-text-fill: white;
+                <Button fx:id="backButton" onAction="#backToContinentView" style="-fx-background-color: #B2D5D8; -fx-text-fill: white;
                                -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
                                -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
                         text="⬅️ Back" />
                 <!-- Timer label on the far left-->
-                <HBox spacing="5" alignment="CENTER_LEFT" style="-fx-background-color: #60a5fa; -fx-background-radius: 25; -fx-padding: 10 15;">
+                <HBox spacing="5" alignment="CENTER_LEFT" style="-fx-background-color: #B2D5D8; -fx-background-radius: 25; -fx-padding: 10 15;">
                     <Label fx:id="timerLabel" text="00:00" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />
                 </HBox>
                 <!-- Spacer to push title to center-->
@@ -40,7 +40,7 @@
                 <!-- Spacer to push title to center-->
                 <Region HBox.hgrow="ALWAYS" />
                 <!-- Score label on the right-->
-                <HBox alignment="CENTER" style="-fx-background-color: #60a5fa; -fx-background-radius: 25; -fx-padding: 10 15;">
+                <HBox alignment="CENTER" style="-fx-background-color: #B2D5D8; -fx-background-radius: 25; -fx-padding: 10 15;">
                     <children>
                         <Label text="Score: " style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />
                         <Label fx:id="scoreLabel" text="0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />

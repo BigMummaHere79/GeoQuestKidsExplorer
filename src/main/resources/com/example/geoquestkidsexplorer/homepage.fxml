@@ -33,20 +33,19 @@
             -fx-padding: 0 7.5 0 7.5px;">
             <children>
                 <!-- Navigation Bar -->
-                <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1150.0" style="-fx-background-color: #3b82f6;
+                <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1150.0" style="-fx-background-color: #63acbe;
                     -fx-padding: 10 100;">
                     <children>
-                        <!-- Logo Image -->
-                        <ImageView>
-                            <image >
-                                <Image url="@images/geoquestlogo.PNG" preserveRatio="true" />
-                            </image>
-                            <fitWidth>65.0</fitWidth>
-                            <fitHeight>65.0</fitHeight>
-                        </ImageView>
+                        <Region HBox.hgrow="ALWAYS" />
                         <Label alignment="CENTER_LEFT" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;"
                                text="GeoQuest Dashboards" />
                         <Region HBox.hgrow="ALWAYS" />
+                        <!-- Logo Image -->
+                        <ImageView fitWidth="65.0" fitHeight="65.0">
+                            <image >
+                                <Image url="@images/geoquestlogo.PNG" preserveRatio="true" />
+                            </image>
+                        </ImageView>
                     </children>
                 </HBox>
                 <!-- Main Content Container -->

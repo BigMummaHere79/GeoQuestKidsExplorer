@@ -18,7 +18,7 @@
     <!-- Top navigation bar -->
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="70.0"
-              style="-fx-background-color: #0288D1; -fx-padding: 15 100;">
+              style="-fx-background-color: #63acbe; -fx-padding: 15 100;">
             <children>
                 <!--<Button mnemonicParsing="false" onAction="#backToContinents"
                         style="-fx-background-color: #03A9F4; -fx-text-fill: white;

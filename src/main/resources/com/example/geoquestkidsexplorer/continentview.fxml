@@ -17,9 +17,9 @@
 
     <top>
         <!-- Top: Navigation Bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #63acbe; -fx-padding: 10 100;">
             <children>
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #60a5fa;
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #B2D5D8;
                      -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
                      -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Continents" />
                 <Region HBox.hgrow="ALWAYS" />
