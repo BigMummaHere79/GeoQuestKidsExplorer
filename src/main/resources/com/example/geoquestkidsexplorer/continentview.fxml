@@ -14,25 +14,29 @@
 
 <BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.ContinentsController">
+
+    <top>
+        <!-- Top: Navigation Bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
+            <children>
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #60a5fa;
+                     -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
+                     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Continents" />
+                <Label textAlignment="CENTER" fx:id="continentLabel" text="" textFill="#2d6f44">
+                    <font>
+                        <Font name="System Bold" size="28.0" />
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </top>
+
     <!-- Center: Main Content -->
     <center>
         <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1150.0" style="-fx-background-color: #f0f0f0;
         -fx-padding: 0 7.5 0 7.5px;">
             <children>
-                <!-- Top: Navigation Bar -->
-                <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
-                    <children>
-                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #60a5fa;
-                     -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
-                     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Continents" />
-                        <Label textAlignment="CENTER" fx:id="continentLabel" text="" textFill="#2d6f44">
-                            <font>
-                                <Font name="System Bold" size="28.0" />
-                            </font>
-                        </Label>
-                        <Region HBox.hgrow="ALWAYS" />
-                    </children>
-                </HBox>
                 <!-- Main Content Container -->
                 <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0" style="-fx-background-color: #ffffff;
                     -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
