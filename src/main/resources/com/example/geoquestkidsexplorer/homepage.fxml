@@ -228,117 +228,120 @@
                                         <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="North America" />
                                     </children>
                                 </VBox>
+                                <!--Bottom continent centred -->
+                                <HBox GridPane.rowIndex = "1" GridPane.columnSpan="4" alignment="CENTER" spacing="40">
                                 <!-- Europe Tile and Label -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.rowIndex="1">
-                                    <children>
-                                        <Pane fx:id="europePane" onMouseClicked="#handleContinentClick" prefHeight="200.0"
-                                              prefWidth="200.0" styleClass="continent-tile" style="-fx-background-color: #e1bee7;
-                                              -fx-background-radius: 25; -fx-border-radius: 25;
-                                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
-                                            <children>
-                                                <StackPane prefHeight="200.0" prefWidth="200.0">
-                                                    <children>
-                                                        <ImageView fitWidth="145" fitHeight="145" preserveRatio="true" smooth="true" cache="true">
-                                                            <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://img.freepik.com/premium-vector/outline-map-europe-white-background-vector-map-with-contour_652994-2550.jpg"/>
-                                                            </image>
-                                                            <clip>
-                                                                <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
-                                                            </clip>
-                                                        </ImageView>
-                                                        <VBox fx:id="europeLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
-                                                            <children>
-                                                                <Label fx:id="europeLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label fx:id="europeLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
-                                                                       textAlignment="CENTER" wrapText="true">
-                                                                    <font>
-                                                                        <Font size="14.0" />
-                                                                    </font>
-                                                                </Label>
-                                                            </children>
-                                                        </VBox>
-                                                    </children>
-                                                </StackPane>
-                                            </children>
-                                        </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Europe" />
-                                    </children>
-                                </VBox>
-                                <!-- Asia Tile and Label -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <children>
-                                        <Pane fx:id="asiaPane" onMouseClicked="#handleContinentClick" prefHeight="200.0" prefWidth="200.0"
-                                              styleClass="continent-tile" style="-fx-background-color: #d1c4e9;
-                                              -fx-background-radius: 25; -fx-border-radius: 25;
-                                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
-                                            <children>
-                                                <StackPane prefHeight="200.0" prefWidth="200.0">
-                                                    <children>
-                                                        <ImageView fitWidth="175" fitHeight="185" preserveRatio="true" smooth="true" cache="true">
-                                                            <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://i.pinimg.com/736x/5d/e5/1e/5de51e06c7410ae41d6cc0bc431d0e57.jpg"/>
-                                                            </image>
-                                                            <clip>
-                                                                <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
-                                                            </clip>
-                                                        </ImageView>
-                                                        <VBox fx:id="asiaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
-                                                            <children>
-                                                                <Label fx:id="asiaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label fx:id="asiaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
-                                                                       textAlignment="CENTER" wrapText="true">
-                                                                    <font>
-                                                                        <Font size="14.0" />
-                                                                    </font>
-                                                                </Label>
-                                                            </children>
-                                                        </VBox>
-                                                    </children>
-                                                </StackPane>
-                                            </children>
-                                        </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Asia" />
-                                    </children>
-                                </VBox>
-                                <!-- Africa Tile and Label -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                    <children>
-                                        <Pane fx:id="africaPane" onMouseClicked="#handleContinentClick" prefHeight="200.0"
-                                              prefWidth="200.0" styleClass="continent-tile" style="-fx-background-color: #ffecb3;
-                                              -fx-background-radius: 25; -fx-border-radius: 25;
-                                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
-                                            <children>
-                                                <StackPane prefHeight="200.0" prefWidth="200.0">
-                                                    <children>
-                                                        <ImageView fitWidth="155" fitHeight="155" preserveRatio="true" smooth="true" cache="true">
-                                                            <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://gisgeography.com/wp-content/uploads/2023/12/Africa-Country-Blank-Map.jpg"/>
-                                                            </image>
-                                                            <clip>
-                                                                <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
-                                                            </clip>
-                                                        </ImageView>
-                                                        <VBox fx:id="africaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
-                                                            <children>
-                                                                <Label fx:id="africaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
-                                                                <Label fx:id="africaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
-                                                                       textAlignment="CENTER" wrapText="true">
-                                                                    <font>
-                                                                        <Font size="14.0" />
-                                                                    </font>
-                                                                </Label>
-                                                            </children>
-                                                        </VBox>
-                                                    </children>
-                                                </StackPane>
-                                            </children>
-                                        </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Africa" />
-                                    </children>
-                                </VBox>
+                                    <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.rowIndex="1">
+                                        <children>
+                                            <Pane fx:id="europePane" onMouseClicked="#handleContinentClick" prefHeight="200.0"
+                                                  prefWidth="200.0" styleClass="continent-tile" style="-fx-background-color: #e1bee7;
+                                                  -fx-background-radius: 25; -fx-border-radius: 25;
+                                                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                                                <children>
+                                                    <StackPane prefHeight="200.0" prefWidth="200.0">
+                                                        <children>
+                                                            <ImageView fitWidth="145" fitHeight="145" preserveRatio="true" smooth="true" cache="true">
+                                                                <image>
+                                                                    <Image backgroundLoading="true"
+                                                                           url="https://img.freepik.com/premium-vector/outline-map-europe-white-background-vector-map-with-contour_652994-2550.jpg"/>
+                                                                </image>
+                                                                <clip>
+                                                                    <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
+                                                                </clip>
+                                                            </ImageView>
+                                                            <VBox fx:id="europeLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                                                <children>
+                                                                    <Label fx:id="europeLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
+                                                                    <Label fx:id="europeLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
+                                                                           textAlignment="CENTER" wrapText="true">
+                                                                        <font>
+                                                                            <Font size="14.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                </children>
+                                                            </VBox>
+                                                        </children>
+                                                    </StackPane>
+                                                </children>
+                                            </Pane>
+                                            <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Europe" />
+                                        </children>
+                                    </VBox>
+                                    <!-- Asia Tile and Label -->
+                                    <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                        <children>
+                                            <Pane fx:id="asiaPane" onMouseClicked="#handleContinentClick" prefHeight="200.0" prefWidth="200.0"
+                                                  styleClass="continent-tile" style="-fx-background-color: #d1c4e9;
+                                                  -fx-background-radius: 25; -fx-border-radius: 25;
+                                                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                                                <children>
+                                                    <StackPane prefHeight="200.0" prefWidth="200.0">
+                                                        <children>
+                                                            <ImageView fitWidth="175" fitHeight="185" preserveRatio="true" smooth="true" cache="true">
+                                                                <image>
+                                                                    <Image backgroundLoading="true"
+                                                                           url="https://i.pinimg.com/736x/5d/e5/1e/5de51e06c7410ae41d6cc0bc431d0e57.jpg"/>
+                                                                </image>
+                                                                <clip>
+                                                                    <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
+                                                                </clip>
+                                                            </ImageView>
+                                                            <VBox fx:id="asiaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                                                <children>
+                                                                    <Label fx:id="asiaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
+                                                                    <Label fx:id="asiaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
+                                                                           textAlignment="CENTER" wrapText="true">
+                                                                        <font>
+                                                                            <Font size="14.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                </children>
+                                                            </VBox>
+                                                        </children>
+                                                    </StackPane>
+                                                </children>
+                                            </Pane>
+                                            <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Asia" />
+                                        </children>
+                                    </VBox>
+                                    <!-- Africa Tile and Label -->
+                                    <VBox styleClass="continent-tile-container" alignment="CENTER" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                        <children>
+                                            <Pane fx:id="africaPane" onMouseClicked="#handleContinentClick" prefHeight="200.0"
+                                                  prefWidth="200.0" styleClass="continent-tile" style="-fx-background-color: #ffecb3;
+                                                  -fx-background-radius: 25; -fx-border-radius: 25;
+                                                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                                                <children>
+                                                    <StackPane prefHeight="200.0" prefWidth="200.0">
+                                                        <children>
+                                                            <ImageView fitWidth="155" fitHeight="155" preserveRatio="true" smooth="true" cache="true">
+                                                                <image>
+                                                                    <Image backgroundLoading="true"
+                                                                           url="https://gisgeography.com/wp-content/uploads/2023/12/Africa-Country-Blank-Map.jpg"/>
+                                                                </image>
+                                                                <clip>
+                                                                    <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
+                                                                </clip>
+                                                            </ImageView>
+                                                            <VBox fx:id="africaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                                                <children>
+                                                                    <Label fx:id="africaLockedLabel" style="-fx-font-size: 60px;" text="🔒" />
+                                                                    <Label fx:id="africaLockedTextLabel"  text="This Continent is locked.&#10;Complete previous level to unlock!"
+                                                                           textAlignment="CENTER" wrapText="true">
+                                                                        <font>
+                                                                            <Font size="14.0" />
+                                                                        </font>
+                                                                    </Label>
+                                                                </children>
+                                                            </VBox>
+                                                        </children>
+                                                    </StackPane>
+                                                </children>
+                                            </Pane>
+                                            <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Africa" />
+                                        </children>
+                                    </VBox>
+                                </HBox>
                             </children>
                         </GridPane>
                         <!-- Additional Buttons -->
