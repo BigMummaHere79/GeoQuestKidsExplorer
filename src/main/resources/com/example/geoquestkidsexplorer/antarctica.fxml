@@ -13,7 +13,7 @@
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaController"
-            style="-fx-background-color: white;">
+            style="-fx-background-color: linear-gradient(to top, #63acbe, #B2D5D8, #F9F9F9);">
 
     <!-- Top navigation bar -->
     <top>
