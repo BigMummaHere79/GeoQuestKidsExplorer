@@ -5,6 +5,8 @@ import com.example.geoquestkidsexplorer.models.FlashCardDeck;
 import com.example.geoquestkidsexplorer.models.FlashCardRepository;
 import com.example.geoquestkidsexplorer.models.FlashCardRealRepository;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -35,10 +37,16 @@ public class FlashcardsController {
 
     @FXML
     private StackPane flashcardStack;
-
+    @FXML private Label quizWelcomeLabel;
+    @FXML private Button backButton;
+    @FXML
+    private Button flipCardButton; // New field for Flip button
+    @FXML
+    private Button nextCardButton; // New field for Next button
 
     private final FlashCardRepository repository;
     private FlashCardDeck deck;
+    private String continentName;
 
     public FlashcardsController(){
         this(new FlashCardRealRepository());
@@ -56,7 +64,9 @@ public class FlashcardsController {
          So that the method  has both the has cards and no cards
          - Tori
         **/
+        this.continentName = region;
         regionLabel.setText("Flashcards for " + region);
+        backButton.setText("⬅️ Back to " + continentName + " Game Mode");
         List<FlashCard> cards = repository.loadByRegion(region);
         deck = new FlashCardDeck(cards);
 
@@ -76,6 +86,28 @@ public class FlashcardsController {
         } else {
             deck.next();
         }
+        render();
+    }
+
+    // Adding this method to handle both buttons in the flash card fxml. Glenda
+    @FXML
+    private void handleCardAction(ActionEvent event) {
+        if (deck == null || deck.isEmpty()) return;
+
+        Button source = (Button) event.getSource();
+        String buttonId = source.getId();
+
+        if ("flipCardButton".equals(buttonId)) {
+            // Flip the card (front to back or back to front)
+            deck.flip();
+        } else if ("nextCardButton".equals(buttonId)) {
+            // Move to the next card and ensure it shows the front
+            deck.next();
+            if (!deck.showingFront()) {
+                deck.flip(); // Ensure the front is shown
+            }
+        }
+
         render();
     }
 
@@ -108,12 +140,13 @@ public class FlashcardsController {
         }
     }
     @FXML
-    private void handleBackToHome(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+    private void handleBackToContinent(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
         Parent root = loader.load();
-
+        ContinentsController controller = loader.getController();
+        controller.setContinentName(continentName); // Pass continentName back
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 }

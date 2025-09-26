@@ -24,6 +24,7 @@ public class ContinentsController {
     private Label continentLabel;
     @FXML
     private Button backButton;
+    @FXML private Label gameModeWelcomeLabel;
 
     private String continentName;
 
@@ -33,7 +34,13 @@ public class ContinentsController {
      */
     public void setContinentName(String name) {
         this.continentName = name;
-        continentLabel.setText(name); // Assuming you have a label to display the continent name
+        if (continentName == null || continentName.trim().isEmpty()) {
+            System.err.println("Continent name is null or empty. Skipping quiz load.");
+            gameModeWelcomeLabel.setText("Error: No continent selected.");
+            return;
+        }
+        gameModeWelcomeLabel.setText("Game Mode Control for " + continentName + " Continent!");
+        //continentLabel.setText(name); // Assuming you have a label to display the continent name
         backButton.setText("⬅️ Back to Continents"); // Use a generic back button text
     }
 
@@ -67,6 +74,8 @@ public class ContinentsController {
         try {
             if ("practiceModeTile".equals(tileId)) {
                 openPracticeQuiz(event, this.continentName);
+            }else if ("flashCardsModeTile".equals(tileId)) {
+                openFlashCardMode(event, this.continentName);
             } else if ("testModeTile".equals(tileId)) {
                 // Similarly, you would open the generic test quiz and pass the continent name.
                 openTestQuiz(event, this.continentName);
@@ -93,6 +102,38 @@ public class ContinentsController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Practice Quiz for: " + continent);
+        stage.show();
+    }
+
+    /** Helper method to load the generic flash card mode page and set the continent. */
+    @FXML
+    private void openFlashCardMode(MouseEvent event, String continent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml"));
+        Parent root = loader.load();
+
+        // Get the controller and set the continent name
+        FlashcardsController controller = loader.getController();
+        controller.setRegion(continent);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Flash Cards Mode for:" + continent);
+        stage.show();
+    }
+
+    //* Helper method to load the generic quiz page and set the continent.
+    private void openTestQuiz(Event event, String continentName) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
+        Parent root = loader.load();
+
+        TestQuizController quizController = loader.getController();
+        quizController.setContinentName(continentName);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Quiz - " + continentName);
         stage.show();
     }
 
@@ -123,21 +164,6 @@ public class ContinentsController {
         stage.show();
     }*/
 
-      //* Helper method to load the generic quiz page and set the continent.
-    private void openTestQuiz(Event event, String continentName) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
-        Parent root = loader.load();
-
-        TestQuizController quizController = loader.getController();
-        quizController.setContinentName(continentName);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Quiz - " + continentName);
-        stage.show();
-    }
-
     // (unchanged) Opens country test page in a new window — not used by quiz branch
     private void openTestPage(String continent, String country) throws IOException {
         FXMLLoader loader = new FXMLLoader(
@@ -152,21 +178,6 @@ public class ContinentsController {
         controller.setCountry(country, testStage);
 
         testStage.show();
-    }
-
-    @FXML
-    private void handleFlashcards(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml")
-        );
-        Parent root = loader.load();
-
-        FlashcardsController controller = loader.getController();
-        controller.setRegion("Oceania");
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
-        stage.show();
     }
 
     /** Helper: load an FXML into the current window */

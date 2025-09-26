@@ -139,29 +139,82 @@
                     </children>
                 </VBox>
 
-                <VBox alignment="CENTER" prefHeight="600.0" prefWidth="700.0" spacing="10.0"
+                <!-- Login Welcome Message -->
+                <VBox fx:id="loginWelcomeMessage" alignment="CENTER" prefHeight="600.0" prefWidth="700.0" spacing="10.0"
                       style="-fx-background-color: #dbeafe; -fx-padding: 20px; -fx-background-radius: 10px;
-                             -fx-border-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                      -fx-border-radius: 10px; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);"
+                      visible="false" managed="false">
                     <children>
-                        <!-- Logo Image -->
                         <ImageView>
                             <image>
                                 <Image url="@images/geoquestlogo.PNG" preserveRatio="true" />
                             </image>
-                            <fitWidth>300.0</fitWidth> <!-- Adjust width as needed -->
-                            <fitHeight>300.0</fitHeight> <!-- Adjust height as needed -->
+                            <fitWidth>300.0</fitWidth>
+                            <fitHeight>300.0</fitHeight>
                         </ImageView>
-                        <!-- Welcome Labels -->
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Join the Fun and Start your Amazing Geography Journey!"
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Welcome Back!"
                                textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                        </Label>
+                        <Label text="Ready to continue your" textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label text="Geographic Adventure!" textAlignment="CENTER" wrapText="true">
                             <font>
                                 <Font name="System Bold" size="20.0" />
                             </font>
                         </Label>
-                        <Label text="Explore Continents, learn about Countries, and become a Geography expert!"
-                               textAlignment="CENTER" wrapText="true" />
                     </children>
                 </VBox>
+
+                <!-- Register Welcome Message -->
+                <VBox fx:id="registerWelcomeMessage" alignment="CENTER" prefHeight="600.0" prefWidth="700.0" spacing="10.0"
+                      style="-fx-background-color: #dbeafe; -fx-padding: 20px; -fx-background-radius: 10px;
+                      -fx-border-radius: 10px; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);"
+                      visible="true" managed="true">
+                    <children>
+                        <ImageView>
+                            <image>
+                                <Image url="@images/geoquestlogo.PNG" preserveRatio="true" />
+                            </image>
+                            <fitWidth>300.0</fitWidth>
+                            <fitHeight>300.0</fitHeight>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Join the Fun!"
+                               textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                        </Label>
+                        <Label text="And Start you're amazing" textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label text="Geographic adventure!" textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label text="Explore Continents, learn about Countries, and"
+                               textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label text="become a Geographic expert!" textAlignment="CENTER" wrapText="true">
+                            <font>
+                                <Font name="System" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+
             </children>
         </HBox>
 

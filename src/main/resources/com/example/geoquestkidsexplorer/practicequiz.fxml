@@ -20,17 +20,17 @@
             fx:controller="com.example.geoquestkidsexplorer.controllers.PracticeQuizController">
     <!-- Top: Navigation Bar -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">
+        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #63acbe; -fx-padding: 10 100;">
             <children>
                 <!-- This button's text is now set dynamically in the controller -->
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToGameModes" style="-fx-background-color: #60a5fa;
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToGameModes" style="-fx-background-color: #B2D5D8;
                      -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
                      -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Africa Game Mode" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="questionNumberLabel" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;"
                        text="Question 1 of 10" />
                 <Region HBox.hgrow="ALWAYS" />
-                <HBox alignment="CENTER" style="-fx-background-color: #60a5fa; -fx-background-radius: 25; -fx-padding: 10 15;
+                <HBox alignment="CENTER" style="-fx-background-color: #B2D5D8; -fx-background-radius: 25; -fx-padding: 10 15;
                         -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);">
                     <children>
                         <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" text="Score: " />
@@ -41,12 +41,6 @@
             </children>
         </HBox>
     </top>
-
-
-
-
-
-
 
     <!-- Center: Main Content Container -->
     <center>
@@ -88,8 +82,10 @@
                                     <font>
                                         <Font name="System Bold" size="24.0" />
                                     </font>
+                                    <VBox.margin>
+                                        <Insets top="60.0" bottom="50.0" />
+                                    </VBox.margin>
                                 </Label>
-
                                 <!-- Radio Button Tiles Grid -->
                                 <GridPane fx:id="optionsGrid" alignment="CENTER" hgap="10.0" vgap="10.0">
                                     <columnConstraints>
@@ -136,6 +132,18 @@
                                         </VBox>
                                     </children>
                                 </GridPane>
+                                <!-- Hint Button! -->
+                                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint"
+                                        prefHeight="30.0" prefWidth="200.0"
+                                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
+                                        textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="15.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets top="60.0" bottom="10.0" />
+                                    </VBox.margin>
+                                </Button>
                             </children>
                         </VBox>
                         <!-- Right Side: Image Container -->
@@ -176,21 +184,6 @@
                         </HBox>
                     </children>
                 </VBox>
-
-                <!-- Hint Button! -->
-                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint"
-                        prefHeight="40.0" prefWidth="200.0"
-                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
-                        textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets top="10.0" bottom="10.0" />
-                    </VBox.margin>
-                </Button>
-
-
                 <!-- Next Question Button (hidden initially) -->
                 <Button fx:id="nextQuestionButton" mnemonicParsing="false" onAction="#handleNextQuestion"
                         prefHeight="40.0" prefWidth="200.0"
