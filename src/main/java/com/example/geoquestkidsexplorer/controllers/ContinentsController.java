@@ -125,7 +125,8 @@ public class ContinentsController {
         Parent root = loader.load();
 
         //Input colour pallete within different continents
-        //Practise Quiz
+        //Through css and fxml
+        // Can be found in practisequiz.fxml and styles.css
 
         Node navBar = root.lookup("#navBar");
         Node backBtn = root.lookup("#backButton");
@@ -157,6 +158,7 @@ public class ContinentsController {
             }
         }
 
+        //Practise Quiz
         // Get the controller and set the continent name
         PracticeQuizController quizController = loader.getController();
         quizController.setContinentName(continent);
@@ -174,6 +176,10 @@ public class ContinentsController {
     private void openFlashCardMode(MouseEvent event, String continent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml"));
         Parent root = loader.load();
+
+        //Input colour pallete within different continents
+        //Through css and fxml
+        // Can be found in flashcard.fxml and styles.css
 
         Node navBar = root.lookup("#navBar");
         Node backBtn = root.lookup("#backButton");
@@ -216,6 +222,10 @@ public class ContinentsController {
     private void openTestQuiz(Event event, String continentName) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
         Parent root = loader.load();
+
+        //Input colour pallete within different continents
+        //Through css and fxml
+        // Can be found in testquiz.fxml and styles.css
 
         Node navBar = root.lookup("#navBar");
         Node backBtn = root.lookup("#backButton");
