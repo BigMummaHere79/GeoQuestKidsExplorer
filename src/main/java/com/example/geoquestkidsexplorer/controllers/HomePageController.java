@@ -305,6 +305,40 @@ public class HomePageController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
         Parent root = loader.load();
 
+        /**
+         * Switch is added so each game mode for different continent has
+         * different colours
+         *
+         * Node is called to look for the css
+         * **/
+        Node bgPane = root.lookup("#bgPane");
+        Node navBar = root.lookup("#navBar");
+        Node backbtn = root.lookup("#backButton");
+
+        if (bgPane != null){
+            bgPane.setStyle(""); // clear prev inlines
+
+            switch (continentName){
+                case "Oceania" -> {
+                    bgPane.setStyle("-bg1:#f9f9f9; -bg2:#E488DA; -bg3#A95AA1;");
+                    if (navBar != null) navBar.setStyle("-nav-bg:#A95AA1;");
+                    if (backbtn != null) backbtn.setStyle("-btn-bg:#E488DA;");
+                }
+                case "South America" -> {
+                    bgPane.setStyle("-bg1:#f9f9f9; -bg2:#4B66FF; -bg3:#0F2080;");
+                    if (navBar != null) navBar.setStyle("-nav-bg:#0F2080;");
+                    if (backbtn != null) backbtn.setStyle("-btn-bg:#4B66FF;");
+                }
+                case "North America" -> {
+                    bgPane.setStyle("-bg1:#f9f9f9; -bg2:#F4BA9B; -bg3:#F5793A;");
+                    if (navBar != null) navBar.setStyle("-nav-bg:#F5793A;");
+                    if (backbtn != null) backbtn.setStyle("-btn-bg:#F4BA9B;");
+                }
+            }
+            //for debugging. Should print the 3 -bgs
+            System.out.println("bgPanestyle " + bgPane.getStyle());
+        }
+
         // Pass the continent to controllers that accept it (generic or Antarctica-specific)
         Object ctl = loader.getController();
         try {

@@ -131,3 +131,44 @@
 .radio-button .label {
     -fx-text-fill: #333333;
 }
+
+/**
+Creating a gradient colour for each game mode continent
+**/
+.gradient-pane{
+    /*per scene*/
+    -bg1: #f9f9f9; /* top*/
+    -bg2: #E488DA; /* middle*/
+    -bg3: #A95AA1; /* bottom */
+
+    -fx-background-radius: 20;
+    -fx-background-color: linear-gradient(
+        from 0% 100% to 0% 0%,
+        -bg3 0%,
+        -bg2 50%,
+        -bg1 100%
+    );
+}
+
+/*
+For navigation
+*/
+.nav-bar{
+    -nav-bg:#E488DA;
+    -fx-background-color: -nav-bg;
+}
+
+/*
+For back button
+*/
+.back-button{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+    -btn-bg: #A95AA1;
+    -fx-background-color: -btn-bg;
+}
+.back-button:hover {-fx-background-color: derive(-btn-bg, -8%);}
+.back-button:pressed{ -fx-background-color: derive(-btn-bg, -16%); }
+.back-button { -fx-padding: 10 15;}
