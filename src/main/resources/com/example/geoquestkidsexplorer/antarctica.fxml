@@ -9,11 +9,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
+<?import java.net.URL?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaController"
-            style="-fx-background-color: white;">
+            style="-fx-background-color: linear-gradient(to top, #63acbe, #B2D5D8, #F9F9F9);">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
 
     <!-- Top navigation bar -->
     <top>
@@ -36,12 +40,12 @@
 
     <!-- Center: Fun Info + facts + proceed button -->
     <center>
-        <VBox fx:id="centerVBox" alignment="CENTER" spacing="25.0" style="-fx-padding: 50;">
+        <VBox fx:id="centerVBox" alignment="CENTER" spacing="25.0" style="-fx-padding: 50;" styleClass="continent-tile-container">
             <Label text="🎉 Let’s Explore Antarctica!" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #01579B;"/>
             <Label text="Did you know Antarctica is very special?" style="-fx-font-size: 26px; -fx-text-fill: #0277BD;"/>
 
             <!-- Fact 1 -->
-            <StackPane maxWidth="800.0">
+            <StackPane maxWidth="800.0" styleClass="continent-tile-container">
                 <Label fx:id="fact1Label"
                        wrapText="true"
                        prefWidth="700"
@@ -51,7 +55,7 @@
             </StackPane>
 
             <!-- Fact 2  -->
-            <StackPane maxWidth="800.0">
+            <StackPane maxWidth="800.0" styleClass="continent-tile-container">
                 <Label fx:id="fact2Label"
                        wrapText="true"
                        prefWidth="700"
@@ -63,7 +67,7 @@
 
 
             <!-- Fact 3 -->
-            <StackPane maxWidth="800.0">
+            <StackPane maxWidth="800.0" styleClass="continent-tile-container">
                 <Label wrapText="true" prefWidth="700"
                        text="Despite being covered in ice, it’s considered a desert!"
                        style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-text-fill: #006064;
@@ -71,7 +75,7 @@
             </StackPane>
 
             <!-- Congratulations -->
-            <StackPane maxWidth="800.0">
+            <StackPane maxWidth="800.0" styleClass="continent-tile-container">
                 <Label wrapText="true" prefWidth="700"
                        text="🎉 Congratulations on learning about Antarctica!"
                        style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-alignment: center; -fx-text-fill: #006064;
@@ -80,9 +84,8 @@
 
             <!-- Add more about content here -->
             <Button fx:id="continueButton" text="Proceed to the Next Level!" onAction="#handleContinueButton"
-                    style="-fx-font-size: 20px; -fx-padding: 12 30;
-                           -fx-background-color: #0288D1; -fx-text-fill: white;
-                           -fx-background-radius: 20;"/>
+                    style="-fx-font-size: 20px; -fx-padding: 12 30; -fx-background-color: #0288D1; -fx-text-fill: white;
+                    -fx-background-radius: 20;" styleClass="continent-tile-container"/>
         </VBox>
     </center>
 </BorderPane>

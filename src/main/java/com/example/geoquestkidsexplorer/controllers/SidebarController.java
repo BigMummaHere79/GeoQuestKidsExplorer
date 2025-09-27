@@ -9,14 +9,17 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -52,8 +55,11 @@ public class SidebarController {
     @FXML
     private Button myAchievementsButton;
 
-    private boolean isExpanded = false;
     private TranslateTransition transition;
+    private Popup homePopup;
+    private Popup funFactsPopup;
+    private Popup myProgressPopup;
+    private Popup myAchievementsPopup;
 
     /**
      * Initializes the controller. Sets up the sidebar to collapse by default.
@@ -61,40 +67,96 @@ public class SidebarController {
     @FXML
     public void initialize() {
         sidebar.setPrefWidth(50.0); // Start
-        sidebar.setTranslateX(0.0); // Start at the left edge
-        transition = new TranslateTransition(Duration.millis(300), sidebar);
-        sidebar.setOnMouseEntered(event -> expandSidebar());
-        sidebar.setOnMouseExited(event -> collapseSidebar());
+
+        // Clear text for all buttons to show only icons
+        homeButton.setText("\uD83C\uDFE0");
+        funFactsButton.setText("\uD83D\uDCDA");
+        myProgressButton.setText("\uD83D\uDC64");
+        myAchievementsButton.setText("\uD83C\uDFC6");
+
+        // Common label style
+        String commonLabelStyle = "-fx-text-fill: #1A2B4C; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-family: 'Courier New', monospace; " +
+                "-fx-font-weight: bold; " +
+                "-fx-alignment: center; " + // Center text in label
+                "-fx-wrap-text: true;";
+
+        // Common container style (excluding background color)
+        String commonContainerStyle = "-fx-background-radius: 15px; " +
+                "-fx-border-radius: 15px; " +
+                "-fx-padding: 8px; " +
+                "-fx-alignment: center;";
+
+        // Fixed size for all containers
+        double popupWidth = 200.0;
+        double popupHeight = 40.0;
+
+        // Home popup
+        Label homeLabel = new Label("Dashboard");
+        homeLabel.setStyle(commonLabelStyle);
+        homeLabel.setPrefWidth(popupWidth);
+        HBox homeContainer = new HBox(homeLabel);
+        homeContainer.setStyle(commonContainerStyle + "-fx-background-color: #e1bee7;");
+        homeContainer.setPrefWidth(popupWidth);
+        homeContainer.setPrefHeight(popupHeight);
+        homePopup = new Popup();
+        homePopup.getContent().add(homeContainer);
+        homeButton.setOnMouseEntered(event -> showPopup(homePopup, homeButton, popupHeight));
+        homeButton.setOnMouseExited(event -> homePopup.hide());
+
+        // Fun Facts popup
+        Label funFactsLabel = new Label("Fun Facts Libraries");
+        funFactsLabel.setStyle(commonLabelStyle);
+        funFactsLabel.setPrefWidth(popupWidth);
+        HBox funFactsContainer = new HBox(funFactsLabel);
+        funFactsContainer.setStyle(commonContainerStyle + "-fx-background-color: #ffcdd2;");
+        funFactsContainer.setPrefWidth(popupWidth);
+        funFactsContainer.setPrefHeight(popupHeight);
+        funFactsPopup = new Popup();
+        funFactsPopup.getContent().add(funFactsContainer);
+        funFactsButton.setOnMouseEntered(event -> showPopup(funFactsPopup, funFactsButton, popupHeight));
+        funFactsButton.setOnMouseExited(event -> funFactsPopup.hide());
+
+        // My Progress popup
+        Label myProgressLabel = new Label("My Progress");
+        myProgressLabel.setStyle(commonLabelStyle);
+        myProgressLabel.setPrefWidth(popupWidth);
+        HBox myProgressContainer = new HBox(myProgressLabel);
+        myProgressContainer.setStyle(commonContainerStyle + "-fx-background-color: #b3e5fc;");
+        myProgressContainer.setPrefWidth(popupWidth);
+        myProgressContainer.setPrefHeight(popupHeight);
+        myProgressPopup = new Popup();
+        myProgressPopup.getContent().add(myProgressContainer);
+        myProgressButton.setOnMouseEntered(event -> showPopup(myProgressPopup, myProgressButton, popupHeight));
+        myProgressButton.setOnMouseExited(event -> myProgressPopup.hide());
+
+        // My Achievements popup
+        Label myAchievementsLabel = new Label("My Achievements");
+        myAchievementsLabel.setStyle(commonLabelStyle);
+        myAchievementsLabel.setPrefWidth(popupWidth);
+        HBox myAchievementsContainer = new HBox(myAchievementsLabel);
+        myAchievementsContainer.setStyle(commonContainerStyle + "-fx-background-color: #ffe0b2;");
+        myAchievementsContainer.setPrefWidth(popupWidth);
+        myAchievementsContainer.setPrefHeight(popupHeight);
+        myAchievementsPopup = new Popup();
+        myAchievementsPopup.getContent().add(myAchievementsContainer);
+        myAchievementsButton.setOnMouseEntered(event -> showPopup(myAchievementsPopup, myAchievementsButton, popupHeight));
+        myAchievementsButton.setOnMouseExited(event -> myAchievementsPopup.hide());
     }
 
     /**
-     * Expands the sidebar by sliding it out (overlaying content).
+     * Shows the popup to the right of the button, centered vertically.
      */
-    @FXML
-    private void expandSidebar() {
-        if (!isExpanded) {
-            isExpanded = true;
-            sidebar.setPrefWidth(200.0); // Expand to 200px
-            homeButton.setText("Dashboard");
-            funFactsButton.setText("Fun Facts Library");
-            myProgressButton.setText("My Progress");
-            myAchievementsButton.setText("My Achievements");
+    private void showPopup(Popup popup, Button button, double popupHeight) {
+        if (popup.isShowing()) {
+            popup.hide();
         }
-    }
-
-    /**
-     * Collapses the sidebar by sliding it back.
-     */
-    @FXML
-    private void collapseSidebar() {
-        if (isExpanded) {
-            isExpanded = false;
-            sidebar.setPrefWidth(50.0); // Collapse to 50px
-            homeButton.setText("\uD83C\uDFE0");
-            funFactsButton.setText("\uD83D\uDCDA");
-            myProgressButton.setText("\uD83D\uDC64");
-            myAchievementsButton.setText("\uD83C\uDFC6");
-        }
+        Window window = button.getScene().getWindow();
+        Point2D buttonScreenPos = button.localToScreen(0, 0);
+        double screenX = buttonScreenPos.getX() + button.getWidth() + 10;
+        double screenY = buttonScreenPos.getY() + (button.getHeight() - popupHeight) / 2;
+        popup.show(window, screenX, screenY);
     }
 
     /**
@@ -102,7 +164,7 @@ public class SidebarController {
      */
     @FXML
     private void navigateToHome(ActionEvent event) throws IOException {
-        loadScene(event, "/com/example/geoquestkidsexplorer/homepage.fxml", true, this  );
+        loadScene(event, "/com/example/geoquestkidsexplorer/homepage.fxml", true);
     }
 
     /**
@@ -110,7 +172,7 @@ public class SidebarController {
      */
     @FXML
     private void openFunFacts(ActionEvent event) throws IOException {
-        loadScene(event, "/com/example/geoquestkidsexplorer/funfacts.fxml", false, this );
+        loadScene(event, "/com/example/geoquestkidsexplorer/funfacts.fxml", false);
     }
 
     /**
@@ -132,13 +194,13 @@ public class SidebarController {
      */
     @FXML
     private void openMyAchievements(ActionEvent event) throws IOException {
-        loadScene(event, "/com/example/geoquestkidsexplorer/myachievements.fxml", false, this   );
+        loadScene(event, "/com/example/geoquestkidsexplorer/myachievements.fxml", false);
     }
 
     /**
      * Loads the specified scene into the current stage.
      */
-    private void loadScene(ActionEvent event, String fxmlPath, boolean isHomePage, SidebarController sidebarController) throws IOException {
+    private void loadScene(ActionEvent event, String fxmlPath, boolean isHomePage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
         // If it's the homepage, set profile data
@@ -165,14 +227,6 @@ public class SidebarController {
         stage.setScene(scene);
         stage.setResizable(false); // Prevent resizing
         stage.show();
-        // Use the passed sidebarController to maintain state
-        if (sidebarController != null) {
-            if (sidebarController.isExpanded) {
-                sidebarController.expandSidebar();
-            } else {
-                sidebarController.collapseSidebar();
-            }
-        }
     }
 
     /**

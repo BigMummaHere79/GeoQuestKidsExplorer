@@ -5,38 +5,38 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="sidebar" prefWidth="200.0" style="-fx-background-color: #63acbe; -fx-padding: 10; -fx-spacing: 10;
-      -fx-alignment: center-left;"
+<?import java.net.URL?>
+<VBox fx:id="sidebar" prefWidth="200.0" style="-fx-background-color: #63acbe; -fx-padding: 150 10 10 10; -fx-spacing: 10;
+      -fx-alignment: top-left;"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.geoquestkidsexplorer.controllers.SidebarController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <children>
-        <Button fx:id="homeButton" graphicTextGap="10" onMouseEntered="#expandSidebar" onMouseExited="#collapseSidebar"
-                onAction="#navigateToHome" styleClass="sidebar-button">
+        <Button fx:id="homeButton" graphicTextGap="10" style="-fx-background-color: #e1bee7;"
+                textAlignment="CENTER" onAction="#navigateToHome" styleClass="continent-tile-container">
             <graphic>
                 <Label text="🏠" style="-fx-font-size: 24px;" />
             </graphic>
-            <text>Dashboard</text>
         </Button>
-        <Button fx:id="funFactsButton" graphicTextGap="10" onMouseEntered="#expandSidebar" onMouseExited="#collapseSidebar"
-                onAction="#openFunFacts" styleClass="sidebar-button">
+        <Button fx:id="funFactsButton" graphicTextGap="10" style="-fx-background-color: #ffcdd2;"
+                textAlignment="CENTER" onAction="#openFunFacts" styleClass="continent-tile-container">
             <graphic>
                 <Label text="📚" style="-fx-font-size: 24px;" />
             </graphic>
-            <text>Fun Facts Library</text>
         </Button>
-        <Button fx:id="myProgressButton" graphicTextGap="10" onMouseEntered="#expandSidebar" onMouseExited="#collapseSidebar"
-                onAction="#openMyProgress" styleClass="sidebar-button">
+        <Button fx:id="myProgressButton" graphicTextGap="10" style="-fx-background-color: #b3e5fc;"
+                textAlignment="CENTER" onAction="#openMyProgress" styleClass="continent-tile-container">
             <graphic>
                 <Label text="👤" style="-fx-font-size: 24px;" />
             </graphic>
-            <text>My Progress</text>
         </Button>
-        <Button fx:id="myAchievementsButton" graphicTextGap="10" onMouseEntered="#expandSidebar" onMouseExited="#collapseSidebar"
-                onAction="#openMyAchievements" styleClass="sidebar-button">
+        <Button fx:id="myAchievementsButton" graphicTextGap="10" style="-fx-background-color: #ffe0b2;"
+                textAlignment="CENTER" onAction="#openMyAchievements" styleClass="continent-tile-container">
             <graphic>
                 <Label text="🏆" style="-fx-font-size: 24px;" />
             </graphic>
-            <text>My Achievements</text>
         </Button>
     </children>
 </VBox>

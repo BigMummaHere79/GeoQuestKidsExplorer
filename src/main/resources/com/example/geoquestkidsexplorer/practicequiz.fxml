@@ -16,26 +16,35 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.ImageView?>
 
+<?import java.net.URL?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.PracticeQuizController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <!-- Top: Navigation Bar -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #63acbe; -fx-padding: 10 100;">
+        <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-padding: 8 16;">
             <children>
                 <!-- This button's text is now set dynamically in the controller -->
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToGameModes" style="-fx-background-color: #B2D5D8;
-                     -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
-                     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Africa Game Mode" />
+                <Button fx:id="backButton" styleClass="back-button" onAction="#backToGameModes" >
+                    <HBox.margin>
+                        <Insets left="16"/>
+                    </HBox.margin>
+                </Button>
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="questionNumberLabel" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;"
                        text="Question 1 of 10" />
                 <Region HBox.hgrow="ALWAYS" />
-                <HBox alignment="CENTER" style="-fx-background-color: #B2D5D8; -fx-background-radius: 25; -fx-padding: 10 15;
-                        -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);">
+                <HBox  alignment="CENTER">
                     <children>
                         <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" text="Score: " />
-                        <Label fx:id="scoreLabel" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"
-                               text="0" />
+                        <Label fx:id="scoreLabel" styleClass="score-label"
+                               text="0" >
+                            <HBox.margin>
+                                <Insets right ="16" />
+                            </HBox.margin>
+                        </Label>
                     </children>
                 </HBox>
             </children>
@@ -83,24 +92,21 @@
                                         <Font name="System Bold" size="24.0" />
                                     </font>
                                     <VBox.margin>
-                                        <Insets top="60.0" bottom="50.0" />
+                                        <Insets top="40.0" bottom="30.0" />
                                     </VBox.margin>
                                 </Label>
                                 <!-- Radio Button Tiles Grid -->
-                                <GridPane fx:id="optionsGrid" alignment="CENTER" hgap="10.0" vgap="10.0">
+                                <GridPane fx:id="optionsGrid" alignment="CENTER" hgap="40.0" vgap="40.0" prefWidth="400.0" prefHeight="200.0">
                                     <columnConstraints>
-                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="150.0" prefWidth="200.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="150.0" prefWidth="200.0" />
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="20.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="20.0" prefHeight="50.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
-                                    <VBox.margin>
-                                        <Insets top="10.0" />
-                                    </VBox.margin>
                                     <children>
-                                        <VBox fx:id="option1Tile" styleClass="option-tile">
+                                        <VBox fx:id="option1Tile" styleClass="option-tile" alignment="CENTER" prefWidth="150.0" prefHeight="30.0">
                                             <children>
                                                 <RadioButton fx:id="option1" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton">
                                                     <toggleGroup>
@@ -109,21 +115,21 @@
                                                 </RadioButton>
                                             </children>
                                         </VBox>
-                                        <VBox fx:id="option2Tile" styleClass="option-tile"
+                                        <VBox fx:id="option2Tile" styleClass="option-tile" alignment="CENTER" prefWidth="150.0" prefHeight="30.0"
                                               GridPane.columnIndex="1">
                                             <children>
                                                 <RadioButton fx:id="option2" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton"
                                                              toggleGroup="$answerGroup" />
                                             </children>
                                         </VBox>
-                                        <VBox fx:id="option3Tile" styleClass="option-tile"
+                                        <VBox fx:id="option3Tile" styleClass="option-tile" alignment="CENTER" prefWidth="150.0" prefHeight="30.0"
                                               GridPane.rowIndex="1">
                                             <children>
                                                 <RadioButton fx:id="option3" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton"
                                                              toggleGroup="$answerGroup" />
                                             </children>
                                         </VBox>
-                                        <VBox fx:id="option4Tile" styleClass="option-tile"
+                                        <VBox fx:id="option4Tile" styleClass="option-tile" alignment="CENTER" prefWidth="150.0" prefHeight="30.0"
                                               GridPane.columnIndex="1" GridPane.rowIndex="1">
                                             <children>
                                                 <RadioButton fx:id="option4" onAction="#handleAnswerSelection" mnemonicParsing="false" text="RadioButton"
@@ -133,15 +139,14 @@
                                     </children>
                                 </GridPane>
                                 <!-- Hint Button! -->
-                                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint"
-                                        prefHeight="30.0" prefWidth="200.0"
-                                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;"
-                                        textFill="WHITE">
+                                <Button fx:id="hintButton" text="Hint Please!" onAction="#handleHint" prefHeight="30.0" prefWidth="200.0"
+                                        style="-fx-background-color: #2196F3; -fx-background-radius: 25;" textFill="WHITE"
+                                        styleClass="continent-tile-container">
                                     <font>
                                         <Font name="System Bold" size="15.0" />
                                     </font>
                                     <VBox.margin>
-                                        <Insets top="60.0" bottom="10.0" />
+                                        <Insets top="40.0" bottom="10.0" />
                                     </VBox.margin>
                                 </Button>
                             </children>
@@ -185,10 +190,9 @@
                     </children>
                 </VBox>
                 <!-- Next Question Button (hidden initially) -->
-                <Button fx:id="nextQuestionButton" mnemonicParsing="false" onAction="#handleNextQuestion"
-                        prefHeight="40.0" prefWidth="200.0"
-                        style="-fx-background-color: #4CAF50; -fx-background-radius: 25;"
-                        text="Next Question" textFill="WHITE" visible="false">
+                <Button fx:id="nextQuestionButton" mnemonicParsing="false" onAction="#handleNextQuestion" prefHeight="40.0"
+                        prefWidth="200.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 25;" text="Next Question"
+                        styleClass="continent-tile-container" textFill="WHITE" visible="false">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>

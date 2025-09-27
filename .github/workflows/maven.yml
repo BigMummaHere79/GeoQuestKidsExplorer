@@ -10,9 +10,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "Saitoria" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "Saitoria" ]
+    branches: [ "master" ]
 
 jobs:
   build:

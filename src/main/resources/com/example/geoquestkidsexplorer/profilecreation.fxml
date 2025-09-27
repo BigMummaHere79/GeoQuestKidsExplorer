@@ -10,9 +10,13 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f0f0f0;"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.geoquestkidsexplorer.controllers.ProfileCreationController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <children>
         <!-- Main Content Box -->
         <VBox alignment="CENTER" prefHeight="600.0" prefWidth="1000.0" spacing="20.0"
@@ -52,7 +56,8 @@
                                       -fx-background-color: #b3e5fc; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
                                       -fx-padding: 15px; -fx-cursor: hand; -fx-border-color: transparent;
-                                      -fx-border-width: 3px; -fx-border-radius: 10px;" userData="explorer_boy">
+                                      -fx-border-width: 3px; -fx-border-radius: 10px;" userData="explorer_boy"
+                                      styleClass="continent-tile-container">
                                     <children>
                                         <Label style="-fx-font-size: 60px;" text="👦" />
                                         <Label text="Explorer Boy">
@@ -68,7 +73,8 @@
                                       -fx-max-height: 120; -fx-background-color: #ffcdd2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
                                       -fx-padding: 15px; -fx-cursor: hand; -fx-border-color: transparent;
-                                      -fx-border-width: 3px; -fx-border-radius: 10px;" userData="explorer_girl">
+                                      -fx-border-width: 3px; -fx-border-radius: 10px;" userData="explorer_girl"
+                                      styleClass="continent-tile-container">
                                     <children>
                                         <Label style="-fx-font-size: 60px;" text="👧" />
                                         <Label text="Explorer Girl">
@@ -84,7 +90,8 @@
                                       -fx-background-color: #c8e6c9; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0); -fx-padding: 15px;
                                       -fx-cursor: hand; -fx-border-color: transparent; -fx-border-width: 3px;
-                                      -fx-border-radius: 10px;" userData="explorer_boy-student">
+                                      -fx-border-radius: 10px;" userData="explorer_boy-student"
+                                      styleClass="continent-tile-container">
                                     <children>
 <!--                                        <Label style="-fx-font-size: 60px;" text="🎓" />-->
                                         <Label style="-fx-font-size: 60px;" text="👨‍🎓" />
@@ -101,7 +108,8 @@
                                       -fx-background-color:#cfd8dc;; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0); -fx-padding: 15px;
                                       -fx-cursor: hand; -fx-border-color: transparent; -fx-border-width: 3px;
-                                      -fx-border-radius: 10px;" userData="explorer_girl-student">
+                                      -fx-border-radius: 10px;" userData="explorer_girl-student"
+                                      styleClass="continent-tile-container">
                                     <children>
                                         <!-- <Label style="-fx-font-size: 60px;" text="🎓" />-->
                                         <Label style="-fx-font-size: 60px;" text="👩‍🎓"/>
@@ -118,7 +126,8 @@
                                       -fx-background-color: #ffe0b2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0); -fx-padding: 15px;
                                       -fx-cursor: hand; -fx-border-color: transparent; -fx-border-width: 3px;
-                                      -fx-border-radius: 10px;" userData="explorer_magician">
+                                      -fx-border-radius: 10px;" userData="explorer_magician"
+                                      styleClass="continent-tile-container">
                                     <children>
                                         <Label style="-fx-font-size: 60px;" text="🧙‍♂️" />
                                         <Label text="Explorer Magician">
@@ -134,7 +143,8 @@
                                       -fx-background-color: #e1f5fe; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0); -fx-padding: 15px;
                                       -fx-cursor: hand; -fx-border-color: transparent; -fx-border-width: 3px;
-                                      -fx-border-radius: 10px;" userData="explorer_elf">
+                                      -fx-border-radius: 10px;" userData="explorer_elf"
+                                      styleClass="continent-tile-container">
                                     <children>
                                         <Label style="-fx-font-size: 60px;" text="🧝‍♀️" />
                                         <Label text="Explorer Elf">
@@ -150,7 +160,8 @@
                                       -fx-background-color: #ffcdd2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0); -fx-padding: 15px;
                                       -fx-cursor: hand; -fx-border-color: transparent; -fx-border-width: 3px;
-                                      -fx-border-radius: 10px;" userData="explorer_wizard">
+                                      -fx-border-radius: 10px;" userData="explorer_wizard"
+                                      styleClass="continent-tile-container">
                                     <children>
                                         <Label style="-fx-font-size: 60px;" text="🧙‍♀️" />
                                         <Label text="Explorer Wizard">
@@ -212,7 +223,7 @@
                 </HBox>
                 <Button fx:id="createProfileButton" mnemonicParsing="false" onAction="#createProfile" prefWidth="250.0"
                         style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;"
-                        text="Create Your Profile Now!" />
+                        text="Create Your Profile Now!" styleClass="continent-tile-container"/>
             </children>
         </VBox>
         <Label fx:id="messageLabel" style="-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 10px 0 0 0;" />
