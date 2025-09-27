@@ -37,7 +37,7 @@
                 </Button>
                 <!-- Timer label on the far left-->
                 <HBox spacing="5" alignment="CENTER_LEFT">
-                    <Label fx:id="timerLabel" styleClass="timer-label" text="00:00">
+                    <Label fx:id="timerLabel" styleClass="timer-label" text="00:00" prefWidth="70">
                         <HBox.margin>
                             <Insets left ="24" />
                         </HBox.margin>
