@@ -305,6 +305,39 @@ public class HomePageController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
         Parent root = loader.load();
 
+        /**
+         * Adding switch and nodes for colour changes
+         * in different continent
+         * */
+
+        Node bg = root.lookup("#bgPane");
+        Node navBar = root.lookup("#navBar");
+        Node backBtn = root.lookup("#backButton");
+
+        if(bg != null){
+            switch (continentName){
+                case "Oceania" -> {
+                    bg.setStyle("-bg1:#f9f9f9 ; -bg2:#F4BA9B ; -bg3:#F5793A ;");
+                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                }
+                case "South America" -> {
+                    bg.setStyle("-bg1:#f9f9f9 ; -bg2:#E488DA ; -bg3:#A95AA1 ;");
+                    if(navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#E488DA;");
+                }
+                case "North America" -> {
+                    bg.setStyle("-bg1:#f9f9f9 ; -bg2:#F4BA9B ; -bg3:#F5793A ;");
+                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                }
+                case "Europe" -> {
+                    bg.setStyle("-bg1:#f9f9f9 ; -bg2:#4B66FF ; -bg3:#0F2080 ;");
+                    if(navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#4B66FF;");
+                }
+            }
+        }
         // Pass the continent to controllers that accept it (generic or Antarctica-specific)
         Object ctl = loader.getController();
         try {
