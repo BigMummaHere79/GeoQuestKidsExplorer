@@ -70,12 +70,12 @@
                 <!-- Main Content Container -->
                 <VBox fx:id="bgPane" alignment="CENTER" prefHeight="695.0" prefWidth="800.0" styleClass="gradient-pane">
                     <children>
-                        <Label text="Time to Test you're knowledge and play the game!">
+                        <Label style=" -fx-padding: 20 0;" text="Time to Test you're knowledge and play the game!" >
                             <font>
                                 <Font name="System Bold" size="36.0" />
                             </font>
                         </Label>
-                        <Label style="-fx-text-fill: black; -fx-font-weight: bold;"
+                        <Label style="-fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 20 0;"
                                text="Choose you're Game Mode now!">
                             <font>
                                 <Font size="20.0" />
