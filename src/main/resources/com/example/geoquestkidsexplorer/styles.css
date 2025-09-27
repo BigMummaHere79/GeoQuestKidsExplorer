@@ -136,9 +136,9 @@ Adding css for game mode colours, flash cards , test quiz and practise quiz
 */
 
 .gradient-pane{
-    -bg1:F5793A;
-    -bg2:F4BA9B;
-    -bg3:f9f9f9;
+    -bg1:#F5793A;
+    -bg2:#F4BA9B;
+    -bg3:#f9f9f9;
     -fx-background-radius:20;
     -fx-border-radius: 20;
     -fx-background-color: linear-gradient(
@@ -173,3 +173,25 @@ For the back button bar
 
 .back-button:hover { -fx-background-color: derive(-btn-bg, -8%);}
 .back-button:pressed { -fx-background-color: derive(-btn-bg, -16%);}
+
+.score-label{
+    -score-bg: #F4BA9B;
+    -fx-background-color: -score-bg;
+    -fx-background-radius: 25;
+    -fx-padding: 10 15;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+}
+
+.timer-label{
+    -timer-bg: #111111;
+    -fx-background-color: -timer-bg;
+    -fx-background-radius: 25;
+    -fx-padding: 10 15;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+}

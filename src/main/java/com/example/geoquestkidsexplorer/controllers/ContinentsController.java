@@ -25,6 +25,9 @@ public class ContinentsController {
     @FXML
     private Button backButton;
     @FXML private Label gameModeWelcomeLabel;
+    @FXML private javafx.scene.layout.VBox bgPane;
+    @FXML private javafx.scene.layout.HBox navBar;
+
 
     private String continentName;
 
@@ -42,6 +45,34 @@ public class ContinentsController {
         gameModeWelcomeLabel.setText("Game Mode Control for " + continentName + " Continent!");
         //continentLabel.setText(name); // Assuming you have a label to display the continent name
         backButton.setText("⬅️ Back to Continents"); // Use a generic back button text
+
+        /**
+         * Adding switch for colour changes
+         * in different continent
+         * */
+
+        switch (name){
+            case "Oceania" -> {
+                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#F4BA9B ; -bg3:#F5793A ;");
+                navBar.setStyle("-nav-bg: #F5793A;");
+                backButton.setStyle("-btn-bg:#F4BA9B;");
+            }
+            case "South America" -> {
+                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#E488DA ; -bg3:#A95AA1 ;");
+                navBar.setStyle("-nav-bg: #A95AA1;");
+                backButton.setStyle("-btn-bg:#E488DA;");
+            }
+            case "North America" -> {
+                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#FA76A7 ; -bg3:#D81B60 ;");
+                navBar.setStyle("-nav-bg: #D81B60;");
+                backButton.setStyle("-btn-bg:#FA76A7;");
+            }
+            case "Europe" -> {
+                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#4B66FF ; -bg3:#0F2080 ;");
+                navBar.setStyle("-nav-bg: #0F2080;");
+                backButton.setStyle("-btn-bg:#4B66FF;");
+            }
+        }
     }
 
     @FXML
@@ -93,6 +124,39 @@ public class ContinentsController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/practicequiz.fxml"));
         Parent root = loader.load();
 
+        //Input colour pallete within different continents
+        //Practise Quiz
+
+        Node navBar = root.lookup("#navBar");
+        Node backBtn = root.lookup("#backButton");
+        Node score = root.lookup("#scoreLabel");
+
+        if(navBar != null && backBtn != null){
+            switch (continentName){
+                case "Oceania" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                    if (score != null)score.setStyle("-score-bg:#F4BA9B;");
+                }
+                case "South America" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#E488DA;");
+                    if (score != null)score.setStyle("-score-bg:#E488DA;");
+                }
+                case "North America" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#FA76A7;");
+                    if (score != null)score.setStyle("-score-bg:#FA76A7;");
+
+                }
+                case "Europe" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#4B66FF;");
+                    if (score != null)score.setStyle("-score-bg:#4B66FF;");
+                }
+            }
+        }
+
         // Get the controller and set the continent name
         PracticeQuizController quizController = loader.getController();
         quizController.setContinentName(continent);
@@ -111,6 +175,32 @@ public class ContinentsController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml"));
         Parent root = loader.load();
 
+        Node navBar = root.lookup("#navBar");
+        Node backBtn = root.lookup("#backButton");
+        Node score = root.lookup("#scoreLabel");
+        Node timer = root.lookup("timerLabel");
+
+        if(navBar != null && backBtn != null) {
+            switch (continentName) {
+                case "Oceania" -> {
+                    if (navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
+                    if (backBtn != null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                }
+                case "South America" -> {
+                    if (navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
+                    if (backBtn != null) backBtn.setStyle("-btn-bg:#E488DA;");
+                }
+                case "North America" -> {
+                    if (navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
+                    if (backBtn != null) backBtn.setStyle("-btn-bg:#FA76A7;");
+                }
+                case "Europe" -> {
+                    if (navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
+                    if (backBtn != null) backBtn.setStyle("-btn-bg:#4B66FF;");
+                }
+            }
+        }
+
         // Get the controller and set the continent name
         FlashcardsController controller = loader.getController();
         controller.setRegion(continent);
@@ -127,6 +217,40 @@ public class ContinentsController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
         Parent root = loader.load();
 
+        Node navBar = root.lookup("#navBar");
+        Node backBtn = root.lookup("#backButton");
+        Node score = root.lookup("#scoreLabel");
+        Node timer = root.lookup("timerLabel");
+
+        if(navBar != null && backBtn != null){
+            switch (continentName){
+                case "Oceania" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                    if (score != null)score.setStyle("-score-bg:#F4BA9B;");
+                    if (timer != null) timer.setStyle("-timer-bg:#F4BA9B;");
+                }
+                case "South America" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#E488DA;");
+                    if (score != null)score.setStyle("-score-bg:#E488DA;");
+                    if (timer != null) timer.setStyle("-timer-bg:#E488DA;");
+                }
+                case "North America" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#FA76A7;");
+                    if (score != null)score.setStyle("-score-bg:#FA76A7;");
+                    if (timer != null) timer.setStyle("-timer-bg:#FA76A7;");
+
+                }
+                case "Europe" -> {
+                    if(navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#4B66FF;");
+                    if (score != null)score.setStyle("-score-bg:#4B66FF;");
+                    if (timer != null) timer.setStyle("-timer-bg:#4B66FF;");
+                }
+            }
+        }
         TestQuizController quizController = loader.getController();
         quizController.setContinentName(continentName);
 

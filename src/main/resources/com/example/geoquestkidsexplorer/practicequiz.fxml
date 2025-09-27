@@ -24,23 +24,27 @@
     </stylesheets>
     <!-- Top: Navigation Bar -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #63acbe; -fx-padding: 10 100;">
+        <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-padding: 8 16;">
             <children>
                 <!-- This button's text is now set dynamically in the controller -->
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToGameModes" style="-fx-background-color: #B2D5D8;
-                     -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
-                     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Africa Game Mode"
-                        styleClass="continent-tile-container"/>
+                <Button fx:id="backButton" styleClass="back-button" onAction="#backToGameModes" >
+                    <HBox.margin>
+                        <Insets left="16"/>
+                    </HBox.margin>
+                </Button>
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="questionNumberLabel" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;"
                        text="Question 1 of 10" />
                 <Region HBox.hgrow="ALWAYS" />
-                <HBox alignment="CENTER" style="-fx-background-color: #B2D5D8; -fx-background-radius: 25; -fx-padding: 10 15;
-                        -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);">
+                <HBox  alignment="CENTER">
                     <children>
                         <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" text="Score: " />
-                        <Label fx:id="scoreLabel" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;"
-                               text="0" />
+                        <Label fx:id="scoreLabel" styleClass="score-label"
+                               text="0" >
+                            <HBox.margin>
+                                <Insets right ="16" />
+                            </HBox.margin>
+                        </Label>
                     </children>
                 </HBox>
             </children>
