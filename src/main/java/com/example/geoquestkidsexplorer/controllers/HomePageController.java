@@ -327,9 +327,9 @@ public class HomePageController {
                     if(backBtn !=null) backBtn.setStyle("-btn-bg:#E488DA;");
                 }
                 case "North America" -> {
-                    bg.setStyle("-bg1:#f9f9f9 ; -bg2:#F4BA9B ; -bg3:#F5793A ;");
-                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                    bg.setStyle("-bg1:#f9f9f9 ; -bg2:#FA76A7 ; -bg3:#D81B60 ;");
+                    if(navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
+                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#FA76A7;");
                 }
                 case "Europe" -> {
                     bg.setStyle("-bg1:#f9f9f9 ; -bg2:#4B66FF ; -bg3:#0F2080 ;");
