@@ -198,13 +198,17 @@ public class HomePageController {
                     textLabel.setText("This continent is locked. Complete previous level to unlock.");
                     textLabel.setVisible(true);
                     textLabel.setStyle("-fx-text-fill: red;");
+                    // Reset layoutY to default or a position suitable for locked state
+                    textLabel.setLayoutY(0); // Adjust this value based on your UI
                     System.out.println("setContinentLocks: Locked " + continentName);
                 } else {
                     pane.setOpacity(1.0);
                     lockLabel.setVisible(false);
                     textLabel.setText("This continent is now unlocked.");
                     textLabel.setVisible(true);
-                    textLabel.setStyle("-fx-text-fill: green;");
+                    textLabel.setStyle("-fx-text-fill: green; -fx-padding: 5;");
+                    // Move the text lower in the pane
+                    textLabel.setLayoutY(pane.getHeight() - 10); // Adjust this value to position the text lower
                     System.out.println("setContinentLocks: Unlocked " + continentName);
                 }
             } else {

@@ -26,7 +26,7 @@
     <left>
         <StackPane>
             <BorderPane.margin>
-                <Insets top="0" left="0" bottom="10" right="0" />
+                <Insets top="0" left="0" bottom="0" right="0" />
             </BorderPane.margin>
             <fx:include source="sidebar.fxml" />
         </StackPane>
@@ -97,11 +97,13 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="185" fitHeight="150" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                             <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://t4.ftcdn.net/jpg/07/22/12/43/360_F_722124358_pmAyxjaWPEOX3pELDGzNOjsjHu2NcCfi.jpg"/>
+                                                                <Image url="@images/antarctican.png" />
                                                             </image>
+                                                            <clip>
+                                                                <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
+                                                            </clip>
                                                         </ImageView>
                                                         <VBox fx:id="antarcticaLockedContainer" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                                             <children>
@@ -131,10 +133,9 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="185" fitHeight="200" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                             <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://static.vecteezy.com/system/resources/previews/003/087/848/non_2x/outline-simple-map-of-oceania-free-vector.jpg"/>
+                                                                <Image url="@images/australian.png" />
                                                             </image>
                                                             <clip>
                                                                 <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
@@ -168,10 +169,9 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="200" fitHeight="150" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                             <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://i.pinimg.com/564x/29/ed/fc/29edfcb9db4afce9630791fc13a5ef59.jpg"/>
+                                                                <Image url="@images/south-american.png" />
                                                             </image>
                                                             <clip>
                                                                 <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
@@ -206,10 +206,9 @@
                                             <children>
                                                 <StackPane prefHeight="200.0" prefWidth="200.0">
                                                     <children>
-                                                        <ImageView fitWidth="155" fitHeight="150" preserveRatio="true" smooth="true" cache="true">
+                                                        <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                             <image>
-                                                                <Image backgroundLoading="true"
-                                                                       url="https://i.pinimg.com/originals/67/58/ac/6758acde861811f6d32e7a678d334562.png"/>
+                                                                <Image url="@images/north-american.png" />
                                                             </image>
                                                             <clip>
                                                                 <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
@@ -245,10 +244,9 @@
                                                 <children>
                                                     <StackPane prefHeight="200.0" prefWidth="200.0">
                                                         <children>
-                                                            <ImageView fitWidth="145" fitHeight="145" preserveRatio="true" smooth="true" cache="true">
+                                                            <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                                 <image>
-                                                                    <Image backgroundLoading="true"
-                                                                           url="https://img.freepik.com/premium-vector/outline-map-europe-white-background-vector-map-with-contour_652994-2550.jpg"/>
+                                                                    <Image url="@images/european.png" />
                                                                 </image>
                                                                 <clip>
                                                                     <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
@@ -282,10 +280,9 @@
                                                 <children>
                                                     <StackPane prefHeight="200.0" prefWidth="200.0">
                                                         <children>
-                                                            <ImageView fitWidth="175" fitHeight="185" preserveRatio="true" smooth="true" cache="true">
+                                                            <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                                 <image>
-                                                                    <Image backgroundLoading="true"
-                                                                           url="https://i.pinimg.com/736x/5d/e5/1e/5de51e06c7410ae41d6cc0bc431d0e57.jpg"/>
+                                                                    <Image url="@images/asian.png" />
                                                                 </image>
                                                                 <clip>
                                                                     <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
@@ -319,10 +316,9 @@
                                                 <children>
                                                     <StackPane prefHeight="200.0" prefWidth="200.0">
                                                         <children>
-                                                            <ImageView fitWidth="155" fitHeight="155" preserveRatio="true" smooth="true" cache="true">
+                                                            <ImageView fitHeight="200.0" fitWidth="200.0" preserveRatio="false">
                                                                 <image>
-                                                                    <Image backgroundLoading="true"
-                                                                           url="https://gisgeography.com/wp-content/uploads/2023/12/Africa-Country-Blank-Map.jpg"/>
+                                                                    <Image url="@images/african.png" />
                                                                 </image>
                                                                 <clip>
                                                                     <Rectangle arcHeight="45.0" arcWidth="45.0" height="200.0" width="200.0" />
@@ -349,20 +345,6 @@
                                 </HBox>
                             </children>
                         </GridPane>
-                        <!-- Additional Buttons -->
-                        <!--<HBox alignment="CENTER" spacing="20.0">
-                            <children>
-                                &lt;!&ndash; Start Adventure Button &ndash;&gt;
-                                <Button fx:id="startAdventureButton" mnemonicParsing="false" onAction="#startNewAdventure"
-                                        prefWidth="350.0" style="-fx-background-color: #4caf50; -fx-text-fill: white;
-                                        -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 5px;"
-                                        text="🌎  Start Your New Adventure!">
-                                    <VBox.margin>
-                                        <Insets top="5.0" />
-                                    </VBox.margin>
-                                </Button>
-                            </children>
-                        </HBox>-->
                     </children>
                     <VBox.margin>
                         <Insets top="10.0" />

@@ -26,7 +26,7 @@
                         style="-fx-background-color: #B2D5D8; -fx-text-fill: white; -fx-font-weight: bold;
                                -fx-background-radius: 25; -fx-padding: 10 15;
                                -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
-                        text="⬅️ Back to Game Modes" />
+                        styleClass="continent-tile-container" text="⬅️ Back to Game Modes" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="regionLabel" text=""
                        style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;" >
@@ -74,14 +74,16 @@
                                 <Button fx:id="flipCardButton" text="Flip the card and take a guess" onAction="#handleCardAction"
                                         prefHeight="40.0" prefWidth="400.0"
                                         style="-fx-background-color: #90caf9; -fx-background-radius: 25;
-                                               -fx-text-fill: #000000; -fx-font-size: 20px; -fx-font-weight: bold;">
+                                        -fx-text-fill: #000000; -fx-font-size: 20px; -fx-font-weight: bold;"
+                                        styleClass="continent-tile-container">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Button>
                                 <Button fx:id="nextCardButton" text="Next Flash Card" onAction="#handleCardAction" prefHeight="40.0"
                                         prefWidth="400.0" style="-fx-background-color: #ffcdd2; -fx-background-radius: 25;
-                                        -fx-text-fill:#000000; -fx-font-size:20px; -fx-font-weight: bold;">
+                                        -fx-text-fill:#000000; -fx-font-size:20px; -fx-font-weight: bold;"
+                                        styleClass="continent-tile-container">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>

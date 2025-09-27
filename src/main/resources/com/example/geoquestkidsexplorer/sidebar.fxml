@@ -5,31 +5,35 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
+<?import java.net.URL?>
 <VBox fx:id="sidebar" prefWidth="200.0" style="-fx-background-color: #63acbe; -fx-padding: 150 10 10 10; -fx-spacing: 10;
       -fx-alignment: top-left;"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.geoquestkidsexplorer.controllers.SidebarController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <children>
         <Button fx:id="homeButton" graphicTextGap="10" style="-fx-background-color: #e1bee7;"
-                textAlignment="CENTER" onAction="#navigateToHome" styleClass="sidebar-button">
+                textAlignment="CENTER" onAction="#navigateToHome" styleClass="continent-tile-container">
             <graphic>
                 <Label text="🏠" style="-fx-font-size: 24px;" />
             </graphic>
         </Button>
         <Button fx:id="funFactsButton" graphicTextGap="10" style="-fx-background-color: #ffcdd2;"
-                textAlignment="CENTER" onAction="#openFunFacts" styleClass="sidebar-button">
+                textAlignment="CENTER" onAction="#openFunFacts" styleClass="continent-tile-container">
             <graphic>
                 <Label text="📚" style="-fx-font-size: 24px;" />
             </graphic>
         </Button>
         <Button fx:id="myProgressButton" graphicTextGap="10" style="-fx-background-color: #b3e5fc;"
-                textAlignment="CENTER" onAction="#openMyProgress" styleClass="sidebar-button">
+                textAlignment="CENTER" onAction="#openMyProgress" styleClass="continent-tile-container">
             <graphic>
                 <Label text="👤" style="-fx-font-size: 24px;" />
             </graphic>
         </Button>
         <Button fx:id="myAchievementsButton" graphicTextGap="10" style="-fx-background-color: #ffe0b2;"
-                textAlignment="CENTER" onAction="#openMyAchievements" styleClass="sidebar-button">
+                textAlignment="CENTER" onAction="#openMyAchievements" styleClass="continent-tile-container">
             <graphic>
                 <Label text="🏆" style="-fx-font-size: 24px;" />
             </graphic>

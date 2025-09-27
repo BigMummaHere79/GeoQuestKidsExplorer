@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>
+<!--<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>-->
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -11,8 +11,12 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.FunFactsController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <!-- Left: Sidebar (collapsible) -->
     <left>
         <fx:include source="sidebar.fxml" />
@@ -79,7 +83,8 @@
                         <FlowPane alignment="CENTER" hgap="30.0" prefHeight="200.0" prefWidth="200.0" vgap="30.0">
                             <children>
                                 <!-- Africa Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadAfricaFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadAfricaFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #c8e6c9; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
@@ -92,7 +97,8 @@
                                     </children>
                                 </VBox>
                                 <!-- Asia Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadAsiaFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadAsiaFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #ffe0b2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
@@ -105,7 +111,8 @@
                                     </children>
                                 </VBox>
                                 <!-- Europe Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadEuropeFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadEuropeFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #b3e5fc; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
@@ -118,7 +125,8 @@
                                     </children>
                                 </VBox>
                                 <!-- North America Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadNorthAmericaFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadNorthAmericaFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #ffcdd2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
@@ -131,7 +139,8 @@
                                     </children>
                                 </VBox>
                                 <!-- South America Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadSouthAmericaFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadSouthAmericaFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #e6ee9c; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
@@ -144,7 +153,8 @@
                                     </children>
                                 </VBox>
                                 <!-- Oceania Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadOceaniaFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadOceaniaFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #b2ebf2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
@@ -157,7 +167,8 @@
                                     </children>
                                 </VBox>
                                 <!-- Antarctica Tile -->
-                                <VBox alignment="CENTER" onMouseClicked="#loadAntarcticaFacts" prefHeight="200.0" prefWidth="250.0"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadAntarcticaFacts"
+                                      prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #e1f5fe; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>

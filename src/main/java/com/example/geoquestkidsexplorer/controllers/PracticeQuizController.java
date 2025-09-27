@@ -122,21 +122,19 @@ public class PracticeQuizController {
         PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
         String correctAnswer = currentQuestion.getCorrectAnswer();
 
-        List<RadioButton> incorrectOptions = new ArrayList<>();
-        for (RadioButton rb : new RadioButton[]{option1, option2, option3, option4}) {
-            if (!rb.isDisable() && !rb.getText().equals(correctAnswer)) {
-                incorrectOptions.add(rb);
+        List<VBox> incorrectOptions = new ArrayList<>();
+        for (VBox vBox : new VBox[]{option1Tile, option2Tile, option3Tile, option4Tile}) {
+            if (!vBox.isDisable() && !vBox.getStyle().equals(correctAnswer)) {
+                incorrectOptions.add(vBox);
             }
         }
 
         if (!incorrectOptions.isEmpty()) {
-            RadioButton toRemove = incorrectOptions.get(ThreadLocalRandom.current().nextInt(incorrectOptions.size()));
+            VBox toRemove = incorrectOptions.get(ThreadLocalRandom.current().nextInt(incorrectOptions.size()));
             toRemove.setDisable(true);
             toRemove.setVisible(false); // Hide the wrong answer
         }
     }
-
-
 
     @FXML
     public void initialize() {
@@ -178,13 +176,13 @@ public class PracticeQuizController {
 
             PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
             // Reset and re-enable all radio buttons
-            RadioButton[] radioButtons = new RadioButton[]{option1, option2, option3, option4};
-            for (RadioButton rb : radioButtons) {
-                rb.setSelected(false);
-                rb.setDisable(false); // Re-enable the buttons
-                rb.setStyle(null); // Clear any styles
+            VBox[] vBoxes = new VBox[]{option1Tile, option2Tile, option3Tile, option4Tile};
+            for (VBox vbox : vBoxes) {
+                //vbox.setStyle(false);
+                vbox.setDisable(false); // Re-enable the buttons
+                vbox.setStyle(null); // Clear any styles
                 // Make sure they are visible, just in case
-                rb.setVisible(true);
+                vbox.setVisible(true);
             }
             // Make sure the toggle group is cleared
             answerGroup.selectToggle(null);
@@ -220,39 +218,45 @@ public class PracticeQuizController {
     @FXML
     private void handleAnswerSelection(ActionEvent event) {
         if (!answerChecked) {
-            checkAnswer((RadioButton) event.getSource());
+            RadioButton selectedRadio = (RadioButton) event.getSource();
+            VBox selectedVbox = (VBox) selectedRadio.getParent();
+            checkAnswer(selectedVbox);
         }
     }
 
-    private void checkAnswer(RadioButton selectedRadioButton) {
+    private void checkAnswer(VBox selectedVbox) {
         if (questions.isEmpty() || currentQuestionIndex >= questions.size()) {
             System.err.println("No questions available to check.");
             return;
         }
         answerChecked = true;
         PracticeQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
+        RadioButton selectedRadioButton = (RadioButton) selectedVbox.getChildren().get(0); // Get the RadioButton inside the VBox
         String selectedAnswer = selectedRadioButton.getText();
         boolean isCorrect = selectedAnswer.equals(currentQuestion.getCorrectAnswer());
 
+        // Disable all radio buttons and their parent VBoxes to prevent further interaction and bounce effects
+        for (VBox vbox : new VBox[]{option1Tile, option2Tile, option3Tile, option4Tile}) {
+            vbox.setDisable(true); // Disables the VBox (stops hover/press CSS effects)
+        }
         // Disable all radio buttons after an answer is selected
         disableRadioButtons(true);
-
         hintButton.setDisable(true);   // Disables hint after an answer is selected
-
 
         if (isCorrect) {
             score++;
             scoreLabel.setText(String.valueOf(score));
-            selectedRadioButton.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 5;");
+            selectedVbox.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 5;");
             feedbackMessageLabel.setText("Awesome! That's a correct answer. 😊");
             feedbackMessageLabel.setTextFill(Color.web("#4caf50"));
         } else {
             // Apply wrong answer style
-            selectedRadioButton.setStyle("-fx-background-color: #ffccbc; -fx-background-radius: 5;");
-            // Find the correct answer and apply the right style
-            for (RadioButton rb : new RadioButton[]{option1, option2, option3, option4}) {
+            selectedVbox.setStyle("-fx-background-color: #ffccbc; -fx-background-radius: 5;");
+            // Find the correct answer's VBox and apply the right style
+            for (VBox vbox : new VBox[]{option1Tile, option2Tile, option3Tile, option4Tile}) {
+                RadioButton rb = (RadioButton) vbox.getChildren().get(0);
                 if (rb.getText().equals(currentQuestion.getCorrectAnswer())) {
-                    rb.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 5;");
+                    vbox.setStyle("-fx-background-color: #a5d6a7; -fx-background-radius: 10px;");
                     break;
                 }
             }

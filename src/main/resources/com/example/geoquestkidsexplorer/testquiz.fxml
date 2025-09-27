@@ -14,10 +14,14 @@
 <!--Root Container-->
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.text.Font?>
+<?import java.net.URL?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.TestQuizController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
 
     <!-- Navigation Bar-->
     <top>
@@ -27,7 +31,7 @@
                 <Button fx:id="backButton" onAction="#backToContinentView" style="-fx-background-color: #B2D5D8; -fx-text-fill: white;
                                -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
                                -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
-                        text="⬅️ Back" />
+                        styleClass="continent-tile-container" text="⬅️ Back" />
                 <!-- Timer label on the far left-->
                 <HBox spacing="5" alignment="CENTER_LEFT" style="-fx-background-color: #B2D5D8; -fx-background-radius: 25; -fx-padding: 10 15;">
                     <Label fx:id="timerLabel" text="00:00" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;" />
@@ -89,13 +93,15 @@
                     <children>
                         <!-- Submit Button -->
                         <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" visible="false"
-                                style="-fx-background-color: #4CAF50; -fx-background-radius: 25;" textFill="WHITE">
+                                style="-fx-background-color: #4CAF50; -fx-background-radius: 25;" textFill="WHITE"
+                                styleClass="continent-tile-container">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
                         <Button fx:id="nextQuestionButton" text="Next Question" onAction="#handleNextQuestion" visible="false"
-                                style="-fx-background-color: #2196F3; -fx-background-radius: 25;" textFill="WHITE">
+                                style="-fx-background-color: #2196F3; -fx-background-radius: 25;" textFill="WHITE"
+                                styleClass="continent-tile-container">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
