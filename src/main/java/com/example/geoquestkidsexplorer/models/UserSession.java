@@ -10,6 +10,7 @@ public class UserSession {
     // Add these new fields for the username and avatar
     private static String username;
     private static String avatar;
+    private static String explorerName;
 
     /**
      * Sets the current user data in the session.
@@ -55,6 +56,10 @@ public class UserSession {
         return avatar;
     }
 
+    public static String getExplorerName() { return explorerName; }
+    public static void setExplorerName(String name) { explorerName = name; }
+
+
     /**
      * Clears the session by resetting all user data.
      */
@@ -62,5 +67,6 @@ public class UserSession {
         //userId = -1;
         username = null;
         avatar = null;
+        explorerName = null;
     }
 }
