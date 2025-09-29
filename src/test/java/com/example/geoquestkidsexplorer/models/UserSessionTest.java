@@ -76,4 +76,23 @@ class UserSessionTest {
         UserSession.clear();
         assertNull(UserSession.getAvatar());
     }
+
+    //Test the set user test
+    @Test
+    void testSetUser(){
+        UserSession.setUser("Tom", "👧  Girl");
+        //UserSession.getUsername();
+        assertEquals("Tom", UserSession.getUsername());
+
+    }
+
+    //Test the set Explorer name
+    @Test
+    void testSetExplorerName(){
+        UserSession.setExplorerName("Tommy");
+        assertEquals("Tommy", UserSession.getExplorerName());
+    }
+
+    //Test the get Explorer name
+
 }
