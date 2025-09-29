@@ -8,16 +8,16 @@ class UserSessionTest {
 
     @AfterEach
     // Always reset after every test to avoid errors or problems
-  /*  void reset() {
+    void reset() {
         try {
             UserSession.clear();
         } catch (Throwable ignored) {}
-    }*/
+    }
 
     @Test
     // test that username is minus 1
     void testUsernameMinusOne(){
-        assertEquals(null,UserSession.getUsername());
+        assertNull(UserSession.getUsername());
     }
 
     // Test that user id updates to a specific number
@@ -92,7 +92,5 @@ class UserSessionTest {
         UserSession.setExplorerName("Tommy");
         assertEquals("Tommy", UserSession.getExplorerName());
     }
-
     //Test the get Explorer name
-
 }
