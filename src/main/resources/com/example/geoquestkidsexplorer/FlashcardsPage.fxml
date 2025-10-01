@@ -20,13 +20,14 @@
     </stylesheets>
     <!-- Top: Navigation Bar -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="1200.0" style="-fx-background-color: #63acbe; -fx-padding: 0 100 10 100;">
+        <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="1200.0" style="-fx-background-color: #63acbe; -fx-padding: 0 100 10 100;">
             <children>
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackToContinent"
-                        style="-fx-background-color: #B2D5D8; -fx-text-fill: white; -fx-font-weight: bold;
-                               -fx-background-radius: 25; -fx-padding: 10 15;
-                               -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
-                        styleClass="continent-tile-container" text="⬅️ Back to Game Modes" />
+                <Button fx:id="backButton" onAction="#handleBackToContinent"
+                        styleClass="back-button" text="⬅️ Back to Game Modes" >
+                    <HBox.margin>
+                        <Insets left ="16" />
+                    </HBox.margin>
+                </Button>
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="regionLabel" text=""
                        style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;" >

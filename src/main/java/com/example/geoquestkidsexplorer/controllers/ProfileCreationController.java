@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
+import com.example.geoquestkidsexplorer.models.UserSession; // NEW
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;        // NEW (for optional DB update)
+import java.sql.PreparedStatement; // NEW
+import java.sql.SQLException;      // NEW
 
 public class ProfileCreationController {
 
@@ -29,25 +33,40 @@ public class ProfileCreationController {
     // Instance variables to keep track of the selected avatar and the last selected tile
     private String selectedAvatarEmoji;
     private VBox lastSelectedTile = null;
+
     @FXML private ComboBox<String> avatarCombo;
     @FXML private Label avatarPreview;
+
     /**
      * Initializes the controller. This method is called automatically after the FXML has been loaded.
      */
     @FXML
     public void initialize() {
-            if (avatarCombo != null) {
-                avatarCombo.setItems(javafx.collections.FXCollections.observableArrayList(
-                        "👦 Explorer Boy",
-                        "👧 Explorer Girl",
-                        "👨‍🎓 Student (Boy)",
-                        "👩‍🎓 Student (Girl)"
-                ));
-                avatarCombo.valueProperty().addListener((obs, oldV, newV) -> {
-                    avatarPreview.setText((newV == null || newV.isBlank()) ? "🙂" : newV.split(" ")[0]);
-                });
-            }
+        // NEW: Preload from session so preview shows current values
+        String sessionAvatar = UserSession.getAvatar();
+        String sessionExplorerName = UserSession.getExplorerName();
+
+        selectedAvatarEmoji = (sessionAvatar != null && !sessionAvatar.isBlank()) ? sessionAvatar : "🙂";
+        if (previewAvatarLabel != null) previewAvatarLabel.setText(selectedAvatarEmoji);
+        if (previewNameLabel != null)  previewNameLabel.setText(sessionExplorerName != null ? sessionExplorerName : "Choose your name!");
+        if (explorerNameField != null) explorerNameField.setText(sessionExplorerName != null ? sessionExplorerName : "");
+
+        if (avatarCombo != null) {
+            avatarCombo.setItems(javafx.collections.FXCollections.observableArrayList(
+                    "👦 Explorer Boy",
+                    "👧 Explorer Girl",
+                    "👨‍🎓 Student (Boy)",
+                    "👩‍🎓 Student (Girl)"
+            ));
+            avatarCombo.valueProperty().addListener((obs, oldV, newV) -> {
+                String emoji = (newV == null || newV.isBlank()) ? "🙂" : newV.split(" ")[0];
+                if (avatarPreview != null) avatarPreview.setText(emoji);
+                selectedAvatarEmoji = emoji;                      // NEW: actually set selection
+                if (previewAvatarLabel != null) previewAvatarLabel.setText(emoji); // keep preview in sync
+            });
         }
+    }
+
     /**
      * Handles the click on any of the avatar tiles.
      * This method will highlight the selected tile and store the avatar emoji.
@@ -63,7 +82,6 @@ public class ProfileCreationController {
         VBox currentTile = (VBox) event.getSource();
 
         // Add the CSS class "selected-avatar" to the current tile to highlight it.
-        // This is a robust way to avoid layout shifts.
         currentTile.getStyleClass().add("selected-avatar");
 
         // Store a reference to the current tile.
@@ -90,20 +108,44 @@ public class ProfileCreationController {
     private void createProfile(ActionEvent event) throws IOException {
         String explorerName = explorerNameField.getText();
 
-        if (explorerName.isEmpty()) {
+        if (explorerName == null || explorerName.isBlank()) {
             messageLabel.setText("Please enter a name for your explorer.");
             return;
         }
 
-        if (selectedAvatarEmoji == null || selectedAvatarEmoji.isEmpty()) {
+        // If the user used only the combo and not a tile, ensure we still have an emoji
+        if ((selectedAvatarEmoji == null || selectedAvatarEmoji.isBlank()) && avatarCombo != null) {
+            String v = avatarCombo.getValue();
+            if (v != null && !v.isBlank()) {
+                selectedAvatarEmoji = v.split(" ")[0];
+            }
+        }
+
+        if (selectedAvatarEmoji == null || selectedAvatarEmoji.isBlank()) {
             messageLabel.setText("Please select an avatar.");
             return;
         }
 
         System.out.println("Creating profile for: " + explorerName + " with avatar " + selectedAvatarEmoji);
 
-        // Call the DatabaseManager to save the new user profile
-        //DatabaseManager.insertUser(explorerName, selectedAvatarEmoji);
+        // NEW: Save to session so UserProgress can read it on initialize()
+        UserSession.setExplorerName(explorerName.trim());
+        UserSession.setAvatar(selectedAvatarEmoji);
+
+        // NEW (optional): Persist to DB if we know the login username
+        String username = UserSession.getUsername(); // login identity
+        if (username != null && !username.isBlank()) {
+            try (Connection conn = DatabaseManager.getConnection();
+                 PreparedStatement ps = conn.prepareStatement(
+                         "UPDATE users SET explorer_name = ?, avatar = ? WHERE username = ?")) {
+                ps.setString(1, explorerName.trim());
+                ps.setString(2, selectedAvatarEmoji);
+                ps.setString(3, username);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Profile save warning: " + e.getMessage());
+            }
+        }
 
         // Get the current stage
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -117,8 +159,7 @@ public class ProfileCreationController {
         profileCreatedController.setProfileData(explorerName, selectedAvatarEmoji);
         profileCreatedController.setStage(stage);
 
-        // Get the current stage and set the new scene.
-        //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        // Set the new scene.
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

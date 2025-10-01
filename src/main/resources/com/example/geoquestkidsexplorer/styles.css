@@ -131,3 +131,67 @@
 .radio-button .label {
     -fx-text-fill: #333333;
 }
+/*
+Adding css for game mode colours, flash cards , test quiz and practise quiz
+*/
+
+.gradient-pane{
+    -bg1:#F5793A;
+    -bg2:#F4BA9B;
+    -bg3:#f9f9f9;
+    -fx-background-radius:20;
+    -fx-border-radius: 20;
+    -fx-background-color: linear-gradient(
+        from 0% 100% to 0% 0%,
+        -bg3 0%,
+        -bg2 50%,
+        -bg1 100%
+    );
+}
+
+/*
+For the Nav bar
+*/
+.nav-bar {
+    -nav-bg: #F4BA9B;
+    -fx-background-color: -nav-bg;
+}
+
+/*
+For the back button bar
+*/
+
+.back-button{
+    -btn-bg: #F4BA9B;
+    -fx-background-color: -btn-bg;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-padding: 10 15;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.back-button:hover { -fx-background-color: derive(-btn-bg, -8%);}
+.back-button:pressed { -fx-background-color: derive(-btn-bg, -16%);}
+
+.score-label{
+    -score-bg: #F4BA9B;
+    -fx-background-color: -score-bg;
+    -fx-background-radius: 25;
+    -fx-padding: 10 15;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+}
+
+.timer-label{
+    -timer-bg: #111111;
+    -fx-background-color: -timer-bg;
+    -fx-background-radius: 25;
+    -fx-padding: 10 15;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+}

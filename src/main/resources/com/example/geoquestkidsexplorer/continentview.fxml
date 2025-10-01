@@ -14,18 +14,32 @@
 
 <?import java.net.URL?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.geoquestkidsexplorer.controllers.ContinentsController">
+            fx:controller="com.example.geoquestkidsexplorer.controllers.ContinentsController"
+            stylesheets="@styles.css">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
     <top>
         <!-- Top: Navigation Bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" style="-fx-background-color: #63acbe; -fx-padding: 10 100;">
+        <HBox fx:id="navBar" alignment="CENTER_LEFT" prefHeight="65.0"
+              styleClass="nav-bar">
+              <!-- style="-fx-background-color: #63acbe; -fx-padding: 10 100;" -->
             <children>
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToContinents" style="-fx-background-color: #B2D5D8;
-                     -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
-                     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
-                        styleClass="continent-tile-container" text="⬅️ Back to Continents" />
+                <Button fx:id="backButton"  onAction="#backToContinents"
+                        styleClass="back-button" text="⬅️ Back to Continents">
+                    <HBox.margin>
+                        <Insets left="16"/>
+                    </HBox.margin>
+                </Button>
+
+                <!-- Commented out the previous back button just incase it is needed
+                mnemonicParsing="false"
+                style="-fx-background-color: #B2D5D8;
+              -fx-text-fill: white; -fx-font-weight: bold;
+              -fx-background-radius: 25; -fx-padding: 10 15;
+              -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
+               styleClass="continent-tile-container"-->
+
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox alignment="CENTER" spacing="10.0">
                     <children>
@@ -54,16 +68,14 @@
                 -fx-padding: 0 7.5 0 7.5px;">
             <children>
                 <!-- Main Content Container -->
-                <VBox alignment="CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
-                      style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-border-radius: 20px;
-                            -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                <VBox fx:id="bgPane" alignment="CENTER" prefHeight="695.0" prefWidth="800.0" styleClass="gradient-pane">
                     <children>
-                        <Label text="Time to Test you're knowledge and play the game!">
+                        <Label style=" -fx-padding: 20 0;" text="Time to Test you're knowledge and play the game!" >
                             <font>
                                 <Font name="System Bold" size="36.0" />
                             </font>
                         </Label>
-                        <Label style="-fx-text-fill: black; -fx-font-weight: bold;"
+                        <Label style="-fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 20 0;"
                                text="Choose you're Game Mode now!">
                             <font>
                                 <Font size="20.0" />
