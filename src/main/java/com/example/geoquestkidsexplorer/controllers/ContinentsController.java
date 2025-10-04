@@ -261,7 +261,7 @@ public class ContinentsController {
                 }
             }
         }
-        TestQuizController quizController = loader.getController();
+        TestModeController quizController = loader.getController();
         quizController.setContinentName(continentName);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

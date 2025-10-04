@@ -40,7 +40,7 @@ import java.util.List;
  * This is in order to achieve easier code visibility and testing!
  * **/
 
-public class TestQuizController {
+public class TestModeController {
 
     // You need to declare the quizBox as a member variable with @FXML
     // so it can be accessed by any method in this class.
@@ -77,10 +77,10 @@ public class TestQuizController {
      * Creating a more or less simple method to call within test
      * Same thing, implements the same logic
      * **/
-    public TestQuizController(){
+    public TestModeController(){
         this(new DatabaseAdapter());
     }
-    public TestQuizController(IQuizQuestionDAO dao){
+    public TestModeController(IQuizQuestionDAO dao){
         this.quizDao = dao;
     }
     public TestQuizQuestions fetchTest(String continent){
@@ -235,7 +235,7 @@ public class TestQuizController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quizresults.fxml"));
             Parent root = loader.load();
-            QuizResultsController resultsController = loader.getController();
+            TestResultsController resultsController = loader.getController();
 
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);

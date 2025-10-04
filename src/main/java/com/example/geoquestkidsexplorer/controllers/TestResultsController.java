@@ -2,7 +2,6 @@ package com.example.geoquestkidsexplorer.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -10,7 +9,7 @@ import javafx.stage.Stage;
 /**
  * Controller for the quiz results dialog box.
  */
-public class QuizResultsController {
+public class TestResultsController {
 
     @FXML private Label scoreLabel;
     @FXML private Label messageLabel;

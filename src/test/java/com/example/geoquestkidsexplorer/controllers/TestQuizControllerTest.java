@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestQuizControllerTest {
 
-    private TestQuizController controller;
+    private TestModeController controller;
 
     @BeforeEach
     void startUp(){
-        controller = new TestQuizController(new FakeQuizDao());
+        controller = new TestModeController(new FakeQuizDao());
     }
 
     @Test
