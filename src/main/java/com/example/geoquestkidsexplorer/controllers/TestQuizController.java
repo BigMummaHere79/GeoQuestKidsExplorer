@@ -309,8 +309,7 @@ public class TestQuizController {
         resetQuiz();
     }
 
-    // You will need to add this new method to your TestQuizController
-    // It will be responsible for loading the practice quiz view
+
     private void loadPracticeQuiz() {
         System.out.println("Redirecting to the practice quiz...");
         try {
