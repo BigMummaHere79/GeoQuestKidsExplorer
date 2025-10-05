@@ -69,11 +69,7 @@
                                         <Label fx:id="avatarLabel" style="-fx-font-size: 60px;" text="" />
                                         <VBox alignment="CENTER_LEFT" spacing="5.0">
                                             <children>
-                                                <Label text="Choose a Continent you want to Explore!">
-                                                    <font>
-                                                        <Font name="System Bold" size="25.0" />
-                                                    </font>
-                                                </Label>
+                                                <Label styleClass="continent-label" text="Choose a Continent you want to Explore!"/>
                                             </children>
                                         </VBox>
                                     </children>
@@ -89,11 +85,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🦁" />
-                                        <Label text="Africa">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="Africa" styleClass="continent-label"/>
                                     </children>
                                 </VBox>
                                 <!-- Asia Tile -->
@@ -103,11 +95,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🏯" />
-                                        <Label text="Asia">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="Asia" styleClass="continent-label" />
                                     </children>
                                 </VBox>
                                 <!-- Europe Tile -->
@@ -117,11 +105,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🏰" />
-                                        <Label text="Europe">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="Europe" styleClass="continent-label"/>
                                     </children>
                                 </VBox>
                                 <!-- North America Tile -->
@@ -131,11 +115,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🗽" />
-                                        <Label text="North America">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="North America" styleClass="continent-label"/>
                                     </children>
                                 </VBox>
                                 <!-- South America Tile -->
@@ -145,11 +125,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🌺" />
-                                        <Label text="South America">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="South America" styleClass="continent-label"/>
                                     </children>
                                 </VBox>
                                 <!-- Oceania Tile -->
@@ -159,11 +135,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🐨" />
-                                        <Label text="Oceania">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="Oceania" styleClass="continent-label"/>
                                     </children>
                                 </VBox>
                                 <!-- Antarctica Tile -->
@@ -173,11 +145,7 @@
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
                                     <children>
                                         <Label style="-fx-font-size: 80px;" text="🐧" />
-                                        <Label text="Antarctica">
-                                            <font>
-                                                <Font name="System Bold" size="24.0" />
-                                            </font>
-                                        </Label>
+                                        <Label text="Antarctica" styleClass="continent-label"/>
                                     </children>
                                 </VBox>
                             </children>
