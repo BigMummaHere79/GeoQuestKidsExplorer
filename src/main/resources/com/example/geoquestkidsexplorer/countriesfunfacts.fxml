@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<?import java.net.URL?>
+<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.geoquestkidsexplorer.controllers.CountriesFunFactsController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+
+    <top>
+        <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER" prefHeight="65.0" style="-fx-background-color: #3b82f6;
+            -fx-padding: 10 100;">
+            <children>
+                <Button mnemonicParsing="false" onAction="#backToFunFacts" style="-fx-background-color: #60a5fa; -fx-text-fill: white;
+                -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 15;
+                -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" text="⬅️ Back to Continents" />
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                            <children>
+                                <Label textAlignment="CENTER" fx:id="continentFactsWelcomeLabel" text="" textFill="white">
+                                    <font>
+                                        <Font name="System Bold" size="25.0" />
+                                    </font>
+                                </Label>
+                                <Label textAlignment="CENTER" style="-fx-text-fill: white; -fx-font-weight: bold;"
+                                       text="Discover fascinating fun facts from countries!">
+                                    <font>
+                                        <Font size="16.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1150.0" style="-fx-background-color: #f0f0f0;
+            -fx-padding: 0 7.5 0 7.5px;">
+            <children>
+                <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="1100.0" spacing="10.0"
+                      style="-fx-background-color: #ffffff; -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
+                      -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                    <children>
+                        <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1100.0" style="-fx-padding: 10px;">
+                            <children>
+                                <HBox alignment="CENTER" spacing="5.0">
+                                    <children>
+                                        <Label fx:id="avatarLabel" style="-fx-font-size: 60px;" text="🌍" />
+                                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <Label text="Choose a Country to Explore Fun Facts!">
+                                                    <font>
+                                                        <Font name="System Bold" size="25.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <HBox spacing="10.0" VBox.vgrow="ALWAYS" prefHeight="600.0">
+                            <children>
+                                <ScrollPane fitToWidth="true" fitToHeight="true" pannable="true"
+                                            style="-fx-background-color: transparent; -fx-border-color: #ddd; -fx-border-radius: 10px;"
+                                            HBox.hgrow="ALWAYS" prefViewportWidth="600.0" prefViewportHeight="600.0">
+                                    <content>
+                                        <FlowPane fx:id="countryTilesContainer" alignment="TOP_CENTER" hgap="15.0" vgap="15.0"
+                                                  style="-fx-padding: 10px;">
+                                        </FlowPane>
+                                    </content>
+                                </ScrollPane>
+
+                                <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS"
+                                            style="-fx-background-color: transparent; -fx-border-color: #ddd; -fx-border-radius: 10px;">
+                                    <content>
+                                        <VBox fx:id="factsContainer" alignment="TOP_CENTER" spacing="10" prefWidth="380.0"
+                                              style="-fx-padding: 10px; -fx-background-color: #f9f9f9; -fx-background-radius: 15px;"
+                                              maxHeight="Infinity" maxWidth="Infinity" />
+                                    </content>
+                                </ScrollPane>
+                            </children>
+                        </HBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </VBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

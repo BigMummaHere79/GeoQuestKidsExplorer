@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>-->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -79,7 +77,7 @@
                         <FlowPane alignment="CENTER" hgap="30.0" prefHeight="200.0" prefWidth="200.0" vgap="30.0">
                             <children>
                                 <!-- Africa Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadAfricaFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #c8e6c9; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
@@ -89,7 +87,7 @@
                                     </children>
                                 </VBox>
                                 <!-- Asia Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadAsiaFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #ffe0b2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
@@ -99,7 +97,7 @@
                                     </children>
                                 </VBox>
                                 <!-- Europe Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadEuropeFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #b3e5fc; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
@@ -109,7 +107,7 @@
                                     </children>
                                 </VBox>
                                 <!-- North America Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadNorthAmericaFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #ffcdd2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
@@ -119,7 +117,7 @@
                                     </children>
                                 </VBox>
                                 <!-- South America Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadSouthAmericaFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #e6ee9c; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
@@ -129,7 +127,7 @@
                                     </children>
                                 </VBox>
                                 <!-- Oceania Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadOceaniaFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #b2ebf2; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
@@ -139,7 +137,7 @@
                                     </children>
                                 </VBox>
                                 <!-- Antarctica Tile -->
-                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadAntarcticaFacts"
+                                <VBox styleClass="continent-tile-container" alignment="CENTER" onMouseClicked="#loadContinentFacts"
                                       prefHeight="200.0" prefWidth="200.0"
                                       style="-fx-background-color: #e1f5fe; -fx-background-radius: 10px;
                                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
