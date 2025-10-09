@@ -17,8 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -53,7 +53,7 @@ public class TestModeController {
     @FXML private Label quizWelcomeLabel;
     @FXML private Label questionLabel;
     @FXML private Label countryImagePlaceholder;
-    @FXML private TextField answerField;
+    @FXML private ComboBox<String> answerDropdown;
     @FXML private Button submitButton;
     @FXML private Label feedbackMessageLabel;
     @FXML private Button nextQuestionButton;
@@ -113,6 +113,11 @@ public class TestModeController {
         loadQuestions();
     }
 
+    //Adjust this:
+    //To populate the dropdown:
+    //Clear old options
+    //Add multiple-choice answers for the current question
+    //Reset the selected value
     private void loadQuestions() {
         if (currentQuestionIndex < questions.size()) {
             TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
@@ -123,8 +128,16 @@ public class TestModeController {
 
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             questionLabel.setText(currentQuestion.getQuestionText());
-            answerField.setText("");
-            answerField.setDisable(false);
+
+//            answerField.setText("");
+//            answerField.setDisable(false);
+
+            answerDropdown.getItems().clear();
+
+            answerDropdown.getItems().addAll(currentQuestion.getChoices());
+            answerDropdown.getSelectionModel().clearSelection();
+            answerDropdown.setDisable(false);
+
             submitButton.setVisible(true);
             nextQuestionButton.setVisible(false);
             feedbackMessageLabel.setText("");
@@ -158,6 +171,11 @@ public class TestModeController {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
+
+    //Adjust this
+    // To check the selected answer
+    //Read selected answer instead if text input
+    //To evaluate answer correctness
     @FXML
     private void handleSubmit() {
         if (isSubmitted) return;
@@ -166,7 +184,7 @@ public class TestModeController {
         timeline.stop();
 
         TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
-        String userAnswer = answerField.getText().trim();
+        String userAnswer = answerDropdown.getValue().trim();   //get selected option
         String correctAnswer = currentQuestion.getCorrectAnswer().trim();
 
         boolean isCorrect = userAnswer.equalsIgnoreCase(correctAnswer);
@@ -181,7 +199,7 @@ public class TestModeController {
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
         }
 
-        answerField.setDisable(true);
+        answerDropdown.setDisable(true);
         submitButton.setVisible(false);
         nextQuestionButton.setVisible(true);
     }
