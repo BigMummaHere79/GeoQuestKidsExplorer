@@ -233,7 +233,7 @@ public class TestModeController {
                 }
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quizresults.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testresults.fxml"));
             Parent root = loader.load();
             TestResultsController resultsController = loader.getController();
 

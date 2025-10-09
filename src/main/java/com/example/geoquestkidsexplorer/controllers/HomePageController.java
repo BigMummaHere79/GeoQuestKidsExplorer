@@ -121,33 +121,34 @@ public class HomePageController {
     /**
      * Handles the "Start Your New Adventure!" button action.
      * Note: This method should be called from the HomePageController itself.
+     * We don't need these methods anymore
      */
-    private void openQuiz(String continent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
-            Parent root = loader.load();
+//    private void openQuiz(String continent) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(
+//                    getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
+//            Parent root = loader.load();
+//
+//            // Show quiz in a new window (keeps Home open)
+//            Stage quizStage = new Stage();
+//            quizStage.setTitle(continent + " Quiz");
+//            quizStage.setScene(new Scene(root, 800, 600));
+//
+//            // Pass data into the quiz controller
+//            QuizController controller = loader.getController();
+//            controller.setStage(quizStage);       // so Back can close this window
+//            controller.setContinent(continent);   // loads the first question
+//
+//            quizStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            // Show quiz in a new window (keeps Home open)
-            Stage quizStage = new Stage();
-            quizStage.setTitle(continent + " Quiz");
-            quizStage.setScene(new Scene(root, 800, 600));
-
-            // Pass data into the quiz controller
-            QuizController controller = loader.getController();
-            controller.setStage(quizStage);       // so Back can close this window
-            controller.setContinent(continent);   // loads the first question
-
-            quizStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void startNewAdventure(ActionEvent event) {
-        openQuiz("South America"); // or choose based on the user’s level/last choice
-    }
+//    @FXML
+//    private void startNewAdventure(ActionEvent event) {
+//        openQuiz("South America"); // or choose based on the user’s level/last choice
+//    }
 
     /**
      * This method is called by HomePageController to set the lock status of each continent.
