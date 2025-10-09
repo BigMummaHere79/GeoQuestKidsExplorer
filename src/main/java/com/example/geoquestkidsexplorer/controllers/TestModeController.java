@@ -133,7 +133,6 @@ public class TestModeController {
 //            answerField.setDisable(false);
 
             answerDropdown.getItems().clear();
-
             answerDropdown.getItems().addAll(currentQuestion.getChoices());
             answerDropdown.getSelectionModel().clearSelection();
             answerDropdown.setDisable(false);
@@ -142,6 +141,7 @@ public class TestModeController {
             nextQuestionButton.setVisible(false);
             feedbackMessageLabel.setText("");
             isSubmitted = false;
+
 
             startTimer();
 
@@ -184,7 +184,18 @@ public class TestModeController {
         timeline.stop();
 
         TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
-        String userAnswer = answerDropdown.getValue().trim();   //get selected option
+        String userAnswer = answerDropdown.getValue();
+        //if user submits before selecting an answer
+        if(userAnswer == null){
+            //Prompt user to select an answer
+            feedbackMessageLabel.setText("Please select an answer before submitting!");
+            feedbackMessageLabel.setTextFill(Color.web("#f44336"));
+            isSubmitted = false;
+            timeline.play();
+            return;
+        }
+
+        userAnswer = userAnswer.trim();
         String correctAnswer = currentQuestion.getCorrectAnswer().trim();
 
         boolean isCorrect = userAnswer.equalsIgnoreCase(correctAnswer);
