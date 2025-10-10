@@ -72,7 +72,7 @@ public class TestModeController {
     private boolean isSubmitted = false;
     private int timeSeconds = 60;
 
-    /**
+    /** For testing:
      * As of now, because refactoring hasn't started
      * Creating a more or less simple method to call within test
      * Same thing, implements the same logic
@@ -94,9 +94,7 @@ public class TestModeController {
         return current;
     }
 
-    /**
-     * Sets the continent name to load the correct quiz data.
-     */
+     //Sets the continent name to load the correct quiz data.
     public void setContinentName(String continent) {
         this.continentName = continent;
         // Update the hardcoded labels with the correct continent name
@@ -111,6 +109,26 @@ public class TestModeController {
         }
         // Now that we have the continent and the questions, load the first question.
         loadQuestions();
+    }
+
+    //Controller UI set up:
+    //Once the user starts typing all the options show:
+    @FXML
+    public void initialize(){
+        //make ComboBox to editable so the user can type
+        answerDropdown.setEditable(true);
+
+        // //Add event listener to detect once the user starts typing
+        //Automatically shows options when the user starts typing
+        //Using an inner anonymous class:
+        answerDropdown.getEditor().textProperty().addListener(new javafx.beans.value.ChangeListener<String>(){
+            @Override
+            public void changed(javafx.beans.value.ObservableValue<? extends String> observable, String oldValue, String newValue){
+                if(!answerDropdown.isShowing()){
+                    answerDropdown.show();
+                }
+            }
+        });
     }
 
     //Adjust this:
@@ -129,13 +147,13 @@ public class TestModeController {
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             questionLabel.setText(currentQuestion.getQuestionText());
 
-//            answerField.setText("");
-//            answerField.setDisable(false);
-
+            //Reset and populate ComboBox
             answerDropdown.getItems().clear();
             answerDropdown.getItems().addAll(currentQuestion.getChoices());
             answerDropdown.getSelectionModel().clearSelection();
             answerDropdown.setDisable(false);
+            answerDropdown.setPromptText("Type and select your answer");
+
 
             submitButton.setVisible(true);
             nextQuestionButton.setVisible(false);
@@ -172,6 +190,8 @@ public class TestModeController {
         timeline.play();
     }
 
+
+
     //Adjust this
     // To check the selected answer
     //Read selected answer instead if text input
@@ -185,10 +205,10 @@ public class TestModeController {
 
         TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
         String userAnswer = answerDropdown.getValue();
-        //if user submits before selecting an answer
-        if(userAnswer == null){
+        //if user submits before selecting an answer or without typing thus also checks for an empty string
+        if(userAnswer == null || userAnswer.trim().isEmpty()){
             //Prompt user to select an answer
-            feedbackMessageLabel.setText("Please select an answer before submitting!");
+            feedbackMessageLabel.setText("Please type or select an answer before submitting!");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
             isSubmitted = false;
             timeline.play();
