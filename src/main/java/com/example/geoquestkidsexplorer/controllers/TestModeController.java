@@ -39,7 +39,6 @@ import java.util.List;
  * this controller can be refactored similar to that of Flashcards
  * This is in order to achieve easier code visibility and testing!
  * **/
-
 public class TestModeController {
 
     // You need to declare the quizBox as a member variable with @FXML
