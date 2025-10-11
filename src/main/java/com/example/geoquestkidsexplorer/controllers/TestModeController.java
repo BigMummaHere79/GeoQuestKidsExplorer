@@ -288,7 +288,7 @@ public class TestModeController {
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(questionNumberLabel.getScene().getWindow());
-            dialogStage.setScene(new Scene(root, 400, 300));
+            dialogStage.setScene(new Scene(root, 1200, 800));
             dialogStage.setTitle("Quiz Results");
 
             resultsController.setDialogStage(dialogStage);
