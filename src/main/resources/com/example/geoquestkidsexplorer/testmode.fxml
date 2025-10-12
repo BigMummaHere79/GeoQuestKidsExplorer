@@ -90,11 +90,11 @@
                         </VBox>
                     </children>
                 </VBox>
-                <!-- TextField -->
+                <!-- ComboBox (Drop down feature) -->
                 <VBox alignment="TOP_CENTER" prefWidth="800.0" prefHeight="200.0" spacing="10.0"
                       style="-fx-background-color: #e0e0e0; -fx-padding: 15px; -fx-background-radius: 15px; -fx-border-radius: 15px;">
                     <children>
-                        <ComboBox fx:id="answerDropdown" promptText="Select your answer.." prefWidth="1080" prefHeight="50"/>
+                        <ComboBox fx:id="answerDropdown" promptText="Select your answer.." prefWidth="1080" prefHeight="50" styleClass="combo-box"/>
                     </children>
                 </VBox>
 

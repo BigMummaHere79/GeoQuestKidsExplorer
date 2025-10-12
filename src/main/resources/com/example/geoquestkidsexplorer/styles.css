@@ -242,3 +242,14 @@ For the back button bar
      -fx-opacity: 0.3;
 }
 
+.combo-box {
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial"
+
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #e0f2f1;
+    -fx-text-fill: black;
+}
+
