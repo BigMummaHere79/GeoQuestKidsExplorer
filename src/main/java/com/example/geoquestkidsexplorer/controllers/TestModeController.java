@@ -153,9 +153,15 @@ public class TestModeController {
             answerDropdown.setDisable(false);
             answerDropdown.setPromptText("Type and select your answer");
 
-
+            //both buttons are present
             submitButton.setVisible(true);
-            nextQuestionButton.setVisible(false);
+            nextQuestionButton.setVisible(true);
+
+            //User can only press the submit button
+            submitButton.setDisable(false);
+            nextQuestionButton.setDisable(true);
+
+            //empty feedback message
             feedbackMessageLabel.setText("");
             isSubmitted = false;
 
@@ -163,7 +169,7 @@ public class TestModeController {
             startTimer();
 
         } else {
-            // End of Quiz logic
+            // End of Quiz logic: all  questions have been asnwered
             showResults();
         }
     }
@@ -224,14 +230,17 @@ public class TestModeController {
             scoreLabel.setText(String.valueOf(score));
             feedbackMessageLabel.setText("Awesome! That's a correct answer. 😊");
             feedbackMessageLabel.setTextFill(Color.web("#4caf50"));
+
         } else {
             feedbackMessageLabel.setText("Good try! The correct answer is " + correctAnswer + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
+
         }
 
+        //So user can only press next after submitting an answer
         answerDropdown.setDisable(true);
-        submitButton.setVisible(false);
-        nextQuestionButton.setVisible(true);
+        submitButton.setDisable(true);
+        nextQuestionButton.setDisable(false);
     }
 
     @FXML
