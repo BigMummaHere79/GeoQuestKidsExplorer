@@ -17,8 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -39,8 +39,7 @@ import java.util.List;
  * this controller can be refactored similar to that of Flashcards
  * This is in order to achieve easier code visibility and testing!
  * **/
-
-public class TestQuizController {
+public class TestModeController {
 
     // You need to declare the quizBox as a member variable with @FXML
     // so it can be accessed by any method in this class.
@@ -53,7 +52,7 @@ public class TestQuizController {
     @FXML private Label quizWelcomeLabel;
     @FXML private Label questionLabel;
     @FXML private Label countryImagePlaceholder;
-    @FXML private TextField answerField;
+    @FXML private ComboBox<String> answerDropdown;
     @FXML private Button submitButton;
     @FXML private Label feedbackMessageLabel;
     @FXML private Button nextQuestionButton;
@@ -72,15 +71,15 @@ public class TestQuizController {
     private boolean isSubmitted = false;
     private int timeSeconds = 60;
 
-    /**
+    /** For testing:
      * As of now, because refactoring hasn't started
      * Creating a more or less simple method to call within test
      * Same thing, implements the same logic
      * **/
-    public TestQuizController(){
+    public TestModeController(){
         this(new DatabaseAdapter());
     }
-    public TestQuizController(IQuizQuestionDAO dao){
+    public TestModeController(IQuizQuestionDAO dao){
         this.quizDao = dao;
     }
     public TestQuizQuestions fetchTest(String continent){
@@ -94,9 +93,7 @@ public class TestQuizController {
         return current;
     }
 
-    /**
-     * Sets the continent name to load the correct quiz data.
-     */
+     //Sets the continent name to load the correct quiz data.
     public void setContinentName(String continent) {
         this.continentName = continent;
         // Update the hardcoded labels with the correct continent name
@@ -113,6 +110,31 @@ public class TestQuizController {
         loadQuestions();
     }
 
+    //Controller UI set up:
+    //Once the user starts typing all the options show:
+    @FXML
+    public void initialize(){
+        //make ComboBox to editable so the user can type
+        answerDropdown.setEditable(true);
+
+        // //Add event listener to detect once the user starts typing
+        //Automatically shows options when the user starts typing
+        //Using an inner anonymous class:
+        answerDropdown.getEditor().textProperty().addListener(new javafx.beans.value.ChangeListener<String>(){
+            @Override
+            public void changed(javafx.beans.value.ObservableValue<? extends String> observable, String oldValue, String newValue){
+                if(!answerDropdown.isShowing()){
+                    answerDropdown.show();
+                }
+            }
+        });
+    }
+
+    //Adjust this:
+    //To populate the dropdown:
+    //Clear old options
+    //Add multiple-choice answers for the current question
+    //Reset the selected value
     private void loadQuestions() {
         if (currentQuestionIndex < questions.size()) {
             TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
@@ -123,17 +145,31 @@ public class TestQuizController {
 
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             questionLabel.setText(currentQuestion.getQuestionText());
-            answerField.setText("");
-            answerField.setDisable(false);
+
+            //Reset and populate ComboBox
+            answerDropdown.getItems().clear();
+            answerDropdown.getItems().addAll(currentQuestion.getChoices());
+            answerDropdown.getSelectionModel().clearSelection();
+            answerDropdown.setDisable(false);
+            answerDropdown.setPromptText("Type and select your answer");
+
+            //both buttons are present
             submitButton.setVisible(true);
-            nextQuestionButton.setVisible(false);
+            nextQuestionButton.setVisible(true);
+
+            //User can only press the submit button
+            submitButton.setDisable(false);
+            nextQuestionButton.setDisable(true);
+
+            //empty feedback message
             feedbackMessageLabel.setText("");
             isSubmitted = false;
+
 
             startTimer();
 
         } else {
-            // End of Quiz logic
+            // End of Quiz logic: all  questions have been asnwered
             showResults();
         }
     }
@@ -158,6 +194,13 @@ public class TestQuizController {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
+
+
+
+    //Adjust this
+    // To check the selected answer
+    //Read selected answer instead if text input
+    //To evaluate answer correctness
     @FXML
     private void handleSubmit() {
         if (isSubmitted) return;
@@ -166,7 +209,18 @@ public class TestQuizController {
         timeline.stop();
 
         TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
-        String userAnswer = answerField.getText().trim();
+        String userAnswer = answerDropdown.getValue();
+        //if user submits before selecting an answer or without typing thus also checks for an empty string
+        if(userAnswer == null || userAnswer.trim().isEmpty()){
+            //Prompt user to select an answer
+            feedbackMessageLabel.setText("Please type or select an answer before submitting!");
+            feedbackMessageLabel.setTextFill(Color.web("#f44336"));
+            isSubmitted = false;
+            timeline.play();
+            return;
+        }
+
+        userAnswer = userAnswer.trim();
         String correctAnswer = currentQuestion.getCorrectAnswer().trim();
 
         boolean isCorrect = userAnswer.equalsIgnoreCase(correctAnswer);
@@ -176,14 +230,17 @@ public class TestQuizController {
             scoreLabel.setText(String.valueOf(score));
             feedbackMessageLabel.setText("Awesome! That's a correct answer. 😊");
             feedbackMessageLabel.setTextFill(Color.web("#4caf50"));
+
         } else {
             feedbackMessageLabel.setText("Good try! The correct answer is " + correctAnswer + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
+
         }
 
-        answerField.setDisable(true);
-        submitButton.setVisible(false);
-        nextQuestionButton.setVisible(true);
+        //So user can only press next after submitting an answer
+        answerDropdown.setDisable(true);
+        submitButton.setDisable(true);
+        nextQuestionButton.setDisable(false);
     }
 
     @FXML
@@ -233,14 +290,14 @@ public class TestQuizController {
                 }
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/quizresults.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testresults.fxml"));
             Parent root = loader.load();
-            QuizResultsController resultsController = loader.getController();
+            TestResultsController resultsController = loader.getController();
 
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(questionNumberLabel.getScene().getWindow());
-            dialogStage.setScene(new Scene(root, 400, 300));
+            dialogStage.setScene(new Scene(root, 1200, 800));
             dialogStage.setTitle("Quiz Results");
 
             resultsController.setDialogStage(dialogStage);
@@ -309,8 +366,7 @@ public class TestQuizController {
         resetQuiz();
     }
 
-    // You will need to add this new method to your TestQuizController
-    // It will be responsible for loading the practice quiz view
+
     private void loadPracticeQuiz() {
         System.out.println("Redirecting to the practice quiz...");
         try {

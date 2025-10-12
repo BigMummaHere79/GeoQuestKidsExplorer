@@ -25,6 +25,7 @@ public class UserProgressController {
 
     // Legacy: keep label field in case your FXML still has the old control
     @FXML private Label avatarLabel;
+    @FXML private Label welcomeLabel;
 
     @FXML private Label continentsUnlockedLabel;
     @FXML private Label levelsCompletedLabel;
@@ -32,10 +33,11 @@ public class UserProgressController {
     @FXML private Label correctAnswersLabel;
     @FXML private Label levelsCompletedTileLabel;
     @FXML private Label continentsUnlockedTileLabel;
+    @FXML private SidebarController mySidebarController; // FXML loader automatically injects this.
 
     /* ---------------------- Lifecycle ---------------------- */
 
-    @FXML
+    /*@FXML
     public void initialize() {
         // 1) Paint avatar from session onto whichever control exists
         String avatar = UserSession.getAvatar();
@@ -43,6 +45,32 @@ public class UserProgressController {
 
         // 2) Load stats from DB using the logged-in *username* (not explorer name)
         String username = UserSession.getUsername();
+        loadAndRenderProgress(username);
+    }*/
+
+    @FXML
+    public void initialize() {
+        // 1) Paint avatar from session onto whichever control exists
+        String avatar = UserSession.getAvatar();
+        setAvatarOnUI(avatar != null ? avatar : "🙂");
+
+        // Get user data directly from the UserSession
+        String username = UserSession.getUsername();
+        System.out.println("HomePageController: Current username = " + username);
+        String explorerAvatar = UserSession.getAvatar();
+
+        if (username != null && !username.isEmpty()) {
+            welcomeLabel.setText(username);
+            //avatarLabel.setText(explorerAvatar != null ? explorerAvatar : "");
+
+            // Ensure the sidebar also gets the data
+            if (mySidebarController != null) {
+                mySidebarController.setProfileData(username, explorerAvatar);
+            }
+        } else {
+            // This handles cases where no one is logged in
+            welcomeLabel.setText("Welcome, Explorer!");
+        }
         loadAndRenderProgress(username);
     }
 

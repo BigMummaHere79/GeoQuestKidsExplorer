@@ -13,7 +13,7 @@ public class TestQuizQuestions extends PrimaryQuizQuestions {
     }
 
     // Getter for the unique scoreValue property
-    public int getScoreValue() {
-        return scoreValue;
-    }
+    //public int getScoreValue() {
+       // return scoreValue;
+    //}
 }

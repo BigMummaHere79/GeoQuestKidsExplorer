@@ -87,7 +87,8 @@
                                 <!-- Profile Text -->
                                 <VBox alignment="CENTER_LEFT" spacing="5.0">
                                     <children>
-                                        <Label style="-fx-font-weight: bold; -fx-text-fill: #555555;" text="Geographic Explorer">
+                                        <Label fx:id="welcomeLabel" style="-fx-font-weight: bold; -fx-text-fill: #555555;"
+                                               text="Geographic Explorer">
                                             <font>
                                                 <Font size="22.0" />
                                             </font>

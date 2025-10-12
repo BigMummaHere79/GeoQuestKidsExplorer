@@ -55,7 +55,7 @@
                 </HBox>
                 <!-- Main Content Container -->
                 <VBox alignment="CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
-                      style="-fx-background-color: linear-gradient(to top, #63acbe, #B2D5D8, #F9F9F9);
+                      style="-fx-background-color: linear-gradient(to top, #63acbe, #CAD6CA, #F9F9F9);
                       -fx-background-radius: 20px; -fx-border-radius: 20px;
                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
@@ -67,11 +67,7 @@
                                         <Label fx:id="avatarLabel" style="-fx-font-size: 60px;" text="" />
                                         <VBox alignment="CENTER_LEFT" spacing="5.0">
                                             <children>
-                                                <Label fx:id="welcomeLabel" text="Welcome, Explorer!">
-                                                    <font>
-                                                        <Font name="System Bold" size="25.0" />
-                                                    </font>
-                                                </Label>
+                                                <Label fx:id="welcomeLabel" text="Welcome, Explorer!" styleClass="welcome-label"/>
                                                 <Label fx:id="subWelcomeLabel" text="Ready for a new Adventure!">
                                                     <font>
                                                         <Font size="18.0" />
@@ -120,7 +116,7 @@
                                                 </StackPane>
                                             </children>
                                         </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Antarctica" />
+                                        <Label styleClass="continent-label" text="Antarctica" />
                                     </children>
                                 </VBox>
                                 <!-- Oceania Tile and Label -->
@@ -156,7 +152,7 @@
                                                 </StackPane>
                                             </children>
                                         </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Oceania" />
+                                        <Label styleClass="continent-label" text="Oceania" />
                                     </children>
                                 </VBox>
                                 <!-- South America Tile and Label -->
@@ -193,7 +189,7 @@
                                                 </StackPane>
                                             </children>
                                         </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="South America" />
+                                        <Label styleClass="continent-label" text="South America" />
                                     </children>
                                 </VBox>
                                 <!-- North America Tile and Label -->
@@ -229,7 +225,7 @@
                                                 </StackPane>
                                             </children>
                                         </Pane>
-                                        <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="North America" />
+                                        <Label styleClass="continent-label" text="North America" />
                                     </children>
                                 </VBox>
                                 <!--Bottom continent centred -->
@@ -267,7 +263,7 @@
                                                     </StackPane>
                                                 </children>
                                             </Pane>
-                                            <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Europe" />
+                                            <Label styleClass="continent-label" text="Europe" />
                                         </children>
                                     </VBox>
                                     <!-- Asia Tile and Label -->
@@ -303,7 +299,7 @@
                                                     </StackPane>
                                                 </children>
                                             </Pane>
-                                            <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Asia" />
+                                            <Label styleClass="continent-label" text="Asia" />
                                         </children>
                                     </VBox>
                                     <!-- Africa Tile and Label -->
@@ -339,7 +335,7 @@
                                                     </StackPane>
                                                 </children>
                                             </Pane>
-                                            <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="Africa" />
+                                            <Label styleClass="continent-label" text="Africa" />
                                         </children>
                                     </VBox>
                                 </HBox>

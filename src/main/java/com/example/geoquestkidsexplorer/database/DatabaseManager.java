@@ -438,7 +438,7 @@ public class DatabaseManager {
         return countries; // Returns the list, even if it's empty
     }
 
-    // --- NEW: Added for Test Quiz with capital cities and fun facts.
+    //For TestMode--------------------------------------------------------------------------------------------------------------
     // This method will generate a complete quiz question with an image and multiple-choice options.
     public static TestQuizQuestions getTestQuizQuestion(String continent) {
         //Get the correct country and its image for the question
@@ -448,14 +448,21 @@ public class DatabaseManager {
             return null; // No countries found
         }
 
-        //(Optional) Create a simple question text and fun fact.
-        // You can hard-code a generic question or use a more sophisticated method.
+        //Set up
         String questionText = "Which country is this?";
         String correctAnswer = correctQuestion.countryName;
         Image countryImage = correctQuestion.image;
 
-        // Create an empty list for choices, since the test mode doesn't have them
+        // Populate choice list for ComboBox
         List<String> choices = new ArrayList<>();
+        //Add correct answer
+        choices.add(correctAnswer);
+        //get three incorrect answers
+        List<String> incorrectAnswers = getNRandomCountriesByContinent(continent, 3, correctAnswer);
+        //Add incorrect answers to list
+        choices.addAll(incorrectAnswers);
+        //Shuffle list
+        Collections.shuffle(choices);
 
         // Provide the score value for the test question
         int scoreValue = 10; // Or whatever value you want to assign

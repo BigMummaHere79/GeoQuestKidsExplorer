@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
 /* A transition for smooth animation effects */
 .nav-button, .continent-tile, .continent-tile-container {
     -fx-transition: -fx-background-color 0.3s ease, -fx-scale-x 0.3s ease, -fx-scale-y 0.3s ease, -fx-effect 0.3s ease;
@@ -194,4 +196,60 @@ For the back button bar
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 25;
+   }
+
+ .welcome-label {
+   -fx-font-family: "Luckiest Guy", cursive;
+   -fx-font-weight: 400;
+   -fx-font-style: normal;
+   -fx-font-size: 25.0;
+ }
+
+ .continent-label {
+    -fx-font-family: "Luckiest Guy", cursive;
+    -fx-font-weight: 300;
+    -fx-font-style: normal;
+    -fx-font-size: 24;
+ }
+
+  .game-mode {
+     -fx-font-family: "Luckiest Guy", cursive;
+     -fx-font-weight: 100;
+     -fx-font-style: normal;
+     -fx-font-size: 22;
+  }
+
+ .game-mode-first-label {
+    -fx-font-family: "Luckiest Guy", cursive;
+    -fx-font-weight: 300;
+    -fx-font-style: normal;
+    -fx-font-size: 30;
+ }
+
+/*Normal state buttons: submit and next*/
+.test-mode-button {
+    -fx-background-color: #4CAF50;
+     -fx-text-fill: white;
+     -fx-background-radius: 25;
 }
+
+
+/* Style disabled buttons: Submit and next */
+.test-mode-button:disabled {
+    -fx-background-color: #cfd1d1;
+     -fx-text-fill: #666666;
+     -fx-background-radius: 25;
+     -fx-opacity: 0.3;
+}
+
+.combo-box {
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial"
+
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #e0f2f1;
+    -fx-text-fill: black;
+}
+

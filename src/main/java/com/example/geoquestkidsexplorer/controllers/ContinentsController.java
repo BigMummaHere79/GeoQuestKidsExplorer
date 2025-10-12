@@ -220,12 +220,12 @@ public class ContinentsController {
 
     //* Helper method to load the generic quiz page and set the continent.
     private void openTestQuiz(Event event, String continentName) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testquiz.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testmode.fxml"));
         Parent root = loader.load();
 
         //Input colour pallete within different continents
         //Through css and fxml
-        // Can be found in testquiz.fxml and styles.css
+        // Can be found in testmode.fxml and styles.css
 
         Node navBar = root.lookup("#navBar");
         Node backBtn = root.lookup("#backButton");
@@ -261,7 +261,7 @@ public class ContinentsController {
                 }
             }
         }
-        TestQuizController quizController = loader.getController();
+        TestModeController quizController = loader.getController();
         quizController.setContinentName(continentName);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

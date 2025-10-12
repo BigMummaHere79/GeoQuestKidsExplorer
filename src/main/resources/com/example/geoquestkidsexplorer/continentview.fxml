@@ -70,12 +70,8 @@
                 <!-- Main Content Container -->
                 <VBox fx:id="bgPane" alignment="CENTER" prefHeight="695.0" prefWidth="800.0" styleClass="gradient-pane">
                     <children>
-                        <Label style=" -fx-padding: 20 0;" text="Time to Test you're knowledge and play the game!" >
-                            <font>
-                                <Font name="System Bold" size="36.0" />
-                            </font>
-                        </Label>
-                        <Label style="-fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 20 0;"
+                        <Label styleClass="game-mode-first-label" style=" -fx-padding: 20 0;" text="Time to Test you're knowledge and play the game!" />
+                        <Label styleClass="continent-label" style=" -fx-padding: 20 0;"
                                text="Choose you're Game Mode now!">
                             <font>
                                 <Font size="20.0" />
@@ -89,11 +85,7 @@
                                   styleClass="continent-tile-container">
                                 <children>
                                     <Label style="-fx-font-size: 60px;" text="✍️" />
-                                    <Label text="Practice Mode Quiz" textAlignment="CENTER">
-                                        <font>
-                                            <Font name="System Bold" size="24.0" />
-                                        </font>
-                                    </Label>
+                                    <Label styleClass="game-mode" text="Practice Mode Quiz" textAlignment="CENTER"/>
                                 </children>
                             </VBox>
 
@@ -104,11 +96,7 @@
                                   styleClass="continent-tile-container">
                                   <children>
                                       <Label style="-fx-font-size: 60px;" text="🃏" />
-                                      <Label text="Flash Cards Mode" textAlignment="CENTER">
-                                          <font>
-                                              <Font name="System Bold" size="24.0" />
-                                          </font>
-                                      </Label>
+                                      <Label styleClass="game-mode" text="Flash Cards Mode" textAlignment="CENTER"/>
                                   </children>
                             </VBox>
 
@@ -119,11 +107,7 @@
                                   styleClass="continent-tile-container">
                                 <children>
                                     <Label style="-fx-font-size: 60px;" text="📝" />
-                                    <Label text="Test Mode Quiz" textAlignment="CENTER">
-                                        <font>
-                                            <Font name="System Bold" size="24.0" />
-                                        </font>
-                                    </Label>
+                                    <Label styleClass="game-mode" text="Test Mode Quiz" textAlignment="CENTER"/>
                                 </children>
                             </VBox>
                         </HBox>

@@ -77,7 +77,6 @@ public class FlashcardsController {
     @FXML
     private void handleNextCountry(ActionEvent event) {
         // Refactored countries into deck
-        //Tori
         if (deck == null || deck.isEmpty()) return;
 
         if (deck.showingFront()) {
