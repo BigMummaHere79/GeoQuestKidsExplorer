@@ -18,8 +18,7 @@
 <BorderPane prefHeight="800.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.geoquestkidsexplorer.controllers.TestModeController"
-            stylesheets="@styles.css">
+            fx:controller="com.example.geoquestkidsexplorer.controllers.TestModeController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -100,19 +99,15 @@
                 </VBox>
 
                 <!-- Submit + Next Question buttons -->
-                <HBox spacing="10" alignment="CENTER">
+                <HBox spacing="10" alignment="BOTTOM_RIGHT">
                     <children>
                         <!-- Submit Button -->
-                        <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" visible="false"
-                                style="-fx-background-color: #4CAF50; -fx-background-radius: 25;" textFill="WHITE"
-                                styleClass="continent-tile-container">
+                        <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" visible="false" styleClass="test-mode-button">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
-                        <Button fx:id="nextQuestionButton" text="Next Question" onAction="#handleNextQuestion" visible="false"
-                                style="-fx-background-color: #2196F3; -fx-background-radius: 25;" textFill="WHITE"
-                                styleClass="continent-tile-container">
+                        <Button fx:id="nextQuestionButton" text="Next Question" onAction="#handleNextQuestion" visible="false" styleClass="test-mode-button">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>

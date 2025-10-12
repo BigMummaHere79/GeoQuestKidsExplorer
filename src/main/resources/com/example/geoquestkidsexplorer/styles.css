@@ -225,3 +225,20 @@ For the back button bar
     -fx-font-style: normal;
     -fx-font-size: 30;
  }
+
+/*Normal state buttons: submit and next*/
+.test-mode-button {
+    -fx-background-color: #4CAF50;
+     -fx-text-fill: white;
+     -fx-background-radius: 25;
+}
+
+
+/* Style disabled buttons: Submit and next */
+.test-mode-button:disabled {
+    -fx-background-color: #cfd1d1;
+     -fx-text-fill: #666666;
+     -fx-background-radius: 25;
+     -fx-opacity: 0.3;
+}
+
