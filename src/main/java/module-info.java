@@ -5,6 +5,7 @@ module com.example.geoquestkidsexplorer {
 
     requires java.sql;
     requires java.desktop;
+    requires org.controlsfx.controls; // Adding this for ControlsFX
 
 
     opens com.example.geoquestkidsexplorer to javafx.fxml;

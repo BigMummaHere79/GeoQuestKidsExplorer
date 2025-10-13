@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="/com/example/geoquestkidsexplorer/styles.css"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.geoquestkidsexplorer.controllers.FeedbackController">
+    <!-- Left: Sidebar (collapsible) -->
+    <left>
+        <fx:include source="sidebar.fxml" />
+    </left>
+
+    <top>
+        <!-- Navigation Bar -->
+        <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1200.0" style="-fx-background-color: #F06292;
+                    -fx-padding: 10 100;">
+            <children>
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                            <children>
+                                <Label style="-fx-text-fill: white; -fx-font-weight: bold;"
+                                       text="Feedbacks and Reviews">
+                                    <font>
+                                        <Font size="25.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Center: Main Content -->
+    <center>
+        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #F6A4BF;
+            -fx-padding: 0 7.5 0 7.5px;">
+            <children>
+                <!-- Content Container acting as a single large tile -->
+                <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
+                      style="-fx-background-color: linear-gradient(to top, #AD1457, #F06292, #F8BACF);
+                      -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
+                      -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
+                    <children>
+                        <!-- Welcome Container -->
+                        <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1000.0" style="-fx-padding: 10px;">
+                            <children>
+                                <HBox alignment="CENTER" spacing="5.0">
+                                    <children>
+                                        <Label fx:id="avatarLabel" style="-fx-font-size: 60px;" text="" />
+                                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <Label text="Give us what you think, leave a comment or feedback to help us improve the game!">
+                                                    <font>
+                                                        <Font name="System Bold" size="20.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Feedback Form -->
+                        <VBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-padding: 20px;">
+                            <children>
+                                <Label text="Your Rating:" />
+                                <HBox fx:id="ratingContainer" alignment="CENTER_LEFT" />
+                                <Label text="Your Comment:" />
+                                <TextArea fx:id="commentArea" wrapText="true" prefHeight="100.0" prefWidth="700.0"
+                                          promptText="Enter your comment here..." />
+                                <Button fx:id="submitButton" text="Submit" onAction="#submitFeedback" />
+                            </children>
+                        </VBox>
+
+                        <!-- Feedbacks List -->
+                        <ScrollPane fitToWidth="true" vbarPolicy="AS_NEEDED" prefViewportHeight="400.0">
+                            <content>
+                                <VBox fx:id="feedbacksVBox" spacing="15.0" style="-fx-padding: 10px;
+                                    -fx-background-color: #FBD1DF;"/>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </VBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
