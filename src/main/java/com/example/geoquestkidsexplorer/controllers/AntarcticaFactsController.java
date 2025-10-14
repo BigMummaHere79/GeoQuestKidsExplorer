@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.data.AntarcticaFunFacts;
+import com.example.geoquestkidsexplorer.models.Country;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AntarcticaFactsController {
 
@@ -42,8 +44,20 @@ public class AntarcticaFactsController {
         VBox.setMargin(continentTitle, new Insets(0, 0, 5, 0));
         factsContainer.getChildren().add(continentTitle);
 
-        // Fetch facts
-        String[][] facts = AntarcticaFunFacts.getantarcticaFacts();
+        // Fetch facts using FunFactsProvider
+        AntarcticaFunFacts funFactsProvider = new AntarcticaFunFacts();
+        List<Country> countries = funFactsProvider.getCountries();
+        String[][] facts = (countries != null && !countries.isEmpty())
+                ? countries.get(0).getFunFacts()
+                : new String[0][];
+
+        if (facts.length == 0) {
+            Label noFactsLabel = new Label("No facts available for Antarctica");
+            noFactsLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #999999; -fx-max-height: none; -fx-max-width: none;");
+            noFactsLabel.setAlignment(Pos.CENTER);
+            factsContainer.getChildren().add(noFactsLabel);
+            return;
+        }
 
         for (String[] fact : facts) {
             VBox factBox = createFactVBox(fact[0], fact[1]);

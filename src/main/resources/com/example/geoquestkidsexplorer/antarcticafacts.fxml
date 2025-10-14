@@ -15,9 +15,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaFactsController"> <stylesheets>
-    <URL value="@styles.css" />
-</stylesheets>
+            fx:controller="com.example.geoquestkidsexplorer.controllers.AntarcticaFactsController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
 
     <top>
         <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER" prefHeight="65.0" style="-fx-background-color: #3b82f6; -fx-padding: 10 100;">

@@ -12,8 +12,12 @@
 
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ScrollPane?>
+<?import java.net.URL?>
 <BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.geoquestkidsexplorer.controllers.FeedbackController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <!-- Left: Sidebar (collapsible) -->
     <left>
         <fx:include source="sidebar.fxml" />
@@ -21,7 +25,7 @@
 
     <top>
         <!-- Navigation Bar -->
-        <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1200.0" style="-fx-background-color: #F06292;
+        <HBox alignment="CENTER" prefHeight="65.0" prefWidth="1200.0" style="-fx-background-color: #63acbe;
                     -fx-padding: 10 100;">
             <children>
                 <Region HBox.hgrow="ALWAYS" />
@@ -46,12 +50,12 @@
 
     <!-- Center: Main Content -->
     <center>
-        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #F6A4BF;
-            -fx-padding: 0 7.5 0 7.5px;">
+        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0"
+              style="-fx-padding: 0 7.5 0 7.5px; -fx-background-color: #dbeafe;">
             <children>
                 <!-- Content Container acting as a single large tile -->
                 <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
-                      style="-fx-background-color: linear-gradient(to top, #AD1457, #F06292, #F8BACF);
+                      style="-fx-background-color: linear-gradient(to top, #63acbe, #CAD6CA, #F9F9F9);
                       -fx-padding: 10px; -fx-background-radius: 20px; -fx-border-radius: 20px;
                       -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
@@ -91,7 +95,7 @@
                         <ScrollPane fitToWidth="true" vbarPolicy="AS_NEEDED" prefViewportHeight="400.0">
                             <content>
                                 <VBox fx:id="feedbacksVBox" spacing="15.0" style="-fx-padding: 10px;
-                                    -fx-background-color: #FBD1DF;"/>
+                                    -fx-background-color: #dbeafe;"/>
                             </content>
                         </ScrollPane>
                     </children>

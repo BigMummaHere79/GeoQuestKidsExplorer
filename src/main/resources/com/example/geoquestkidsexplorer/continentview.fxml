@@ -23,7 +23,6 @@
         <!-- Top: Navigation Bar -->
         <HBox fx:id="navBar" alignment="CENTER_LEFT" prefHeight="65.0"
               styleClass="nav-bar">
-              <!-- style="-fx-background-color: #63acbe; -fx-padding: 10 100;" -->
             <children>
                 <Button fx:id="backButton"  onAction="#backToContinents"
                         styleClass="back-button" text="⬅️ Back to Continents">
@@ -32,23 +31,12 @@
                     </HBox.margin>
                 </Button>
 
-                <!-- Commented out the previous back button just incase it is needed
-                mnemonicParsing="false"
-                style="-fx-background-color: #B2D5D8;
-              -fx-text-fill: white; -fx-font-weight: bold;
-              -fx-background-radius: 25; -fx-padding: 10 15;
-              -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);"
-               styleClass="continent-tile-container"-->
-
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox alignment="CENTER" spacing="10.0">
                     <children>
                         <VBox alignment="CENTER_LEFT" spacing="5.0">
                             <children>
                                 <Label textAlignment="CENTER" fx:id="gameModeWelcomeLabel" text="" textFill="white">
-                                <!--<Label style="-fx-text-fill: white; -fx-font-weight: bold;
-                                       -fx-padding: 0 0 0 10px;"
-                                       text="Game Mode Control">-->
                                     <font>
                                         <Font name="System Bold" size="25.0" />
                                     </font>

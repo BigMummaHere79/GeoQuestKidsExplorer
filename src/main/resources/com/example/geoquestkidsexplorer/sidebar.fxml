@@ -32,12 +32,6 @@
                 <Label text="👤" style="-fx-font-size: 24px;" />
             </graphic>
         </Button>
-        <Button fx:id="myAchievementsButton" graphicTextGap="10" style="-fx-background-color: #ffe0b2;"
-                textAlignment="CENTER" onAction="#openMyAchievements" styleClass="continent-tile-container">
-            <graphic>
-                <Label text="🏆" style="-fx-font-size: 24px;" />
-            </graphic>
-        </Button>
         <Button fx:id="feedbackRatingsButton" graphicTextGap="10" style="-fx-background-color: #FCE4EC;"
                 textAlignment="CENTER" onAction="#openFeedbackRatings" styleClass="sidebar-button">
             <graphic>

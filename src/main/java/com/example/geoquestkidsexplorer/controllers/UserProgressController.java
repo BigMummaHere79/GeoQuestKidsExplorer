@@ -33,20 +33,6 @@ public class UserProgressController {
     @FXML private Label correctAnswersLabel;
     @FXML private Label levelsCompletedTileLabel;
     @FXML private Label continentsUnlockedTileLabel;
-    @FXML private SidebarController mySidebarController; // FXML loader automatically injects this.
-
-    /* ---------------------- Lifecycle ---------------------- */
-
-    /*@FXML
-    public void initialize() {
-        // 1) Paint avatar from session onto whichever control exists
-        String avatar = UserSession.getAvatar();
-        setAvatarOnUI(avatar != null ? avatar : "🙂");
-
-        // 2) Load stats from DB using the logged-in *username* (not explorer name)
-        String username = UserSession.getUsername();
-        loadAndRenderProgress(username);
-    }*/
 
     @FXML
     public void initialize() {
@@ -61,12 +47,6 @@ public class UserProgressController {
 
         if (username != null && !username.isEmpty()) {
             welcomeLabel.setText(username);
-            //avatarLabel.setText(explorerAvatar != null ? explorerAvatar : "");
-
-            // Ensure the sidebar also gets the data
-            if (mySidebarController != null) {
-                mySidebarController.setProfileData(username, explorerAvatar);
-            }
         } else {
             // This handles cases where no one is logged in
             welcomeLabel.setText("Welcome, Explorer!");

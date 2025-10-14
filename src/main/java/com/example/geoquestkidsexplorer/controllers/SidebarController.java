@@ -30,30 +30,13 @@ import java.sql.SQLException;
 public class SidebarController {
 
     @FXML
-    private Label avatarLabel;
-    @FXML
-    private Label welcomeLabel;
-    @FXML
-    private Label subWelcomeLabel;
-
-    // A private field to hold the explorer's avatar string
-    private String explorerAvatar;
-    private String explorerName;
-
-    @FXML
     private VBox sidebar;
-
     @FXML
     private Button homeButton;
-
     @FXML
     private Button funFactsButton;
-
     @FXML
     private Button myProgressButton;
-
-    @FXML
-    private Button myAchievementsButton;
     @FXML
     private Button feedbackRatingsButton;
 
@@ -61,7 +44,6 @@ public class SidebarController {
     private Popup homePopup;
     private Popup funFactsPopup;
     private Popup myProgressPopup;
-    private Popup myAchievementsPopup;
     private Popup feedbackRatingsPopup;
 
     /**
@@ -75,7 +57,6 @@ public class SidebarController {
         homeButton.setText("\uD83C\uDFE0");
         funFactsButton.setText("\uD83D\uDCDA");
         myProgressButton.setText("\uD83D\uDC64");
-        myAchievementsButton.setText("\uD83C\uDFC6");
         feedbackRatingsButton.setText(" ");
 
         // Common label style
@@ -135,19 +116,6 @@ public class SidebarController {
         myProgressButton.setOnMouseEntered(event -> showPopup(myProgressPopup, myProgressButton, popupHeight));
         myProgressButton.setOnMouseExited(event -> myProgressPopup.hide());
 
-        // My Achievements popup
-        Label myAchievementsLabel = new Label("My Achievements");
-        myAchievementsLabel.setStyle(commonLabelStyle);
-        myAchievementsLabel.setPrefWidth(popupWidth);
-        HBox myAchievementsContainer = new HBox(myAchievementsLabel);
-        myAchievementsContainer.setStyle(commonContainerStyle + "-fx-background-color: #ffe0b2;");
-        myAchievementsContainer.setPrefWidth(popupWidth);
-        myAchievementsContainer.setPrefHeight(popupHeight);
-        myAchievementsPopup = new Popup();
-        myAchievementsPopup.getContent().add(myAchievementsContainer);
-        myAchievementsButton.setOnMouseEntered(event -> showPopup(myAchievementsPopup, myAchievementsButton, popupHeight));
-        myAchievementsButton.setOnMouseExited(event -> myAchievementsPopup.hide());
-
         // Feedback Ratings popup
         Label feedbackRatingsLabel = new Label("Feedback and Ratings");
         feedbackRatingsLabel.setStyle(commonLabelStyle);
@@ -206,14 +174,6 @@ public class SidebarController {
         loadScene(event, root);
     }
 
-    /**
-     * Opens My Achievements page.
-     */
-    @FXML
-    private void openMyAchievements(ActionEvent event) throws IOException {
-        loadScene(event, "/com/example/geoquestkidsexplorer/myachievements.fxml", false);
-    }
-
     @FXML
     private void openFeedbackRatings(ActionEvent event) throws IOException {
         loadScene(event, "/com/example/geoquestkidsexplorer/feedbackratings.fxml", false);
@@ -264,13 +224,8 @@ public class SidebarController {
     /**
      * This method is called by the previous controller to set the user's data.
      * We pass both the name and the avatar to display on the home screen.
-     */
     public void setProfileData(String username, String avatar) {
         this.explorerName = username;
         this.explorerAvatar = avatar;
-
-        // Update the avatar and welcome message
-        avatarLabel.setText(this.explorerAvatar);
-        welcomeLabel.setText("Welcome back, " + this.explorerName + "!");
-    }
+    }*/
 }
