@@ -1,6 +1,5 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-//We don't need GameStateManger at the moment. This is for unlocking countries for later on.
 import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
@@ -13,12 +12,11 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -27,39 +25,31 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * As mentioned within Practise Quiz,
- * this controller can be refactored similar to that of Flashcards
- * This is in order to achieve easier code visibility and testing!
- * **/
 public class TestModeController {
 
-    // You need to declare the quizBox as a member variable with @FXML
-    // so it can be accessed by any method in this class.
-    @FXML
-    private VBox quizBox;
-
+    @FXML private VBox quizBox;
     @FXML private Label questionNumberLabel;
     @FXML private Label scoreLabel;
     @FXML private ImageView countryImageView;
     @FXML private Label quizWelcomeLabel;
     @FXML private Label questionLabel;
     @FXML private Label countryImagePlaceholder;
-    @FXML private ComboBox<String> answerDropdown;
+
+    // NEW: TextField (we removed the ComboBox)
+    @FXML private TextField answerField;
+
     @FXML private Button submitButton;
     @FXML private Label feedbackMessageLabel;
     @FXML private Button nextQuestionButton;
     @FXML private Button backButton;
     @FXML private Label timerLabel;
-    private Timeline timeline;
 
+    private Timeline timeline;
     private final IQuizQuestionDAO quizDao;
     private TestQuizQuestions current;
 
@@ -71,113 +61,201 @@ public class TestModeController {
     private boolean isSubmitted = false;
     private int timeSeconds = 60;
 
-    /** For testing:
-     * As of now, because refactoring hasn't started
-     * Creating a more or less simple method to call within test
-     * Same thing, implements the same logic
-     * **/
-    public TestModeController(){
-        this(new DatabaseAdapter());
-    }
-    public TestModeController(IQuizQuestionDAO dao){
-        this.quizDao = dao;
-    }
-    public TestQuizQuestions fetchTest(String continent){
+    // Autocomplete support
+    private final ContextMenu suggestionsMenu = new ContextMenu();
+    private List<String> currentChoices = List.of();
+    private int highlightedIndex = -1; // for up/down navigation
+
+    public TestModeController() { this(new DatabaseAdapter()); }
+    public TestModeController(IQuizQuestionDAO dao) { this.quizDao = dao; }
+
+    public TestQuizQuestions fetchTest(String continent) {
         current = quizDao.getTestQuizQuestion(continent);
         return current;
     }
-    public boolean evaluateAnswer(String chosen){
+    public boolean evaluateAnswer(String chosen) {
         return current != null && chosen != null && chosen.equals(current.getCorrectAnswer());
     }
-    public TestQuizQuestions getCurrent(){
-        return current;
-    }
+    public TestQuizQuestions getCurrent() { return current; }
 
-     //Sets the continent name to load the correct quiz data.
+    // Set continent & load questions
     public void setContinentName(String continent) {
         this.continentName = continent;
-        // Update the hardcoded labels with the correct continent name
         quizWelcomeLabel.setText("Practice your knowledge with the " + continentName + " Continent!");
         backButton.setText("⬅️ Back to " + continentName + " Game Mode");
 
-        // --- CRITICAL FIX: Initialize and populate the questions list here ---
-        // This was the missing part that caused the NullPointerException.
         this.questions = new ArrayList<>();
         for (int i = 0; i < QUESTIONS_PER_QUIZ; i++) {
             this.questions.add(DatabaseManager.getTestQuizQuestion(continent));
         }
-        // Now that we have the continent and the questions, load the first question.
         loadQuestions();
     }
 
-    //Controller UI set up:
-    //Once the user starts typing all the options show:
     @FXML
-    public void initialize(){
-        //make ComboBox to editable so the user can type
-        answerDropdown.setEditable(true);
+    public void initialize() {
+        // Wire up TextField events for autocomplete
+        setupAutoCompleteBehavior();
+    }
 
-        // //Add event listener to detect once the user starts typing
-        //Automatically shows options when the user starts typing
-        //Using an inner anonymous class:
-        answerDropdown.getEditor().textProperty().addListener(new javafx.beans.value.ChangeListener<String>(){
-            @Override
-            public void changed(javafx.beans.value.ObservableValue<? extends String> observable, String oldValue, String newValue){
-                if(!answerDropdown.isShowing()){
-                    answerDropdown.show();
-                }
+    /* -------------------- Autocomplete (pure JavaFX) -------------------- */
+
+    private void setupAutoCompleteBehavior() {
+        // Text change → filter and (re)show suggestions
+        answerField.textProperty().addListener((obs, oldV, newV) -> {
+            highlightedIndex = -1;
+            if (newV == null || newV.isBlank()) {
+                suggestionsMenu.hide();
+            } else {
+                showSuggestions(newV);
             }
+        });
+
+        // Key handling for navigation / selection
+        answerField.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case DOWN -> moveHighlight(+1);
+                case UP -> moveHighlight(-1);
+                case ENTER, TAB -> {
+                    if (suggestionsMenu.isShowing() && !suggestionsMenu.getItems().isEmpty()) {
+                        // if we have a highlighted item use it; else choose the first suggestion
+                        String val = getHighlightedOrFirst();
+                        if (val != null) {
+                            answerField.setText(val);
+                            answerField.positionCaret(val.length());
+                        }
+                        suggestionsMenu.hide();
+                        if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                            // Optional: auto-submit on Enter if you like
+                            handleSubmit();
+                        }
+                    }
+                }
+                case ESCAPE -> suggestionsMenu.hide();
+                default -> { /* no-op */ }
+            }
+        });
+
+        // Hide suggestions when field loses focus
+        answerField.focusedProperty().addListener((obs, was, is) -> {
+            if (!is) suggestionsMenu.hide();
         });
     }
 
-    //Adjust this:
-    //To populate the dropdown:
-    //Clear old options
-    //Add multiple-choice answers for the current question
-    //Reset the selected value
+    private void showSuggestions(String typed) {
+        if (currentChoices == null || currentChoices.isEmpty()) {
+            suggestionsMenu.hide();
+            return;
+        }
+        String q = typed.toLowerCase(Locale.ROOT);
+
+        List<String> filtered = currentChoices.stream()
+                .filter(c -> c != null && c.toLowerCase(Locale.ROOT).startsWith(q))
+                .sorted()
+                .limit(10)
+                .toList();
+
+        if (filtered.isEmpty()) {
+            suggestionsMenu.hide();
+            return;
+        }
+
+        suggestionsMenu.getItems().clear();
+        for (int i = 0; i < filtered.size(); i++) {
+            final int index = i;
+            String suggestion = filtered.get(i);
+            CustomMenuItem item = buildSuggestionItem(suggestion);
+            // mouse click → select
+            item.setOnAction(ev -> {
+                answerField.setText(suggestion);
+                answerField.positionCaret(suggestion.length());
+                suggestionsMenu.hide();
+                // (Optional) auto-submit on click:
+                // handleSubmit();
+            });
+            suggestionsMenu.getItems().add(item);
+        }
+        highlightedIndex = -1;
+        if (!suggestionsMenu.isShowing()) {
+            suggestionsMenu.show(answerField, Side.BOTTOM, 0, 0);
+        }
+    }
+
+    private CustomMenuItem buildSuggestionItem(String text) {
+        Label lbl = new Label(text);
+        lbl.setStyle("-fx-padding: 6 12; -fx-font-size: 14px;");
+        CustomMenuItem item = new CustomMenuItem(lbl, true);
+        item.getStyleClass().add("auto-item");
+        return item;
+    }
+
+    private void moveHighlight(int delta) {
+        if (!suggestionsMenu.isShowing() || suggestionsMenu.getItems().isEmpty()) return;
+
+        int size = suggestionsMenu.getItems().size();
+        int newIndex = highlightedIndex + delta;
+        if (newIndex < 0) newIndex = size - 1;
+        if (newIndex >= size) newIndex = 0;
+
+        // clear old
+        if (highlightedIndex >= 0 && highlightedIndex < size) {
+            setItemHighlight(highlightedIndex, false);
+        }
+        highlightedIndex = newIndex;
+        setItemHighlight(highlightedIndex, true);
+    }
+
+    private void setItemHighlight(int idx, boolean on) {
+        if (idx < 0 || idx >= suggestionsMenu.getItems().size()) return;
+        CustomMenuItem item = (CustomMenuItem) suggestionsMenu.getItems().get(idx);
+        Label lbl = (Label) item.getContent();
+        if (on) {
+            lbl.setStyle("-fx-padding: 6 12; -fx-font-size: 14px; -fx-background-color: #e0f2fe;");
+        } else {
+            lbl.setStyle("-fx-padding: 6 12; -fx-font-size: 14px;");
+        }
+    }
+
+    private String getHighlightedOrFirst() {
+        if (!suggestionsMenu.isShowing() || suggestionsMenu.getItems().isEmpty()) return null;
+        int idx = highlightedIndex >= 0 ? highlightedIndex : 0;
+        CustomMenuItem item = (CustomMenuItem) suggestionsMenu.getItems().get(idx);
+        return ((Label) item.getContent()).getText();
+    }
+
+    /* -------------------- Quiz flow -------------------- */
+
     private void loadQuestions() {
         if (currentQuestionIndex < questions.size()) {
             TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
 
             questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             countryImageView.setImage(currentQuestion.getCountryImage());
-            questionLabel.setText(currentQuestion.getCorrectAnswer());
-
-            questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
             questionLabel.setText(currentQuestion.getQuestionText());
 
-            //Reset and populate ComboBox
-            answerDropdown.getItems().clear();
-            answerDropdown.getItems().addAll(currentQuestion.getChoices());
-            answerDropdown.getSelectionModel().clearSelection();
-            answerDropdown.setDisable(false);
-            answerDropdown.setPromptText("Type and select your answer");
+            // (Re-)bind choices to autocomplete
+            currentChoices = currentQuestion.getChoices();
+            suggestionsMenu.hide();
+            answerField.clear();
+            answerField.setDisable(false);
+            answerField.setPromptText("Type your answer...");
 
-            //both buttons are present
             submitButton.setVisible(true);
             nextQuestionButton.setVisible(true);
-
-            //User can only press the submit button
             submitButton.setDisable(false);
             nextQuestionButton.setDisable(true);
 
-            //empty feedback message
             feedbackMessageLabel.setText("");
             isSubmitted = false;
 
-
             startTimer();
-
         } else {
-            // End of Quiz logic: all  questions have been asnwered
             showResults();
         }
     }
 
     private void startTimer() {
-        if (timeline != null) {
-            timeline.stop();
-        }
+        if (timeline != null) timeline.stop();
+
         timeSeconds = 60;
         timerLabel.setText(String.format("%02d:%02d", timeSeconds / 60, timeSeconds % 60));
         timeline = new Timeline(
@@ -186,7 +264,6 @@ public class TestModeController {
                     timerLabel.setText(String.format("%02d:%02d", timeSeconds / 60, timeSeconds % 60));
                     if (timeSeconds <= 0) {
                         timeline.stop();
-                        // Auto-submit a wrong answer on time out
                         handleSubmit();
                     }
                 })
@@ -195,34 +272,27 @@ public class TestModeController {
         timeline.play();
     }
 
-
-
-    //Adjust this
-    // To check the selected answer
-    //Read selected answer instead if text input
-    //To evaluate answer correctness
     @FXML
     private void handleSubmit() {
         if (isSubmitted) return;
 
         isSubmitted = true;
-        timeline.stop();
+        if (timeline != null) timeline.stop();
+        suggestionsMenu.hide();
 
         TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
-        String userAnswer = answerDropdown.getValue();
-        //if user submits before selecting an answer or without typing thus also checks for an empty string
-        if(userAnswer == null || userAnswer.trim().isEmpty()){
-            //Prompt user to select an answer
+        String userAnswer = answerField.getText();
+
+        if (userAnswer == null || userAnswer.trim().isEmpty()) {
             feedbackMessageLabel.setText("Please type or select an answer before submitting!");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
             isSubmitted = false;
-            timeline.play();
+            if (timeline != null) timeline.play();
             return;
         }
 
         userAnswer = userAnswer.trim();
         String correctAnswer = currentQuestion.getCorrectAnswer().trim();
-
         boolean isCorrect = userAnswer.equalsIgnoreCase(correctAnswer);
 
         if (isCorrect) {
@@ -230,15 +300,12 @@ public class TestModeController {
             scoreLabel.setText(String.valueOf(score));
             feedbackMessageLabel.setText("Awesome! That's a correct answer. 😊");
             feedbackMessageLabel.setTextFill(Color.web("#4caf50"));
-
         } else {
             feedbackMessageLabel.setText("Good try! The correct answer is " + correctAnswer + ". 😟");
             feedbackMessageLabel.setTextFill(Color.web("#f44336"));
-
         }
 
-        //So user can only press next after submitting an answer
-        answerDropdown.setDisable(true);
+        answerField.setDisable(true);
         submitButton.setDisable(true);
         nextQuestionButton.setDisable(false);
     }
@@ -253,6 +320,7 @@ public class TestModeController {
         try {
             double scorePercentage = (double) score / questions.size() * 100;
             int currentLevel = 0;
+
             String sql = "SELECT level FROM continents WHERE continent = ?";
             try (Connection conn = DatabaseManager.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -260,22 +328,12 @@ public class TestModeController {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         currentLevel = rs.getInt("level");
-                    } else {
-                        System.err.println("showResults: No level found for continent: " + continentName);
                     }
                 }
-            } catch (SQLException e) {
-                System.err.println("showResults: Error fetching level for " + continentName + ": " + e.getMessage());
-                e.printStackTrace();
-                return;
             }
 
-            // Save result and update level
             String username = UserSession.getUsername();
-            if (username == null || username.isEmpty()) {
-                System.err.println("showResults: No user logged in, cannot save results");
-                return;
-            }
+            if (username == null || username.isEmpty()) return;
 
             boolean levelUpdated = DatabaseManager.saveQuizResultAndUpdateLevel(username, currentLevel, scorePercentage);
             boolean passed = scorePercentage >= 80.0;
@@ -284,9 +342,6 @@ public class TestModeController {
                 if (nextContinent != null) {
                     GameStateManager.getInstance().unlockContinent(nextContinent);
                     GameStateManager.getInstance().saveState();
-                    System.out.println("showResults: Unlocked " + nextContinent + " for user " + username);
-                } else {
-                    System.out.println("showResults: No next continent available for " + continentName);
                 }
             }
 
@@ -302,7 +357,6 @@ public class TestModeController {
 
             resultsController.setDialogStage(dialogStage);
             resultsController.setResults(score, questions.size(), continentName, passed);
-
             resultsController.setActions(
                     this::retryQuiz,
                     () -> {
@@ -311,7 +365,6 @@ public class TestModeController {
                             try {
                                 backToHomePage();
                             } catch (IOException e) {
-                                System.err.println("backToHomePage error: " + e.getMessage());
                                 e.printStackTrace();
                             }
                         }
@@ -329,15 +382,10 @@ public class TestModeController {
             } else if (levelUpdated) {
                 Stage quizStage = (Stage) questionNumberLabel.getScene().getWindow();
                 quizStage.close();
-                try {
-                    backToHomePage();
-                } catch (IOException e) {
-                    System.err.println("backToHomePage error: " + e.getMessage());
-                    e.printStackTrace();
-                }
+                backToHomePage();
             }
-        } catch (IOException e) {
-            System.err.println("showResults error: " + e.getMessage());
+
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -352,7 +400,6 @@ public class TestModeController {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
-        System.out.println("backToHomePage: Navigated to homepage, refreshed locks");
     }
 
     private void resetQuiz() {
@@ -362,13 +409,9 @@ public class TestModeController {
         loadQuestions();
     }
 
-    private void retryQuiz() {
-        resetQuiz();
-    }
-
+    private void retryQuiz() { resetQuiz(); }
 
     private void loadPracticeQuiz() {
-        System.out.println("Redirecting to the practice quiz...");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
             Parent root = loader.load();
