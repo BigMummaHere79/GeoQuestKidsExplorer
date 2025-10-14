@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.database;
 
 import com.example.geoquestkidsexplorer.GameStateManager;
+import com.example.geoquestkidsexplorer.models.FeedbackRatings;
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
 import com.example.geoquestkidsexplorer.models.UserProfile;
@@ -27,6 +28,28 @@ public class DatabaseManager {
         //Note: Added this for the sidebar navigation icons!
 
     }
+
+    /**
+     * Retrieves the avatar and explorer name for a given user ID.
+     *
+     * @param username The name of the user.
+     * @return An array with [username, avatar], or null if not found.
+     */
+    public static String[] getUserDetails(String username) {
+        String sql = "SELECT username, avatar FROM users WHERE username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new String[]{rs.getString("username"), rs.getString("avatar")};
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // ===========================
     // Init / Schema
     // ===========================
@@ -41,6 +64,7 @@ public class DatabaseManager {
                 createCountriesTable(conn);
                 createUsersTable(conn);
                 createResultsTable(conn);
+                createFeedbackTable(conn);
 
                 System.out.println("Database created/connected.");
             }
@@ -116,6 +140,23 @@ public class DatabaseManager {
                 FOREIGN KEY (level) REFERENCES continents(level)
                     ON UPDATE CASCADE ON DELETE SET NULL
             );
+            """;
+        try (Statement st = conn.createStatement()) { st.execute(sql); }
+    }
+
+    private static void createFeedbackTable(Connection conn) throws SQLException {
+        // --------- Feedbacks Table ---------
+        String sql = """
+                CREATE TABLE IF NOT EXISTS feedback (
+                    feedback_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL,
+                    rating REAL NOT NULL,
+                    comment TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    parent_id INTEGER,
+                    FOREIGN KEY(username) REFERENCES users(username),
+                    FOREIGN KEY(parent_id) REFERENCES feedbacks(feedback_id)
+                );
             """;
         try (Statement st = conn.createStatement()) { st.execute(sql); }
     }
@@ -543,5 +584,144 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return null;
+    }
+//---------------------------------------------------------------------------------------------------------------
+    //NOTE: Adding for CRUD functionality. Glenda
+    /**
+     * Adds a new feedback or reply to the database.
+     *
+     * @param username The name of the user leaving the feedback.
+     * @param rating The rating (e.g., 4.5).
+     * @param comment The comment text.
+     * @param parentId The parent feedback ID if this is a reply (null for top-level).
+     * @return The generated feedback ID, or -1 on failure.
+     * @throws SQLException If a database error occurs.
+     */
+    public static int addFeedback(String username, double rating, String comment, Integer parentId) throws SQLException {
+        String sql = "INSERT INTO feedback (username, rating, comment, parent_id) VALUES (?, ?, ?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, username);
+            //pstmt.setDouble(2, rating);
+            pstmt.setDouble(2, Double.parseDouble(String.format("%.2f", rating))); // Round to 2 decimal places
+            pstmt.setString(3, comment);
+            if (parentId != null) {
+                pstmt.setInt(4, parentId);
+            } else {
+                pstmt.setNull(4, Types.INTEGER);
+            }
+            pstmt.executeUpdate();
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Updates an existing feedback (only if owned by the user).
+     *
+     * @param feedbackId The ID of the feedback to update.
+     * @param rating The new rating.
+     * @param comment The new comment.
+     * @param username The name of the user (for ownership check).
+     * @return true if updated successfully, false otherwise.
+     * @throws SQLException If a database error occurs.
+     */
+    public static boolean updateFeedback(int feedbackId, double rating, String comment, String username) throws SQLException {
+        String sql = "UPDATE feedback SET rating = ?, comment = ? WHERE feedback_id = ? AND username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            //pstmt.setDouble(1, rating);
+            pstmt.setDouble(1, Double.parseDouble(String.format("%.2f", rating))); // Round to 2 decimal places
+            pstmt.setString(2, comment);
+            pstmt.setInt(3, feedbackId);
+            pstmt.setString(4, username);
+            int rows = pstmt.executeUpdate();
+            return rows > 0;
+        }
+    }
+
+    /**
+     * Deletes a feedback (only if owned by the user). Replies are not deleted (they become top-level if needed).
+     *
+     * @param feedbackId The ID of the feedback to delete.
+     * @param username The name of the user (for ownership check).
+     * @return true if deleted successfully, false otherwise.
+     * @throws SQLException If a database error occurs.
+     */
+    public static boolean deleteFeedback(int feedbackId, String username) throws SQLException {
+        String sql = "DELETE FROM feedback WHERE feedback_id = ? AND username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, feedbackId);
+            pstmt.setString(2, username);
+            int rows = pstmt.executeUpdate();
+            return rows > 0;
+        }
+    }
+
+    /**
+     * Retrieves all top-level feedbacks (no parent).
+     *
+     * @return List of top-level Feedback objects.
+     * @throws SQLException If a database error occurs.
+     */
+    public static List<FeedbackRatings> getTopLevelFeedbacks() throws SQLException {
+        List<FeedbackRatings> feedbacks = new ArrayList<>();
+        String sql = "SELECT f.*, u.username, u.avatar " +
+                "FROM feedback f " +
+                "JOIN users u ON f.username = u.username " +
+                "WHERE f.parent_id IS NULL " +
+                "ORDER BY f.timestamp DESC";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                feedbacks.add(extractFeedback(rs));
+            }
+        }
+        return feedbacks;
+    }
+
+    /**
+     * Retrieves replies for a specific parent feedback.
+     *
+     * @param parentId The parent feedback ID.
+     * @return List of reply Feedback objects.
+     * @throws SQLException If a database error occurs.
+     */
+    public static List<FeedbackRatings> getReplies(int parentId) throws SQLException {
+        List<FeedbackRatings> replies = new ArrayList<>();
+        String sql = "SELECT f.*, u.username, u.avatar " +
+                "FROM feedback f " +
+                "JOIN users u ON f.username = u.username " +
+                "WHERE f.parent_id = ? " +
+                "ORDER BY f.timestamp ASC";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, parentId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    replies.add(extractFeedback(rs));
+                }
+            }
+        }
+        return replies;
+    }
+
+    private static FeedbackRatings extractFeedback(ResultSet rs) throws SQLException {
+        FeedbackRatings fb = new FeedbackRatings();
+        fb.setFeedbackId(rs.getInt("feedback_id"));
+        fb.setUsername(rs.getString("username"));
+        fb.setRating(rs.getDouble("rating"));
+        fb.setComment(rs.getString("comment"));
+        fb.setTimestamp(rs.getString("timestamp"));
+        fb.setParentId(rs.wasNull() ? null : rs.getInt("parent_id"));  // Handle null parent_id
+        //fb.setExplorerName(rs.getString("explorer_name"));
+        fb.setAvatar(rs.getString("avatar"));
+        return fb;
     }
 }

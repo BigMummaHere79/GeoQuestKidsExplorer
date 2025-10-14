@@ -54,12 +54,15 @@ public class SidebarController {
 
     @FXML
     private Button myAchievementsButton;
+    @FXML
+    private Button feedbackRatingsButton;
 
     private TranslateTransition transition;
     private Popup homePopup;
     private Popup funFactsPopup;
     private Popup myProgressPopup;
     private Popup myAchievementsPopup;
+    private Popup feedbackRatingsPopup;
 
     /**
      * Initializes the controller. Sets up the sidebar to collapse by default.
@@ -73,6 +76,7 @@ public class SidebarController {
         funFactsButton.setText("\uD83D\uDCDA");
         myProgressButton.setText("\uD83D\uDC64");
         myAchievementsButton.setText("\uD83C\uDFC6");
+        feedbackRatingsButton.setText(" ");
 
         // Common label style
         String commonLabelStyle = "-fx-text-fill: #1A2B4C; " +
@@ -143,6 +147,19 @@ public class SidebarController {
         myAchievementsPopup.getContent().add(myAchievementsContainer);
         myAchievementsButton.setOnMouseEntered(event -> showPopup(myAchievementsPopup, myAchievementsButton, popupHeight));
         myAchievementsButton.setOnMouseExited(event -> myAchievementsPopup.hide());
+
+        // Feedback Ratings popup
+        Label feedbackRatingsLabel = new Label("Feedback and Ratings");
+        feedbackRatingsLabel.setStyle(commonLabelStyle);
+        feedbackRatingsLabel.setPrefWidth(popupWidth);
+        HBox feedbackRatingsContainer = new HBox(feedbackRatingsLabel);
+        feedbackRatingsContainer.setStyle(commonContainerStyle + "-fx-background-color: #FCE4EC;");
+        feedbackRatingsContainer.setPrefWidth(popupWidth);
+        feedbackRatingsContainer.setPrefHeight(popupHeight);
+        feedbackRatingsPopup = new Popup();
+        feedbackRatingsPopup.getContent().add(feedbackRatingsContainer);
+        feedbackRatingsButton.setOnMouseEntered(event -> showPopup(feedbackRatingsPopup, feedbackRatingsButton, popupHeight));
+        feedbackRatingsButton.setOnMouseExited(event -> feedbackRatingsPopup.hide());
     }
 
     /**
@@ -195,6 +212,11 @@ public class SidebarController {
     @FXML
     private void openMyAchievements(ActionEvent event) throws IOException {
         loadScene(event, "/com/example/geoquestkidsexplorer/myachievements.fxml", false);
+    }
+
+    @FXML
+    private void openFeedbackRatings(ActionEvent event) throws IOException {
+        loadScene(event, "/com/example/geoquestkidsexplorer/feedbackratings.fxml", false);
     }
 
     /**
