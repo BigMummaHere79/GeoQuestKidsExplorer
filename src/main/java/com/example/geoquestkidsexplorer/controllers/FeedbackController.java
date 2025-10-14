@@ -118,7 +118,7 @@ public class FeedbackController {
 
     private VBox createFeedbackBox(FeedbackRatings fb, boolean isReply, int level) {
         VBox box = new VBox(5);
-        box.setStyle("-fx-background-color: #F9BDD1; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; " +
+        box.setStyle("-fx-background-color: #CAD6CA; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; " +
                 "-fx-background-radius: 5;");
         if (isReply) {
             box.setPadding(new Insets(0, 0, 0, 40 * level));

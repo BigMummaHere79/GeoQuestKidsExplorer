@@ -56,7 +56,8 @@
 
                 <!-- Content Container acting as a single large tile -->
                 <VBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="800.0" spacing="10.0"
-                      style="-fx-background-color: #ffffff; -fx-padding: 10px; -fx-background-radius: 20px;
+                      style="-fx-background-color: linear-gradient(to top, #63acbe, #CAD6CA, #F9F9F9);
+                      -fx-padding: 10px; -fx-background-radius: 20px;
                       -fx-border-radius: 20px; -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
                     <children>
                         <!-- Welcome Container -->

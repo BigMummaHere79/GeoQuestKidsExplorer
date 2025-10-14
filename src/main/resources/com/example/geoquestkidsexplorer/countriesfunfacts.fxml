@@ -20,7 +20,7 @@
     </stylesheets>
 
     <top>
-        <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER" prefHeight="65.0" style="-fx-background-color: #3b82f6;
+        <HBox fx:id="navBar" styleClass="nav-bar" alignment="CENTER" prefHeight="65.0" style="-fx-background-color: #63acbe;
             -fx-padding: 10 100;">
             <children>
                 <Button mnemonicParsing="false" onAction="#backToFunFacts" style="-fx-background-color: #60a5fa; -fx-text-fill: white;
@@ -34,12 +34,6 @@
                                 <Label textAlignment="CENTER" fx:id="continentFactsWelcomeLabel" text="" textFill="white">
                                     <font>
                                         <Font name="System Bold" size="25.0" />
-                                    </font>
-                                </Label>
-                                <Label textAlignment="CENTER" style="-fx-text-fill: white; -fx-font-weight: bold;"
-                                       text="Discover fascinating fun facts from countries!">
-                                    <font>
-                                        <Font size="16.0" />
                                     </font>
                                 </Label>
                             </children>
@@ -78,7 +72,7 @@
                             </children>
                         </VBox>
 
-                        <HBox spacing="10.0" VBox.vgrow="ALWAYS" prefHeight="600.0">
+                        <HBox spacing="10.0" VBox.vgrow="ALWAYS" prefHeight="600.0" >
                             <children>
                                 <ScrollPane fitToWidth="true" fitToHeight="true" pannable="true"
                                             style="-fx-background-color: transparent; -fx-border-color: #ddd; -fx-border-radius: 10px;"

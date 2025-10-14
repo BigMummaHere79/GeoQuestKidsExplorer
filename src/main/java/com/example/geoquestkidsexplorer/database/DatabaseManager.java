@@ -1,10 +1,7 @@
 package com.example.geoquestkidsexplorer.database;
 
 import com.example.geoquestkidsexplorer.GameStateManager;
-import com.example.geoquestkidsexplorer.models.FeedbackRatings;
-import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
-import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
-import com.example.geoquestkidsexplorer.models.UserProfile;
+import com.example.geoquestkidsexplorer.models.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +23,6 @@ public class DatabaseManager {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL);
         //Note: Added this for the sidebar navigation icons!
-
     }
 
     /**
@@ -183,35 +179,6 @@ public class DatabaseManager {
     // Users API
     // ===========================
 
-
-    //NOTE: Commented out due to needed to modify for the implementation of the user progress. Glenda!
-    /** Duplicate-safe insert used by Register.
-    public static void insertUser(String username, String email, String password,
-                                  String avatar, Integer level, String role) {
-        // Pre-check for duplicates
-        if (userExists(username, email)) {
-            throw new RuntimeException("Username or email already exists.");
-        }
-
-        String sql = "INSERT INTO users(username, email, password, avatar, level, role) VALUES (?,?,?,?,?,?)";
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL)) {
-            enableForeignKeys(conn);
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, username);
-                ps.setString(2, email);
-                ps.setString(3, password); // ⚠️ In production, store a password hash instead.
-                ps.setString(4, avatar);
-                if (level == null) ps.setNull(5, Types.INTEGER); else ps.setInt(5, level);
-                ps.setString(6, role);
-                ps.executeUpdate();
-            }
-        } catch (SQLException e) {
-            System.err.println("Insert user error: " + e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }*/
-
-    /** Duplicate-safe insert used by Register. */
     /** Duplicate-safe insert used by Register. */
     public static void insertUser(String username, String email, String password, String avatar, String role) {
         if (userExists(username, email)) {
@@ -287,24 +254,6 @@ public class DatabaseManager {
             return false;
         }
     }
-
-    //NOTE: Just commented out as users table does not have id column, but leaving this as we might need to add id oin the future.
-    //If decided to add the userId column, we can still use this method, but then we will have to modify most of all our method. Glenda.
-    // Adding this new method to DatabaseManager.java file for fetching userID.
-    /*public static int getUserIdByEmail(String email) {
-        final String sql = "SELECT id FROM users WHERE email = ? LIMIT 1"; // assuming your users table has an 'id' column
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:geoquest.db");
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getInt("id");
-            }
-        } catch (SQLException e) {
-            System.err.println("getUserIdByEmail error: " + e.getMessage());
-        }
-        return -1; // Return -1 if not found
-    }*/
-
 
     /** Optional helper to load a profile by username. */
     public static UserProfile getUserProfileByUsername(String username) {
@@ -480,7 +429,7 @@ public class DatabaseManager {
     }
 
     //For TestMode--------------------------------------------------------------------------------------------------------------
-    // This method will generate a complete quiz question with an image and multiple-choice options.
+    // This method will generate a complete quiz question with an image.
     public static TestQuizQuestions getTestQuizQuestion(String continent) {
         //Get the correct country and its image for the question
         CountryQuestion correctQuestion = getRandomCountryByContinent(continent);
@@ -723,5 +672,37 @@ public class DatabaseManager {
         //fb.setExplorerName(rs.getString("explorer_name"));
         fb.setAvatar(rs.getString("avatar"));
         return fb;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------//
+    //NOTE: Added for fetching data's from the database. Glenda.
+    public static List<Country> getCountriesByContinent(String continent) throws SQLException {
+        List<Country> countries = new ArrayList<>();
+        String sql = "SELECT country, continent FROM countries WHERE continent = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, continent);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String name = rs.getString("country");
+                    String continentName = rs.getString("continent");
+                    String flagFileName = name.replaceAll(" ", "") + ".png"; // Derive flag filename
+                    String funFactsJson = rs.getString("funFacts");
+                    String[][] funFacts = parseFunFacts(funFactsJson);
+                    countries.add(new Country(name, continentName, flagFileName, funFacts));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching countries for " + continent + ": " + e.getMessage());
+            throw e;
+        }
+        return countries;
+    }
+
+    private static String[][] parseFunFacts(String funFactsStr) {
+        // Example: Parse fun_facts as JSON or delimited string
+        // For simplicity, assume fun_facts is a JSON array of arrays [[text, icon], ...]
+        // Implement parsing logic here or fallback to empty array
+        return new String[0][];
     }
 }

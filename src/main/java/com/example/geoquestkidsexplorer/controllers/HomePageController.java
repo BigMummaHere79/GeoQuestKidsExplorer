@@ -76,9 +76,9 @@ public class HomePageController {
             subWelcomeLabel.setText("Ready to continue your adventure?");
 
             // Ensure the sidebar also gets the data
-            if (mySidebarController != null) {
+           /* if (mySidebarController != null) {
                 mySidebarController.setProfileData(explorerName, explorerAvatar);
-            }
+            }*/
         } else {
             // This handles cases where no one is logged in
             welcomeLabel.setText("Welcome, Explorer!");
@@ -97,12 +97,6 @@ public class HomePageController {
         this.welcomeLabel.setText("Welcome back, " + username + "!");
         this.avatarLabel.setText(avatar);
         this.subWelcomeLabel.setText("Ready to continue your adventure?");
-
-        // Now, pass the same data to the SidebarController.
-        // The FXML loader ensures mySidebarController is not null here.
-        if (mySidebarController != null) {
-            mySidebarController.setProfileData(username, avatar);
-        }
         refreshContinentLocks();
     }
 
