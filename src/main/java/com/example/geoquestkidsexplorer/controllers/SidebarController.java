@@ -220,12 +220,4 @@ public class SidebarController {
         stage.setScene(scene);
         stage.show();
     }
-
-    /**
-     * This method is called by the previous controller to set the user's data.
-     * We pass both the name and the avatar to display on the home screen.
-    public void setProfileData(String username, String avatar) {
-        this.explorerName = username;
-        this.explorerAvatar = avatar;
-    }*/
 }

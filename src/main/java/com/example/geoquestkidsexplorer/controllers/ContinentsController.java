@@ -271,22 +271,6 @@ public class ContinentsController {
         stage.show();
     }
 
-    // (unchanged) Opens country test page in a new window — not used by quiz branch
-    private void openTestPage(String continent, String country) throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/example/geoquestkidsexplorer/country_image.fxml")
-        );
-        Parent root = loader.load();
-
-        CountryImageController controller = loader.getController();
-        Stage testStage = new Stage();
-        testStage.setTitle(continent + " – " + country);
-        testStage.setScene(new Scene(root, 600, 400));
-        controller.setCountry(country, testStage);
-
-        testStage.show();
-    }
-
     /** Helper: load an FXML into the current window */
     private void loadScene(String fxmlPath, Event event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));

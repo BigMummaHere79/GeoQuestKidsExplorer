@@ -5,17 +5,12 @@ import com.example.geoquestkidsexplorer.models.FeedbackRatings;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +66,6 @@ public class FeedbackController {
                 avatarLabel.setText("😊");
             }
         }
-
         // Load feedbacks
         loadFeedbacks();
     }
@@ -134,7 +128,6 @@ public class FeedbackController {
         displayRating.setRating(fb.getRating());
         displayRating.setPartialRating(true);
         displayRating.setDisable(true);
-        //displayRating.setStyle("-fx-effect: none;"); // For feedback display
         Label timeLbl = new Label(fb.getTimestamp());
         timeLbl.setStyle("-fx-text-fill: gray;");
         Region spacer = new Region();
@@ -156,7 +149,7 @@ public class FeedbackController {
             actions.getChildren().addAll(editBtn, deleteBtn);
         }
 
-        // Check if has replies
+        // Check if it has replies
         boolean hasReplies = false;
         try {
             hasReplies = !DatabaseManager.getReplies(fb.getFeedbackId()).isEmpty();
@@ -199,7 +192,6 @@ public class FeedbackController {
         HBox replyRatingContainer = new HBox();
         Rating replyRating = new Rating(5);
         replyRating.setPartialRating(true);
-        //replyRating.setStyle("-fx-effect: none;"); // For reply form
         replyRating.setRating(0); // Ensure no stars are filled
         replyRatingContainer.getChildren().add(replyRating);
 

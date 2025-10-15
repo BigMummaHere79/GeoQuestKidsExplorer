@@ -40,7 +40,11 @@ public class PracticeQuizController {
     @FXML private Button backButton;
     @FXML private Label quizWelcomeLabel;
     @FXML private VBox option1Tile, option2Tile, option3Tile, option4Tile;
+    //This is for the Hint button
+    @FXML
+    private Button hintButton;
 
+    private boolean hintUsed = false;
     private String continentName;
     private List<PracticeQuizQuestions> questions = new ArrayList<>();
     private int currentQuestionIndex = 0;
@@ -105,10 +109,12 @@ public class PracticeQuizController {
         loadQuizQuestions();
     }
 
-    //This is for the Hint button
     @FXML
-    private Button hintButton;
-    private boolean hintUsed = false;
+    public void initialize() {
+        // Hide feedback container and next question button initially
+        feedbackContainer.setVisible(false);
+        nextQuestionButton.setVisible(false);
+    }
 
     @FXML
     private void handleHint(ActionEvent event) {
@@ -134,13 +140,6 @@ public class PracticeQuizController {
             toRemove.setDisable(true);
             toRemove.setVisible(false); // Hide the wrong answer
         }
-    }
-
-    @FXML
-    public void initialize() {
-        // Hide feedback container and next question button initially
-        feedbackContainer.setVisible(false);
-        nextQuestionButton.setVisible(false);
     }
 
     private void loadQuizQuestions() {

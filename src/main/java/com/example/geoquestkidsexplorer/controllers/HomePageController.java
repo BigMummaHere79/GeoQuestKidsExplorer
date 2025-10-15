@@ -2,17 +2,14 @@ package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.models.UserSession;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
@@ -55,9 +52,6 @@ public class HomePageController {
     @FXML private Label subWelcomeLabel;
 
     @FXML private SidebarController mySidebarController; // FXML loader automatically injects this.
-    // A private field to hold the explorer's avatar string
-    private String explorerAvatar;
-    private String explorerName;
 
     /**
      * The initialize method should not contain business logic.
@@ -74,11 +68,6 @@ public class HomePageController {
             welcomeLabel.setText("Welcome back, " + explorerName + "!");
             avatarLabel.setText(explorerAvatar != null ? explorerAvatar : "");
             subWelcomeLabel.setText("Ready to continue your adventure?");
-
-            // Ensure the sidebar also gets the data
-           /* if (mySidebarController != null) {
-                mySidebarController.setProfileData(explorerName, explorerAvatar);
-            }*/
         } else {
             // This handles cases where no one is logged in
             welcomeLabel.setText("Welcome, Explorer!");
@@ -111,38 +100,6 @@ public class HomePageController {
         }
         setContinentLocks(continents);
     }
-
-    /**
-     * Handles the "Start Your New Adventure!" button action.
-     * Note: This method should be called from the HomePageController itself.
-     * We don't need these methods anymore
-     */
-//    private void openQuiz(String continent) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(
-//                    getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml"));
-//            Parent root = loader.load();
-//
-//            // Show quiz in a new window (keeps Home open)
-//            Stage quizStage = new Stage();
-//            quizStage.setTitle(continent + " Quiz");
-//            quizStage.setScene(new Scene(root, 800, 600));
-//
-//            // Pass data into the quiz controller
-//            QuizController controller = loader.getController();
-//            controller.setStage(quizStage);       // so Back can close this window
-//            controller.setContinent(continent);   // loads the first question
-//
-//            quizStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    @FXML
-//    private void startNewAdventure(ActionEvent event) {
-//        openQuiz("South America"); // or choose based on the user’s level/last choice
-//    }
 
     /**
      * This method is called by HomePageController to set the lock status of each continent.
