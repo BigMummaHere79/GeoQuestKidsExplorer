@@ -4,10 +4,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.canvas.Canvas?> <!-- NOTE: adding this for additional animation -->
 
 <?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0"
       style="-fx-background-color: #f0f0f0; -fx-padding: 30; -fx-background-radius: 20;"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
@@ -15,12 +18,42 @@
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
+
     <children>
         <Label style="-fx-font-weight: bold; -fx-font-size: 24px;" text="You've completed the quiz!" wrapText="true">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
+
+        <!-- HBox to center the animationPane horizontally -->
+        <HBox alignment="CENTER">
+            <!-- Pane to overlay trophy and confetti, sized to match canvas -->
+            <Pane fx:id="animationPane" prefHeight="300.0" prefWidth="300.0">
+                <children>
+                    <!-- Canvas for confetti effect -->
+                    <Canvas fx:id="confettiCanvas" width="300.0" height="300.0" visible="false" managed="false" />
+                    <!-- Trophy Label for emoji -->
+                    <Label fx:id="trophyLabel" text="🏆" visible="false" managed="false" textAlignment="CENTER">
+                        <font>
+                            <Font size="135.0" /> <!-- Larger font for trophy -->
+                        </font>
+                    </Label>
+                </children>
+                <HBox.margin>
+                    <Insets top="10.0" />
+                </HBox.margin>
+            </Pane>
+            <!-- Fail Label for emoji when user fails -->
+            <Label fx:id="failLabel" text="🎮" visible="false" managed="false" textAlignment="CENTER">
+                <font>
+                    <Font size="135.0" /> <!-- Same size as trophy for consistency -->
+                </font>
+                <HBox.margin>
+                    <Insets top="10.0" />
+                </HBox.margin>
+            </Label>
+        </HBox>
 
         <Label fx:id="scoreLabel" text="Your Score: 0/10" wrapText="true">
             <font>
