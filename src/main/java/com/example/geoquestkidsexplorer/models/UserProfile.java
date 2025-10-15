@@ -50,11 +50,6 @@ public class UserProfile {
         return levelsCompleted;
     }
 
-    // Setters of all fields
-   /* public void setExplorerName(String explorerName) {
-        this.explorerName = explorerName;
-    }*/
-
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
@@ -62,9 +57,5 @@ public class UserProfile {
     public void setScore(int score) {
         this.score = score;
     }
-
-  /*public void setLevelsCompleted(int levelsCompleted) {
-        this.levelsCompleted = levelsCompleted;
-    }*/
 }
 

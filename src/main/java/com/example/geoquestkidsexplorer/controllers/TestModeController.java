@@ -438,17 +438,6 @@ public class TestModeController {
 
             dialogStage.showAndWait();
 
-            /*if (!passed) {
-                resetQuiz();
-            } else if (levelUpdated) {
-                // Only close the quiz stage if it’s still valid
-                Stage quizStage = (questionNumberLabel.getScene() != null) ? (Stage) questionNumberLabel.getScene().getWindow() : null;
-                if (quizStage != null && quizStage.isShowing()) {
-                    quizStage.close();
-                }
-                backToHomePage();
-            }*/
-
         } catch (IOException e) {
             System.err.println("Error loading results: " + e.getMessage());
             feedbackMessageLabel.setText("Error displaying results. Please try again.");
