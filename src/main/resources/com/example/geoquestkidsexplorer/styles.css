@@ -165,6 +165,10 @@ Adding css for game mode colours, flash cards , test quiz and practise quiz
     );
 }
 
+.gradient-pane {
+    -fx-background-color: linear-gradient(to bottom, -bg1, -bg2, -bg3);
+}
+
 /*
 For the Nav bar
 */

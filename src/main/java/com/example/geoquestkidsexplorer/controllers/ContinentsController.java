@@ -133,7 +133,7 @@ public class ContinentsController {
         Node score = root.lookup("#scoreLabel");
 
         if(navBar != null && backBtn != null){
-            switch (continentName){
+            switch (continent){
                 case "Oceania" -> {
                     if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
                     if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
@@ -187,7 +187,7 @@ public class ContinentsController {
         Node timer = root.lookup("timerLabel");
 
         if(navBar != null && backBtn != null) {
-            switch (continentName) {
+            switch (continent) {
                 case "Oceania" -> {
                     if (navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
                     if (backBtn != null) backBtn.setStyle("-btn-bg:#F4BA9B;");
@@ -219,7 +219,7 @@ public class ContinentsController {
     }
 
     //* Helper method to load the generic quiz page and set the continent.
-    private void openTestQuiz(Event event, String continentName) throws IOException {
+    private void openTestQuiz(Event event, String continent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testmode.fxml"));
         Parent root = loader.load();
 
@@ -233,7 +233,7 @@ public class ContinentsController {
         Node timer = root.lookup("timerLabel");
 
         if(navBar != null && backBtn != null){
-            switch (continentName){
+            switch (continent){
                 case "Oceania" -> {
                     if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
                     if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
@@ -262,41 +262,14 @@ public class ContinentsController {
             }
         }
         TestModeController quizController = loader.getController();
-        quizController.setContinentName(continentName);
+        quizController.setContinentName(continent);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Quiz - " + continentName);
+        stage.setTitle("Quiz - " + continent);
         stage.show();
     }
-
-
-    /* Open quiz_view.fxml in the SAME window (no new Stage)
-    private void openQuiz(Event event, String continent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/example/geoquestkidsexplorer/quiz_view.fxml")
-        );
-        Parent root = loader.load();
-
-        // Reuse the existing window
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if (stage.getScene() == null) {
-            stage.setScene(new Scene(root, 800, 600));
-        } else {
-            stage.getScene().setRoot(root);
-        }
-        stage.setTitle(continent + " Quiz");
-
-        // Pass data into the quiz controller (optional setStage if your controller uses it)
-        QuizController controller = loader.getController();
-        try {
-            controller.setStage(stage);   // keep Back actions working if your controller expects a Stage
-        } catch (NoSuchMethodError | Exception ignore) { *//* ok if not present *//* }
-        controller.setContinent(continent); // loads the first question inside controller
-
-        stage.show();
-    }*/
 
     // (unchanged) Opens country test page in a new window — not used by quiz branch
     private void openTestPage(String continent, String country) throws IOException {

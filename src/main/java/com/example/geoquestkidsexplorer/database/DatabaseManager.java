@@ -469,7 +469,7 @@ public class DatabaseManager {
      * @param username The user's username.
      * @param level The continent level (1 to 7).
      * @param scorePercentage The quiz score (percentage, e.g., 85.0 for 85%).
-     * @return true if the continent was unlocked, false otherwise.
+     * @return true if the result was saved and (if applicable) the level was updated, false if a database error occurred.
      */
     public static boolean saveQuizResultAndUpdateLevel(String username, int level, double scorePercentage) {
         boolean isPassing = scorePercentage >= 80.0;
@@ -510,7 +510,7 @@ public class DatabaseManager {
                 return false;
             }
         }
-        return false;
+        return true; // Return true for successful result save, even if no level update
     }
 
     /**

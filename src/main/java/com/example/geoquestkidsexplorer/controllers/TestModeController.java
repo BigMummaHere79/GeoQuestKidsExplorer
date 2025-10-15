@@ -124,10 +124,13 @@ public class TestModeController {
                             answerField.positionCaret(val.length());
                         }
                         suggestionsMenu.hide();
-                        if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                        // NOTE: this needs to be removed as this make inconsistent behaviour for choosing correct answer in dropdown menu.
+                        // This make an automatic submit upon hitting the ENTER key for the first question not requiring the to click
+                        // the submit button. --- GLENDA!. ---
+                        /*if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
                             // Optional: auto-submit on Enter if you like
                             handleSubmit();
-                        }
+                        }*/
                     }
                 }
                 case ESCAPE -> suggestionsMenu.hide();
@@ -225,6 +228,19 @@ public class TestModeController {
     /* -------------------- Quiz flow -------------------- */
 
     private void loadQuestions() {
+
+        if (questions.isEmpty()) {
+            System.err.println("No questions available for quiz. Returning to continent view.");
+            feedbackMessageLabel.setText("Error: No questions available.");
+            feedbackMessageLabel.setTextFill(Color.RED);
+            try {
+                backToContinentView(new ActionEvent());
+            } catch (Exception e) {
+                System.err.println("Error returning to continent view: " + e.getMessage());
+            }
+            return;
+        }
+
         if (currentQuestionIndex < questions.size()) {
             TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
 
@@ -264,7 +280,7 @@ public class TestModeController {
                     timerLabel.setText(String.format("%02d:%02d", timeSeconds / 60, timeSeconds % 60));
                     if (timeSeconds <= 0) {
                         timeline.stop();
-                        handleSubmit();
+                        handleTimeEnd();
                     }
                 })
         );
@@ -272,9 +288,26 @@ public class TestModeController {
         timeline.play();
     }
 
+    // NOTE: Adding additional helper for making the timer ends after 60 seconds countdown! GLENDA.
+    private void handleTimeEnd() {
+        if (isSubmitted) return;
+
+        isSubmitted = true;
+        suggestionsMenu.hide();
+        answerField.setDisable(true);
+        submitButton.setDisable(true);
+        nextQuestionButton.setDisable(false);
+
+        TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
+        String correctAnswer = currentQuestion.getCorrectAnswer().trim();
+        feedbackMessageLabel.setText("Time's up! The correct answer is " + correctAnswer + ". 😟");
+        feedbackMessageLabel.setTextFill(Color.web("#f44336"));
+    }
+
     @FXML
     private void handleSubmit() {
-        if (isSubmitted) return;
+        if (isSubmitted || timeSeconds <= 0) // NOTE: adding timeSeconds to check if timer is/or 0.
+            return;
 
         isSubmitted = true;
         if (timeline != null) timeline.stop();
@@ -321,6 +354,7 @@ public class TestModeController {
             double scorePercentage = (double) score / questions.size() * 100;
             int currentLevel = 0;
 
+            // Fetch the current level of the continent
             String sql = "SELECT level FROM continents WHERE continent = ?";
             try (Connection conn = DatabaseManager.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -328,30 +362,55 @@ public class TestModeController {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         currentLevel = rs.getInt("level");
+                    } else {
+                        System.err.println("No level found for continent: " + continentName);
+                        feedbackMessageLabel.setText("Error: Continent data not found.");
+                        feedbackMessageLabel.setTextFill(Color.RED);
+                        return;
                     }
                 }
+            } catch (SQLException e) {
+                System.err.println("Database error fetching level: " + e.getMessage());
+                feedbackMessageLabel.setText("Database error. Please try again.");
+                feedbackMessageLabel.setTextFill(Color.RED);
+                return;
             }
 
             String username = UserSession.getUsername();
-            if (username == null || username.isEmpty()) return;
+            if (username == null || username.isEmpty()) {
+                System.err.println("No valid username found in UserSession.");
+                feedbackMessageLabel.setText("Error: Please log in to save your progress.");
+                feedbackMessageLabel.setTextFill(Color.RED);
+                return;
+            }
 
+            // Save quiz result and check if level was updated
             boolean levelUpdated = DatabaseManager.saveQuizResultAndUpdateLevel(username, currentLevel, scorePercentage);
             boolean passed = scorePercentage >= 80.0;
-            if (passed && levelUpdated) {
+
+            // For failed quizzes, levelUpdated will be false, but the result was saved successfully
+            // Only show error if there was a database issue (handled in DatabaseManager)
+            if (!passed && !levelUpdated) {
+                System.out.println("Quiz failed for user " + username + ", score: " + scorePercentage + ". No level update needed.");
+            } else if (passed && levelUpdated) {
                 String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
                 if (nextContinent != null) {
                     GameStateManager.getInstance().unlockContinent(nextContinent);
                     GameStateManager.getInstance().saveState();
+                    System.out.println("Unlocked continent: " + nextContinent);
+                } else {
+                    System.out.println("No next continent available for " + continentName);
                 }
             }
 
+            // Load and show the results dialog
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testresults.fxml"));
             Parent root = loader.load();
             TestResultsController resultsController = loader.getController();
 
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(questionNumberLabel.getScene().getWindow());
+            dialogStage.initOwner(questionNumberLabel.getScene() != null ? questionNumberLabel.getScene().getWindow() : null);
             dialogStage.setScene(new Scene(root, 1200, 800));
             dialogStage.setTitle("Quiz Results");
 
@@ -365,7 +424,9 @@ public class TestModeController {
                             try {
                                 backToHomePage();
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                System.err.println("Error navigating to homepage: " + e.getMessage());
+                                feedbackMessageLabel.setText("Error returning to homepage.");
+                                feedbackMessageLabel.setTextFill(Color.RED);
                             }
                         }
                     },
@@ -377,16 +438,21 @@ public class TestModeController {
 
             dialogStage.showAndWait();
 
-            if (!passed) {
+            /*if (!passed) {
                 resetQuiz();
             } else if (levelUpdated) {
-                Stage quizStage = (Stage) questionNumberLabel.getScene().getWindow();
-                quizStage.close();
+                // Only close the quiz stage if it’s still valid
+                Stage quizStage = (questionNumberLabel.getScene() != null) ? (Stage) questionNumberLabel.getScene().getWindow() : null;
+                if (quizStage != null && quizStage.isShowing()) {
+                    quizStage.close();
+                }
                 backToHomePage();
-            }
+            }*/
 
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error loading results: " + e.getMessage());
+            feedbackMessageLabel.setText("Error displaying results. Please try again.");
+            feedbackMessageLabel.setTextFill(Color.RED);
         }
     }
 
@@ -413,8 +479,10 @@ public class TestModeController {
 
     private void loadPracticeQuiz() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));
             Parent root = loader.load();
+            ContinentsController controller = loader.getController();
+            controller.setContinentName(this.continentName); // Set the continent name
             Scene scene = new Scene(root, 1200.0, 800.0);
             Stage stage = (Stage) questionNumberLabel.getScene().getWindow();
             stage.setScene(scene);
