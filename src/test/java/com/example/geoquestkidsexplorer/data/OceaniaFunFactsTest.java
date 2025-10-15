@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class OceaniaFunFactsTest {
 
     private String[][] getCountryFacts(String countryName) {
-        AfricaFunFacts africaFunFacts = new AfricaFunFacts();
-        List<Country> countries = africaFunFacts.getCountries();
+        OceaniaFunFacts oceaniaFunFacts = new OceaniaFunFacts();
+        List<Country> countries = oceaniaFunFacts.getCountries();
         return countries.stream()
                 .filter(c -> c.getName().equals(countryName))
                 .findFirst()
@@ -99,7 +99,7 @@ class OceaniaFunFactsTest {
     void gettongaFacts() {
         String[][] facts = getCountryFacts("Tonga");
         assertNotNull(facts, "Facts for Tonga should not be null");
-        assertTrue(Arrays.deepToString(facts).contains("TOnga"));
+        assertTrue(Arrays.deepToString(facts).contains("Tonga"));
     }
 
     @Test
