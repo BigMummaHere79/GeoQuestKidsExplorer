@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class AntarcticaFunFactsTest {
 
     private String[][] getCountryFacts(String countryName) {
-        AfricaFunFacts africaFunFacts = new AfricaFunFacts();
-        List<Country> countries = africaFunFacts.getCountries();
+        AntarcticaFunFacts antarcticaFunFacts = new AntarcticaFunFacts();
+        List<Country> countries = antarcticaFunFacts.getCountries();
         return countries.stream()
                 .filter(c -> c.getName().equals(countryName))
                 .findFirst()

@@ -62,7 +62,7 @@ public class TestModeController {
     private int timeSeconds = 60;
 
     // Autocomplete support
-    private final ContextMenu suggestionsMenu = new ContextMenu();
+    private ContextMenu suggestionsMenu; // NOTE: change this as this is causing the build error for MVN builds when the test runs
     private List<String> currentChoices = List.of();
     private int highlightedIndex = -1; // for up/down navigation
 
@@ -93,6 +93,7 @@ public class TestModeController {
 
     @FXML
     public void initialize() {
+        suggestionsMenu = new ContextMenu(); // ✅ initialize safely here
         // Wire up TextField events for autocomplete
         setupAutoCompleteBehavior();
     }
