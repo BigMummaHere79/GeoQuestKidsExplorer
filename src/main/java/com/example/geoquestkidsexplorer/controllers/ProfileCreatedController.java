@@ -24,6 +24,8 @@ public class ProfileCreatedController {
 
     /**
      * This method is called by the previous controller to set the user's data.
+     * @param name   the explorer’s display name
+     * @param avatar the avatar emoji selected by the explorer
      */
     public void setProfileData(String name, String avatar) {
         this.explorerName = name;

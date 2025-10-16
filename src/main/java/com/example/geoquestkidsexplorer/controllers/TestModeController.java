@@ -69,16 +69,41 @@ public class TestModeController {
     public TestModeController() { this(new DatabaseAdapter()); }
     public TestModeController(IQuizQuestionDAO dao) { this.quizDao = dao; }
 
+
+    /**
+     * Fetches a single test quiz question for corresponding continent.
+     *
+     * @param continent the name of the continent
+     * @return a {@link TestQuizQuestions} object (or null if none)
+     */
     public TestQuizQuestions fetchTest(String continent) {
         current = quizDao.getTestQuizQuestion(continent);
         return current;
     }
+
+    /**
+     * Evaluates whether their answer matches the correct answer
+     *
+     * @param chosen the user’s answer text
+     * @return true if it exactly matches the correct answer; false otherwise
+     */
     public boolean evaluateAnswer(String chosen) {
         return current != null && chosen != null && chosen.equals(current.getCorrectAnswer());
     }
+
+    /**
+     * Returns the currently loaded quiz question.
+     *
+     * @return the current {@link TestQuizQuestions} object
+     */
     public TestQuizQuestions getCurrent() { return current; }
 
-    // Set continent & load questions
+
+    /**
+     * Sets the continent name and loads the quiz questions accordingly.
+     *
+     * @param continent the name of the continent to test
+     */
     public void setContinentName(String continent) {
         this.continentName = continent;
         quizWelcomeLabel.setText("Practice your knowledge with the " + continentName + " Continent!");
@@ -145,6 +170,11 @@ public class TestModeController {
         });
     }
 
+    /**
+     * Filters and displays suggestion items that begin with the typed prefix.
+     *
+     * @param typed the current text input by the user
+     */
     private void showSuggestions(String typed) {
         if (currentChoices == null || currentChoices.isEmpty()) {
             suggestionsMenu.hide();
@@ -192,6 +222,11 @@ public class TestModeController {
         return item;
     }
 
+    /**
+     * Moves the highlight index among suggestion items, cycling through the list.
+     *
+     * @param delta +1 to move down, -1 to move up
+     */
     private void moveHighlight(int delta) {
         if (!suggestionsMenu.isShowing() || suggestionsMenu.getItems().isEmpty()) return;
 
@@ -219,6 +254,11 @@ public class TestModeController {
         }
     }
 
+    /**
+     * Returns the highlighted suggestion text, or the first suggestion if none is highlighted.
+     *
+     * @return selected suggestion text or null if no suggestions
+     */
     private String getHighlightedOrFirst() {
         if (!suggestionsMenu.isShowing() || suggestionsMenu.getItems().isEmpty()) return null;
         int idx = highlightedIndex >= 0 ? highlightedIndex : 0;
@@ -227,6 +267,7 @@ public class TestModeController {
     }
 
     /* -------------------- Quiz flow -------------------- */
+
 
     private void loadQuestions() {
 
@@ -270,6 +311,11 @@ public class TestModeController {
         }
     }
 
+    /**
+     * Starts a 60‑second timer limit for user to answer question
+     * When time reaches zero, stops the timer and triggers
+     * {@link #handleTimeEnd()}.
+     */
     private void startTimer() {
         if (timeline != null) timeline.stop();
 
@@ -344,6 +390,12 @@ public class TestModeController {
         nextQuestionButton.setDisable(false);
     }
 
+
+    /**
+     * navigates user to the next quiz question
+     *
+     * @param event the action event triggered to continue to next question
+     */
     @FXML
     private void handleNextQuestion(ActionEvent event) {
         currentQuestionIndex++;
@@ -446,6 +498,10 @@ public class TestModeController {
         }
     }
 
+    /**
+     * Navigates back to the homepage
+     * @throws IOException if the FXML or scene loading fails
+     */
     private void backToHomePage() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
         Parent root = loader.load();
@@ -483,6 +539,12 @@ public class TestModeController {
         }
     }
 
+
+    /**
+     * Navigates back to the homepage view
+     *
+     * @param event the action event by triggering button
+     */
     @FXML
     private void backToContinentView(ActionEvent event) {
         try {

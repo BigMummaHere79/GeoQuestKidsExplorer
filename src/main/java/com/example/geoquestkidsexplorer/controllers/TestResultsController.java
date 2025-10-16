@@ -51,6 +51,7 @@ public class TestResultsController {
 
     /**
      * Sets the stage for this dialog, allowing it to be closed.
+     * @param dialogStage the Stage representing this dialog
      */
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -58,6 +59,10 @@ public class TestResultsController {
 
     /**
      * Sets the results and configures the buttons based on the score.
+     * @param score           the number of correct answers
+     * @param totalQuestions  the total number of questions in the test
+     * @param continent       the continent name for context (if needed)
+     * @param passed          whether the user passed (met threshold) or not
      */
     public void setResults(int score, int totalQuestions, String continent, boolean passed) {
         this.currentContinent = continent;
@@ -108,7 +113,11 @@ public class TestResultsController {
     }
 
     /**
-     * Sets the actions to be performed when the buttons are clicked.
+     * Sets the actions to be performed when the correspoding buttons are clicked.
+     * @param onRetry      when the user wants to retry the test
+     * @param onContinue   when the user wants to proceed after success
+     * @param onPractice   when the user wants to go back to practice mode
+     *
      */
     public void setActions(Runnable onRetry, Runnable onContinue, Runnable onPractice) {
         this.onRetry = onRetry;
@@ -248,6 +257,12 @@ public class TestResultsController {
         }
     }
 
+    /**
+     * Stops any ongoing confetti animation, executes the appropriate callback,
+     * and closes the result information.
+     *
+     * @param event the ActionEvent is triggered by clicking the main button
+     */
     @FXML
     private void handleMainButton(ActionEvent event) {
         if (confettiTimeline != null) {
@@ -267,6 +282,12 @@ public class TestResultsController {
         }
     }
 
+    /**
+     * Handler for the secondary button click
+     * Stops confetti animation, executes the practice callback, and closes the dialog.
+     *
+     * @param event the ActionEvent triggered by clicking the secondary button
+     */
     @FXML
     private void handleSecondaryButton(ActionEvent event) {
         if (confettiTimeline != null) {
@@ -280,8 +301,10 @@ public class TestResultsController {
         }
     }
 
+
     /**
      * Handles the close button action to close the dialog window.
+     * @param event the ActionEvent triggered by the close command
      */
     @FXML
     private void handleCloseButton(ActionEvent event) {

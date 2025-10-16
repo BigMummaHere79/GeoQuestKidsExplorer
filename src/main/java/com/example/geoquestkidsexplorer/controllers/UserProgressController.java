@@ -56,7 +56,11 @@ public class UserProgressController {
 
     /* ---------------------- UI Handlers ---------------------- */
 
-    /** Click avatar → go to profile creation page */
+    /**
+     * Navigates to the profile creation pahe where the user can change their avatar.
+     *
+     * @param event action event triggered by the button click.
+     */
     @FXML
     private void handleChangeAvatar(ActionEvent event) {
         try {
@@ -70,7 +74,12 @@ public class UserProgressController {
         }
     }
 
-    /** Logout → back to login, clear session */
+    /**
+     * Handles the action when the logout button is clicked.
+     * Navigates back to the login page and clears the user session.
+     *
+     * @param event The action event triggered by the button click.
+     */
     @FXML
     private void handleLogoutButtonAction(ActionEvent event) {
         try {
@@ -88,9 +97,15 @@ public class UserProgressController {
     }
 
     /* ---------------------- Back-compat hook ---------------------- */
+
     /**
      * Some parts of your app may still call this method directly.
      * We treat the first arg as *explorerName* (display name) and the second as the *avatar* emoji.
+     * Sets the user's profile data, including the explorer's name and avatar.
+     * Used for updating the profile information.
+     *
+     * @param explorerName The display name of the explorer.
+     * @param explorerAvatar The avatar emoji representing the explorer.
      */
     public void setProfileData(String explorerName, String explorerAvatar) {
         if (explorerAvatar != null && !explorerAvatar.isBlank()) {
@@ -104,7 +119,10 @@ public class UserProgressController {
 
     /* ---------------------- Helpers ---------------------- */
 
-    /** Paint the avatar onto whichever control exists (Button preferred, Label fallback). */
+    /**
+     * Sets the avatar on the user interface, and updating the avatar button or label.
+     * @param emoji The avatar emoji to be displayed.
+     */
     private void setAvatarOnUI(String emoji) {
         if (avatarButton != null) {
             avatarButton.setText(emoji);
@@ -114,7 +132,14 @@ public class UserProgressController {
         }
     }
 
-    /** Query DB for level & results and render the tiles/labels. */
+
+    /**
+     * Loads and renders the user's progress data, including the number of continents unlocked,
+     * levels completed, perfect scores, and correct answers.
+     * This method retrieves the data from the database and updates the UI labels accordingly.
+     *
+     * @param username The username of the currently logged-in user.
+     */
     private void loadAndRenderProgress(String username) {
         int continentsUnlocked = 1; // default baseline
         int perfectScores = 0;
@@ -180,7 +205,14 @@ public class UserProgressController {
             continentsUnlockedTileLabel.setText(Integer.toString(continentsUnlocked));
     }
 
-    /** Ensure level never stays null/invalid. */
+
+    /**
+     * Updates the user's level in the database to ensure it is never null or invalid.
+     *
+     * @param username The username of the user whose level is to be updated.
+     * @param level The new level to be set for the user.
+     */
+
     private void updateUserLevel(String username, int level) {
         String sql = "UPDATE users SET level = ? WHERE username = ?";
         try (Connection conn = DatabaseManager.getConnection();

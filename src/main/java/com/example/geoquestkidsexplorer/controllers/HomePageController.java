@@ -80,6 +80,8 @@ public class HomePageController {
     /**
      * This is the new, centralized method for setting all user data.
      * It is called by the LoginController after a successful login.
+     * @param username the user's username
+     * @param avatar the user's avatar emoji
      */
     public void setProfileData(String username, String avatar) {
         // Set the labels for the HomePageController
@@ -103,6 +105,7 @@ public class HomePageController {
 
     /**
      * This method is called by HomePageController to set the lock status of each continent.
+     * @param continents a map from continent name to true if locked, false if unlocked
      */
     public void setContinentLocks(Map<String, Boolean> continents) {
         // Map of continent names to their corresponding panes
@@ -172,6 +175,7 @@ public class HomePageController {
     /**
      * Handles the click event on a continent tile.
      * Prevents action if the tile is locked.
+     * @param event the MouseEvent corresponding to the click
      */
     @FXML
     private void handleContinentClick(MouseEvent event) {

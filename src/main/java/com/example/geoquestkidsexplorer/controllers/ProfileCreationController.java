@@ -68,8 +68,13 @@ public class ProfileCreationController {
     }
 
     /**
-     * Handles the click on any of the avatar tiles.
-     * This method will highlight the selected tile and store the avatar emoji.
+     * Handles the click on any of the avatar tile
+     * * <p>
+     * Highlights the clicked tile and, stores the
+     * selected emoji, updates preview, and clears existing error messages.
+     * </p>
+     *
+     * @param event the MouseEvent is triggered by clicking the avatar tile
      */
     @FXML
     private void selectAvatar(javafx.scene.input.MouseEvent event) {
@@ -100,9 +105,11 @@ public class ProfileCreationController {
         System.out.println("Selected avatar: " + selectedAvatarEmoji);
     }
 
+
     /**
-     * Handles the creation of the explorer profile.
-     * It validates the input and transitions to the home page.
+     * when user ceates profile, it validates the name, avatar selection, and updates the session
+     * @param event the ActionEvent triggered by the “create profile” button
+     * @throws IOException if loading the FXML view fails
      */
     @FXML
     private void createProfile(ActionEvent event) throws IOException {

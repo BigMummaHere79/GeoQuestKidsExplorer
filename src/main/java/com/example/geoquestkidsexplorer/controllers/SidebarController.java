@@ -130,8 +130,13 @@ public class SidebarController {
         feedbackRatingsButton.setOnMouseExited(event -> feedbackRatingsPopup.hide());
     }
 
+
     /**
      * Shows the popup to the right of the button, centered vertically.
+     *
+     * @param popup  the Popup to be shown
+     * @param button the Button beside which the popup appears
+     * @param popupHeight the height of the popup, used to center it vertically
      */
     private void showPopup(Popup popup, Button button, double popupHeight) {
         if (popup.isShowing()) {
@@ -145,7 +150,10 @@ public class SidebarController {
     }
 
     /**
-     * Navigates to the home page (dashboard).
+     * Navigates to the homepage
+     *
+     * @param event the ActionEvent triggered by clicking the home button
+     * @throws IOException if the FXML file cannot be loaded
      */
     @FXML
     private void navigateToHome(ActionEvent event) throws IOException {
@@ -153,7 +161,10 @@ public class SidebarController {
     }
 
     /**
-     * Opens the Fun Facts Library.
+     * navigates to the Fun Facts page .
+     *
+     * @param event the ActionEvent triggered by clicking the fun facts button
+     * @throws IOException if the FXML file cannot be loaded
      */
     @FXML
     private void openFunFacts(ActionEvent event) throws IOException {
@@ -161,7 +172,10 @@ public class SidebarController {
     }
 
     /**
-     * Opens the My Progress page.
+     * navigates to the My Progress page correspodning to user logged in and passes profile data to its controller.
+     *
+     * @param event the ActionEvent triggered by clicking the my progress button
+     * @throws IOException if the FXML file cannot be loaded
      */
     @FXML
     private void openMyProgress(ActionEvent event) throws IOException {
@@ -174,13 +188,25 @@ public class SidebarController {
         loadScene(event, root);
     }
 
+
+    /**
+     * naviagtes to the Feedback Ratings page.
+     *
+     * @param event the ActionEvent triggered by clicking the feedback ratings button
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @FXML
     private void openFeedbackRatings(ActionEvent event) throws IOException {
         loadScene(event, "/com/example/geoquestkidsexplorer/feedbackratings.fxml", false);
     }
 
+
     /**
-     * Loads the specified scene into the current stage.
+     * Loads the specified scene into the current stage.     *
+     * @param event     the ActionEvent triggering the scene switch
+     * @param fxmlPath  the path to the FXML file to load
+     * @param isHomePage whether the target scene is the home/dashboard view
+     * @throws IOException if loading the FXML fails
      */
     private void loadScene(ActionEvent event, String fxmlPath, boolean isHomePage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -213,6 +239,10 @@ public class SidebarController {
 
     /**
      * Loads the specified scene root into the current stage.
+     *
+     * @param event the ActionEvent triggering the scene switch
+     * @param root  the root Parent node already loaded
+     * @throws IOException (not typically thrown here) if handling fails
      */
     private void loadScene(ActionEvent event, Parent root) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
