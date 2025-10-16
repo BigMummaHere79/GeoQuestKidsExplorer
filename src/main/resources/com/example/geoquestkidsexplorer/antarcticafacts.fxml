@@ -84,7 +84,7 @@
                                         <children>
                                             <ImageView fitWidth="100.0" fitHeight="65.0">
                                                 <image >
-                                                    <Image url="@antarcticaflag/Antarctica.png" preserveRatio="true" />
+                                                    <Image url="@images/antarctican.png" preserveRatio="true" />
                                                 </image>
                                             </ImageView>
                                             <Label text="Antarctica" alignment="CENTER">

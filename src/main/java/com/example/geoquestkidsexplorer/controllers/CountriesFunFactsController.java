@@ -12,12 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -66,7 +66,54 @@ public class CountriesFunFactsController {
         Label promptLabel = new Label("Select a country from " + currentContinent.getName() + " to see facts!");
         promptLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #3b82f6; -fx-padding: 20px;");
         promptLabel.setAlignment(Pos.CENTER);
-        factsContainer.getChildren().add(promptLabel);
+
+        // Create a VBox to hold the image, similar to countryBox
+        VBox imageBox = new VBox(15);
+        imageBox.setAlignment(Pos.CENTER);
+        imageBox.setPrefHeight(350.0);
+        imageBox.setPrefWidth(225.0);
+        imageBox.setStyle("-fx-background-color: " + currentContinent.getBackgroundColor() + "; -fx-background-radius: 45px; " +
+                "-fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);");
+
+        // Create ImageView for the continent image
+        ImageView continentImageView = new ImageView();
+        continentImageView.setFitWidth(400.0); //520
+        continentImageView.setFitHeight(400.0); //410
+        continentImageView.setPreserveRatio(false); // Match homepage: stretch to fill
+        continentImageView.setStyle("-fx-background-color: transparent;"); // Prevent black border
+
+        // Apply a rounded rectangle clip to the ImageView
+        Rectangle clip = new Rectangle(400.0, 400.0); //500 350
+        clip.setArcHeight(85.0);
+        clip.setArcWidth(85.0);
+        continentImageView.setClip(clip);
+
+        String imagePath = getContinentImagePath(currentContinent.getName());
+        try {
+            Image continentImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+            continentImageView.setImage(continentImage);
+            continentImageView.setSmooth(true); // Improve rendering quality
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not load continent image for " + currentContinent.getName() + ". Path: " + imagePath);
+            continentImageView.setImage(null); // Clear image if loading fails
+        }
+        imageBox.getChildren().add(continentImageView);
+
+        // Add promptLabel and imageBox to factsContainer (image below label)
+        factsContainer.getChildren().addAll(promptLabel, imageBox);
+    }
+
+    private String getContinentImagePath(String continentName) {
+        String basePath = "/com/example/geoquestkidsexplorer/images/";
+        return switch (continentName.toLowerCase()) {
+            case "africa" -> basePath + "african.png";
+            case "asia" -> basePath + "asian.png";
+            case "oceania" -> basePath + "australian.png";
+            case "europe" -> basePath + "european.png";
+            case "north america" -> basePath + "north-american.png";
+            case "south america" -> basePath + "south-american.png";
+            default -> basePath + "default.png"; // Fallback image (optional, create if needed)
+        };
     }
 
 
@@ -84,7 +131,7 @@ public class CountriesFunFactsController {
         countryBox.setPrefWidth(200.0);
         countryBox.setStyle("-fx-background-color: " + currentContinent.getBackgroundColor() + "; -fx-background-radius: 15px; " +
                 "-fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);");
-        countryBox.setOnMouseClicked(event -> loadCountryFacts(event, country));
+        countryBox.setOnMouseClicked(event -> loadCountryFacts(country));
 
         String imagePath = "/com/example/geoquestkidsexplorer/" + currentContinent.getFlagDirectory() + country.getFlagFileName();
         ImageView flagImageView;
@@ -112,10 +159,9 @@ public class CountriesFunFactsController {
     /**
      * Pulls and displays fun facts for the selected country
      *
-     * @param event Mouse click event triggering the fact load.
      * @param country The country which facts are to be displayed.
      */
-    private void loadCountryFacts(MouseEvent event, Country country) {
+    private void loadCountryFacts(Country country) {
         factsContainer.getChildren().clear();
         Label countryTitle = new Label(country.getName() + " Fun Facts");
         countryTitle.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333333;");
