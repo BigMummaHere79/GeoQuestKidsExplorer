@@ -57,7 +57,10 @@ public class FlashcardsController {
 
     private static final String DATABASE_URL = "jdbc:sqlite:geoquest.db";
 
-    // Set region and load countries for it
+    /**
+     * Sets the region (continent) and loads the corresponding data (countries) for it.
+     * @param region the name of the region/continent to load flashcards for
+     */
     public void setRegion(String region) {
 
         /** Refactored - Extract Method
@@ -74,6 +77,11 @@ public class FlashcardsController {
         render();
     }
 
+
+    /**
+     * Actions the “next country”, which  flips to the next country card
+     * @param event the JavaFX ActionEvent triggered by the next-button
+     */
     @FXML
     private void handleNextCountry(ActionEvent event) {
         // Refactored countries into deck
@@ -88,6 +96,13 @@ public class FlashcardsController {
         render();
     }
 
+
+    /**
+     * correspondingly actions events for card interaction (flip or next),
+     * Ensures when next card is actioned the front (image) is shown
+     *
+     * @param event the JavaFX ActionEvent triggered by flip or next button
+     */
     // Adding this method to handle both buttons in the flash card fxml. Glenda
     @FXML
     private void handleCardAction(ActionEvent event) {
@@ -138,6 +153,15 @@ public class FlashcardsController {
             backTextLabel.setVisible(true);
         }
     }
+
+
+    /**
+     * actions navigation back to the continent view. Loads the
+     * continent FXML, passes the continent name to the controller
+     *
+     * @param event the JavaFX ActionEvent triggered by the back button
+     * @throws IOException if loading the FXML file fails
+     */
     @FXML
     private void handleBackToContinent(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/continentview.fxml"));

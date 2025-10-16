@@ -31,6 +31,11 @@ public class CountriesFunFactsController {
 
     private Continents currentContinent;
 
+
+    /**
+     * Sets the current continent name and pulls the corresponding country tiles.
+     * @param continentName Name of the continent to display countries for.
+     */
     public void setContinent(String continentName) {
         this.currentContinent = ContinentFactory.getContinent(continentName);
         if (currentContinent == null || currentContinent.getName().isEmpty()) {
@@ -41,6 +46,7 @@ public class CountriesFunFactsController {
         continentFactsWelcomeLabel.setText("Fun Facts for " + currentContinent.getName() + " Continent!");
         loadContinentCountryTiles();
     }
+
 
     private void loadContinentCountryTiles() {
         if (currentContinent == null || currentContinent.getCountries() == null) {
@@ -63,6 +69,13 @@ public class CountriesFunFactsController {
         factsContainer.getChildren().add(promptLabel);
     }
 
+
+    /**
+     * Creates a visual tile (VBox) representing a country with the corresponding flag and name.
+     *
+     * @param country The country to create the tile for.
+     * @return A VBox styled as a clickable country tile.
+     */
     private VBox createCountryTile(Country country) {
         VBox countryBox = new VBox(5);
         countryBox.getStyleClass().add("countries-tile-container");
@@ -96,6 +109,12 @@ public class CountriesFunFactsController {
         return countryBox;
     }
 
+    /**
+     * Pulls and displays fun facts for the selected country
+     *
+     * @param event Mouse click event triggering the fact load.
+     * @param country The country which facts are to be displayed.
+     */
     private void loadCountryFacts(MouseEvent event, Country country) {
         factsContainer.getChildren().clear();
         Label countryTitle = new Label(country.getName() + " Fun Facts");
@@ -118,6 +137,13 @@ public class CountriesFunFactsController {
         }
     }
 
+    /**
+     * Creates a VBox frameework, representing a single fun fact with icon and text.
+     *
+     * @param text The fact text.
+     * @param icon The icon string to display alongside the fact.
+     * @return A styled VBox containing the fact icon and text.
+     */
     private VBox createFactVBox(String text, String icon) {
         VBox factBox = new VBox(0);
         factBox.setPrefWidth(380.0);
@@ -144,6 +170,12 @@ public class CountriesFunFactsController {
         return factBox;
     }
 
+
+    /**
+     * Navigates the user back to the main fun facts screen.
+     * @param event The action event triggered by clicking the back button.
+     * @throws IOException If loading the FXML file fails.
+     */
     @FXML
     private void backToFunFacts(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/funFacts.fxml"));

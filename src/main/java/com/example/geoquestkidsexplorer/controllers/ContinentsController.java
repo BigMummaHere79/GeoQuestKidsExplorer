@@ -75,6 +75,12 @@ public class ContinentsController {
         }
     }
 
+
+    /**
+     * Navigates back to the main continents homepage
+     *
+     * @param event the ActionEvent triggered by clicking the back button
+     */
     @FXML
     private void backToContinents(ActionEvent event) {
         try {
@@ -91,6 +97,7 @@ public class ContinentsController {
     /**
      * Handles the click event for the Practice Mode tile.
      * It loads the generic practice quiz page and passes the current continent name to it.
+     * @param event the MouseEvent triggered by clicking a mode tile
      */
     @FXML
     private void handleGameModeClick(MouseEvent event) {
@@ -119,7 +126,14 @@ public class ContinentsController {
         }
     }
 
-    /** Helper method to load the generic practice quiz page and set the continent. */
+
+    /**
+     * Opens the practice quiz view for the given continent.
+     *
+     * @param event     the MouseEvent that triggered navigation
+     * @param continent the name of the continent
+     * @throws IOException if the practice quiz FXML cannot be loaded
+     */
     private void openPracticeQuiz(MouseEvent event, String continent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/practicequiz.fxml"));
         Parent root = loader.load();
@@ -171,7 +185,13 @@ public class ContinentsController {
         stage.show();
     }
 
-    /** Helper method to load the generic flash card mode page and set the continent. */
+    /**
+     * Opens the flashcards view for the given continent.
+     *
+     * @param event     the MouseEvent that triggered navigation
+     * @param continent the name of the continent
+     * @throws IOException if the flashcards FXML cannot be loaded
+     */
     @FXML
     private void openFlashCardMode(MouseEvent event, String continent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml"));
@@ -218,7 +238,13 @@ public class ContinentsController {
         stage.show();
     }
 
-    //* Helper method to load the generic quiz page and set the continent.
+    /**
+     * Opens the test quiz view for the given continent.
+     *
+     * @param event     the event triggering navigation (MouseEvent or ActionEvent)
+     * @param continent the name of the continent
+     * @throws IOException if the test mode FXML cannot be loaded
+     */
     private void openTestQuiz(Event event, String continent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testmode.fxml"));
         Parent root = loader.load();
@@ -271,7 +297,13 @@ public class ContinentsController {
         stage.show();
     }
 
-    /** Helper: load an FXML into the current window */
+    /**
+     * Helper method to load an FXML scene into the current window.
+     *
+     * @param fxmlPath the FXML file path to load
+     * @param event    the triggering event used to get the current window
+     * @throws IOException if loading fails
+     */
     private void loadScene(String fxmlPath, Event event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
         Scene scene = new Scene(root);

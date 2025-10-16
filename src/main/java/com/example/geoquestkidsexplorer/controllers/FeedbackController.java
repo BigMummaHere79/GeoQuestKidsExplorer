@@ -70,6 +70,11 @@ public class FeedbackController {
         loadFeedbacks();
     }
 
+
+    /**
+     * Submits the user's feedback if it meets the validation requirments
+     * @param event the JavaFX ActionEvent triggered by clicking the submit button
+     */
     @FXML
     private void submitFeedback(ActionEvent event) {
         if (currentUsername == null) {
@@ -110,6 +115,17 @@ public class FeedbackController {
         }
     }
 
+
+
+    /**
+     * Creates a VBox UI element representing a single feedback (or reply),
+     * with its header (avatar, name, rating, timestamp), comment, and actions.
+     *
+     * @param fb     the FeedbackRatings object which has the feedback data
+     * @param isReply determines whether the provided feedback is a reply
+     * @param level  the nesting level (depth) of this reply for indentation
+     * @return a VBox in the user interface showing the feedback
+     */
     private VBox createFeedbackBox(FeedbackRatings fb, boolean isReply, int level) {
         VBox box = new VBox(5);
         box.setStyle("-fx-background-color: #CAD6CA; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; " +
@@ -180,6 +196,14 @@ public class FeedbackController {
         return box;
     }
 
+
+
+    /**
+     * Displays the ability for the user to reply to older feedback
+     *
+     * @param parentBox the VBox of the parent feedback for the user to reply to
+     * @param parentId  the feedbackId of the feedback being replied to
+     */
     private void showReplyForm(VBox parentBox, int parentId) {
         if (currentUsername == null) {
             showAlert("Error", "You must be logged in to reply.");
@@ -222,6 +246,11 @@ public class FeedbackController {
         parentBox.getChildren().add(replyForm);
     }
 
+
+    /**
+     * Allows the user to be able to edit their own feedback
+     * @param fb the FeedbackRatings object can be edited
+     */
     private void editFeedback(FeedbackRatings fb) {
         if (currentUsername == null || !fb.getUsername().equals(currentUsername)) {
             showAlert("Error", "You can only edit your own feedback.");
@@ -261,6 +290,12 @@ public class FeedbackController {
         }
     }
 
+
+    /**
+     * allows user to delete their own feedback after confirmation
+     *
+     * @param fb the FeedbackRatings object to delete
+     */
     private void deleteFeedback(FeedbackRatings fb) {
         if (currentUsername == null || !fb.getUsername().equals(currentUsername)) {
             showAlert("Error", "You can only delete your own feedback.");
@@ -284,6 +319,11 @@ public class FeedbackController {
         }
     }
 
+    /**
+     * Displays an alert dialog with coressponding title and message if feedback is not valid
+     * @param title   the title of the alert dialog
+     * @param message the content message of the alert dialog
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

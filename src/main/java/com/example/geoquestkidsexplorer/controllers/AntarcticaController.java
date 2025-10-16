@@ -18,6 +18,12 @@ public class AntarcticaController {
 
     @FXML private Button continueButton; // Bind to the "Proceed to the Next Level" button in antarctica.fxml
 
+
+    /**
+     * When "Continue" button is clicked, it updates the user's progress in the DB, and unclocks next
+     * continent in the game + takes user back to homepage
+     * @param event The action event is triggered by clicking the continue button.
+     */
     @FXML
     private void handleContinueButton(ActionEvent event) {
         String username = UserSession.getUsername();
@@ -59,6 +65,7 @@ public class AntarcticaController {
             e.printStackTrace();
         }
     }
+
 
     public void setContinentName(String continentName) {
     }

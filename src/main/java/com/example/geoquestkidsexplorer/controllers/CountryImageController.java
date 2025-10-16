@@ -16,7 +16,12 @@ public class CountryImageController {
 
     private Stage stage;
 
-    // Called by the parent controller when opening this page
+    /**
+     * Sets the country name and displays its image
+     * Called by the parent controller when opening this page/window.
+     * @param countryName the name of the country to display
+     * @param stage the Stage (window) in which this controller is shown
+     */
     public void setCountry(String countryName, Stage stage) {
         this.stage = stage;
         countryNameLabel.setText(countryName);
@@ -29,6 +34,11 @@ public class CountryImageController {
         }
     }
 
+    /**
+     * Handles the “Back” button click event.
+     * Closes the current window (stage) if available.
+     * @param event the ActionEvent triggered by clicking the Back button
+     */
     @FXML
     private void handleBack(ActionEvent event) {
         // simply close this window
