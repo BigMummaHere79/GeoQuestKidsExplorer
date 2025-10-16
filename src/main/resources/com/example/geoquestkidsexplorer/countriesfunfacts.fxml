@@ -87,8 +87,9 @@
                                 <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS"
                                             style="-fx-background-color: transparent; -fx-border-color: #ddd; -fx-border-radius: 10px;">
                                     <content>
-                                        <VBox fx:id="factsContainer" alignment="TOP_CENTER" spacing="10" prefWidth="380.0"
-                                              style="-fx-padding: 10px; -fx-background-color: #f9f9f9; -fx-background-radius: 15px;"
+                                        <VBox fx:id="factsContainer" alignment="TOP_CENTER" spacing="10" prefHeight="550.0"
+                                              prefWidth="316.0"
+                                              style="-fx-padding: 10px; -fx-background-color: #ffffff; -fx-background-radius: 15px;"
                                               maxHeight="Infinity" maxWidth="Infinity" />
                                     </content>
                                 </ScrollPane>
