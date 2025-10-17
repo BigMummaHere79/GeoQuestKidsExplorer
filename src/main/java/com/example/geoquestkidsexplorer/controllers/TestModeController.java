@@ -51,6 +51,7 @@ public class TestModeController {
 
     private Timeline timeline;
     private final IQuizQuestionDAO quizDao;
+    private TestModeManager testModeManager;
     private TestQuizQuestions current;
 
     private String continentName;
@@ -68,6 +69,13 @@ public class TestModeController {
 
     public TestModeController() { this(new DatabaseAdapter()); }
     public TestModeController(IQuizQuestionDAO dao) { this.quizDao = dao; }
+
+    @FXML
+    public void initialize() {
+        suggestionsMenu = new ContextMenu(); // ✅ initialize safely here
+        // Wire up TextField events for autocomplete
+        setupAutoCompleteBehavior();
+    }
 
 
     /**
@@ -109,18 +117,69 @@ public class TestModeController {
         quizWelcomeLabel.setText("Practice your knowledge with the " + continentName + " Continent!");
         backButton.setText("⬅️ Back to " + continentName + " Game Mode");
 
-        this.questions = new ArrayList<>();
-        for (int i = 0; i < QUESTIONS_PER_QUIZ; i++) {
-            this.questions.add(DatabaseManager.getTestQuizQuestion(continent));
-        }
-        loadQuestions();
+        IQuizQuestionDAO quizDao = new DatabaseQuizQuestionDAO();
+
+
     }
 
-    @FXML
-    public void initialize() {
-        suggestionsMenu = new ContextMenu(); // ✅ initialize safely here
-        // Wire up TextField events for autocomplete
-        setupAutoCompleteBehavior();
+    private void loadQuestions() {
+        TestQuizQuestions current = testModeManager.getCurrentQuestion();
+        if (current == null){
+            showResults();
+            return;
+        }
+
+        private void loadCurrentQuestion() {
+            TestQuizQuestions current = quizManager.getCurrentQuestion();
+            if (current == null) {
+                showResults();
+                return;
+            }
+
+            questionNumberLabel.setText("Question " + (quizManager.getCurrentQuestionIndex() + 1)
+                    + " of " + quizManager.getTotalQuestions());
+            countryImageView.setImage(current.getCountryImage());
+            questionLabel.setText(current.getQuestionText());
+
+            // (Re-)bind choices to autocomplete
+            currentChoices = current.getChoices();
+            suggestionsMenu.hide();
+            answerField.clear();
+            answerField.setDisable(false);
+            submitButton.setDisable(false);
+            nextQuestionButton.setDisable(true);
+            feedbackMessageLabel.setText("");
+            isSubmitted = false;
+
+            startTimer();
+        }
+        if (currentQuestionIndex < questions.size()) {
+            TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
+
+            questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
+            countryImageView.setImage(currentQuestion.getCountryImage());
+            questionLabel.setText(currentQuestion.getQuestionText());
+
+            // (Re-)bind choices to autocomplete
+            currentChoices = currentQuestion.getChoices();
+            suggestionsMenu.hide();
+            answerField.clear();
+            answerField.setDisable(false);
+            answerField.setPromptText("Type your answer...");
+
+            //button visibility
+            submitButton.setVisible(true);
+            nextQuestionButton.setVisible(true);
+            submitButton.setDisable(false);
+            nextQuestionButton.setDisable(true);
+
+            feedbackMessageLabel.setText("");
+            isSubmitted = false;
+
+            startTimer();
+        } else {
+            showResults();
+        }
     }
 
     /* -------------------- Autocomplete (pure JavaFX) -------------------- */
@@ -268,48 +327,6 @@ public class TestModeController {
 
     /* -------------------- Quiz flow -------------------- */
 
-
-    private void loadQuestions() {
-
-        if (questions.isEmpty()) {
-            System.err.println("No questions available for quiz. Returning to continent view.");
-            feedbackMessageLabel.setText("Error: No questions available.");
-            feedbackMessageLabel.setTextFill(Color.RED);
-            try {
-                backToContinentView(new ActionEvent());
-            } catch (Exception e) {
-                System.err.println("Error returning to continent view: " + e.getMessage());
-            }
-            return;
-        }
-
-        if (currentQuestionIndex < questions.size()) {
-            TestQuizQuestions currentQuestion = questions.get(currentQuestionIndex);
-
-            questionNumberLabel.setText("Question " + (currentQuestionIndex + 1) + " of " + questions.size());
-            countryImageView.setImage(currentQuestion.getCountryImage());
-            questionLabel.setText(currentQuestion.getQuestionText());
-
-            // (Re-)bind choices to autocomplete
-            currentChoices = currentQuestion.getChoices();
-            suggestionsMenu.hide();
-            answerField.clear();
-            answerField.setDisable(false);
-            answerField.setPromptText("Type your answer...");
-
-            submitButton.setVisible(true);
-            nextQuestionButton.setVisible(true);
-            submitButton.setDisable(false);
-            nextQuestionButton.setDisable(true);
-
-            feedbackMessageLabel.setText("");
-            isSubmitted = false;
-
-            startTimer();
-        } else {
-            showResults();
-        }
-    }
 
     /**
      * Starts a 60‑second timer limit for user to answer question
