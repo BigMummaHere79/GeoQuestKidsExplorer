@@ -392,7 +392,7 @@ public class TestModeController {
 
 
     /**
-     * navigates user to the next quiz question
+     * navigates user to the next quiAz question
      *
      * @param event the action event triggered to continue to next question
      */
