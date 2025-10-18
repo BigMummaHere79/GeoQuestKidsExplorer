@@ -158,7 +158,6 @@ public class LoginController {
         return null;
     }
 
-
     /** After successful login, fetch username & avatar asynchronously, then switch to home. */
     private void loadHomeAsync(ActionEvent event, String email) {
         Task<String[]> userTask = new Task<>() {

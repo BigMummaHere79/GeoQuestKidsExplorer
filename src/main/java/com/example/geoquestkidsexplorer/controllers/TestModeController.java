@@ -539,7 +539,6 @@ public class TestModeController {
         }
     }
 
-
     /**
      * Navigates back to the homepage view
      *

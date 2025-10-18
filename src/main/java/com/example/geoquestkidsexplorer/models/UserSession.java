@@ -50,4 +50,8 @@ public class UserSession {
         avatar = null;
         explorerName = null;
     }
+
+    public static UserSession getInstance() {
+        return null;
+    }
 }

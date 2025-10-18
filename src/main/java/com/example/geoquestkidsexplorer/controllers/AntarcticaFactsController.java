@@ -69,7 +69,7 @@ public class AntarcticaFactsController {
      * Creates a VBox for a single fact (REUSED LOGIC).
      * @param text The  fun fact text
      * @param icon The icon associated with the fun fact.
-     * @return A styled VBox containing the icon and coressponding fact text.
+     * @return A styled VBox containing the icon and corresponding fact text.
      */
     private VBox createFactVBox(String text, String icon) {
         // This is the exact, working logic copied from MultiCountryController (formerly AfricaFunFactsController)

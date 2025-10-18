@@ -66,7 +66,6 @@ public class AntarcticaController {
         }
     }
 
-
     public void setContinentName(String continentName) {
     }
 }

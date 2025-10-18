@@ -11,9 +11,4 @@ public class TestQuizQuestions extends PrimaryQuizQuestions {
         super(questionText, choices, correctAnswer, countryImage);
         this.scoreValue = scoreValue;
     }
-
-    // Getter for the unique scoreValue property
-    //public int getScoreValue() {
-       // return scoreValue;
-    //}
 }
