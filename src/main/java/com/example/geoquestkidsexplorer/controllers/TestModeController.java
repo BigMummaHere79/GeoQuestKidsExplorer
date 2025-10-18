@@ -150,13 +150,6 @@ public class TestModeController {
                             answerField.positionCaret(val.length());
                         }
                         suggestionsMenu.hide();
-                        // NOTE: this needs to be removed as this make inconsistent behaviour for choosing correct answer in dropdown menu.
-                        // This make an automatic submit upon hitting the ENTER key for the first question not requiring the to click
-                        // the submit button. --- GLENDA!. ---
-                        /*if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
-                            // Optional: auto-submit on Enter if you like
-                            handleSubmit();
-                        }*/
                     }
                 }
                 case ESCAPE -> suggestionsMenu.hide();

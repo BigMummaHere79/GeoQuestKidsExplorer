@@ -1,6 +1,6 @@
 package com.example.geoquestkidsexplorer.database;
 
-import com.example.geoquestkidsexplorer.database.DatabaseManager.CountryQuestion;
+import com.example.geoquestkidsexplorer.models.CountryQuestion;
 
 /**
  *

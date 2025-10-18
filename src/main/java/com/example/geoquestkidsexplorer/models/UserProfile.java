@@ -1,61 +1,65 @@
 package com.example.geoquestkidsexplorer.models;
 
 /**
- * A class representing a user's profile in the GeoQuest Kids Explorer game.
- * This model holds the user's name and chosen avatar.
+ * Model for a user's profile, matching database schema.
+ * Encapsulates user data with private fields and public getters/setters.
+ * Supports basic construction and DB-loaded construction.
  */
 public class UserProfile {
-
-    private String explorerName;
+    private String username;  // Fixed: was explorerName
+    private String email;
     private String avatar;
-    private int score; // Add this field
-    private int levelsCompleted; // Add this field
+    private int level;
+    private String role;
+    private int score;  // Default/computed
+    private int levelsCompleted;  // Default/computed (e.g., query results table)
 
     /**
-     * Constructs a new UserProfile.
-     * @param explorerName The name of the explorer.
-     * @param avatar The avatar chosen by the explorer.
-     * @param score The score user gets when they completed a level
-     * @param levelsCompleted The levels the user completed.
+     * Full constructor from DB query.
+     * @param username Username.
+     * @param email Email.
+     * @param avatar Avatar.
+     * @param level Current level.
+     * @param role Role.
      */
-    public UserProfile(String explorerName, String avatar, int score, int levelsCompleted) {
-        this.explorerName = explorerName;
+    public UserProfile(String username, String email, String avatar, int level, String role) {
+        this.username = username;
+        this.email = email;
         this.avatar = avatar;
-        this.score = score;
-        this.levelsCompleted = levelsCompleted;
+        this.level = level;
+        this.role = role;
+        this.score = 0;
+        this.levelsCompleted = 0;  // Compute via service if needed
     }
 
     /**
-     * Constructs a new UserProfile with only name and avatar.
-     * Use this for initial profile creation.
+     * Basic constructor for new profiles.
+     * @param username Username.
+     * @param avatar Avatar.
      */
-    public UserProfile(String explorerName, String avatar, String string, int level, String role) {
-        this(explorerName, avatar, 0, 0); // Call the main constructor with default values
+    public UserProfile(String username, String avatar) {
+        this(username, null, avatar, 1, "user");
     }
 
-    // Getters of all fields
-    public String getExplorerName() {
-        return explorerName;
-    }
+    // Getters and setters for encapsulation
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getAvatar() {
-        return avatar;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public int getScore() {
-        return score;
-    }
+    public String getAvatar() { return avatar; }
+    public void setAvatar(String avatar) { this.avatar = avatar; }
 
-    public int getLevelsCompleted() {
-        return levelsCompleted;
-    }
+    public int getLevel() { return level; }
+    public void setLevel(int level) { this.level = level; }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
+
+    public int getLevelsCompleted() { return levelsCompleted; }
+    public void setLevelsCompleted(int levelsCompleted) { this.levelsCompleted = levelsCompleted; }
 }
-

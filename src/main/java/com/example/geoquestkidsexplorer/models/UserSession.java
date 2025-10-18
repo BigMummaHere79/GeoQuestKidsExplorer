@@ -1,26 +1,25 @@
-/**
- * UserSession is a singleton class that manages the current user's session data.
- * It stores the user ID after successful login for use across controllers.
- */
 package com.example.geoquestkidsexplorer.models;
 
+/**
+ * Singleton-like static class managing current user session data.
+ * Encapsulates username and avatar using private static fields with public static accessors.
+ * Use static methods for session management (no instance needed).
+ */
 public class UserSession {
-    //private static int userId = -1;
-    // Add these new fields for the username and avatar
-    // Add these new fields for the username and avatar
     private static String username;
     private static String avatar;
     private static String explorerName;
 
     /**
-     * Sets the current user data in the session.
+     * Sets the current user session data.
+     * @param username Username.
+     * @param avatar Avatar.
      */
     public static void setUser(String username, String avatar) {
         UserSession.username = username;
         UserSession.avatar = avatar;
     }
 
-    // Add these new methods to set and get the username
     public static void setUsername(String name) {
         username = name;
     }
@@ -29,7 +28,6 @@ public class UserSession {
         return username;
     }
 
-    // Add these new methods to set and get the avatar
     public static void setAvatar(String av) {
         avatar = av;
     }
@@ -38,20 +36,20 @@ public class UserSession {
         return avatar;
     }
 
-    public static String getExplorerName() { return explorerName; }
-    public static void setExplorerName(String name) { explorerName = name; }
+    public static String getExplorerName() {
+        return explorerName;
+    }
 
+    public static void setExplorerName(String name) {
+        explorerName = name;
+    }
 
     /**
-     * Clears the session by resetting all user data.
+     * Clears the session.
      */
     public static void clear() {
         username = null;
         avatar = null;
         explorerName = null;
-    }
-
-    public static UserSession getInstance() {
-        return null;
     }
 }
