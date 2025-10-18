@@ -1,4 +1,4 @@
-package com.example.geoquestkidsexplorer.database;
+package com.example.geoquestkidsexplorer.repositories;
 import com.example.geoquestkidsexplorer.models.CountryQuestion;
 
 /**

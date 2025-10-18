@@ -1,6 +1,6 @@
 package com.example.geoquestkidsexplorer.database;
 
-import com.example.geoquestkidsexplorer.controllers.FlashcardsController;
+import com.example.geoquestkidsexplorer.repositories.QuizDataSource;
 import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.List;

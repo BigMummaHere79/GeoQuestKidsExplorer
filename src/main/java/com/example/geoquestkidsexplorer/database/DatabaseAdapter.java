@@ -2,6 +2,7 @@ package com.example.geoquestkidsexplorer.database;
 
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
+import com.example.geoquestkidsexplorer.repositories.IQuizQuestionDAO;
 
 /**
 * Wasn't abe to directly use Database as it has static methods

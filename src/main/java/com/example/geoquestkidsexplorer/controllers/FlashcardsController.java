@@ -2,7 +2,7 @@ package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.models.FlashCard;
 import com.example.geoquestkidsexplorer.models.FlashCardDeck;
-import com.example.geoquestkidsexplorer.models.FlashCardRepository;
+import com.example.geoquestkidsexplorer.repositories.FlashCardRepository;
 import com.example.geoquestkidsexplorer.models.FlashCardRealRepository;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import com.example.geoquestkidsexplorer.utils.NavigationHelper;

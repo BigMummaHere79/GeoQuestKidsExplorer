@@ -1,8 +1,7 @@
 package com.example.geoquestkidsexplorer.fakes;
 
 import com.example.geoquestkidsexplorer.models.FlashCard;
-import com.example.geoquestkidsexplorer.controllers.FlashcardsController;
-import com.example.geoquestkidsexplorer.models.FlashCardRepository;
+import com.example.geoquestkidsexplorer.repositories.FlashCardRepository;
 import javafx.scene.image.Image;
 
 import java.util.List;
