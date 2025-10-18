@@ -2,16 +2,14 @@ package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.models.UserSession;
+import com.example.geoquestkidsexplorer.utils.NavigationHelper;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,9 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class HomePageController {
+/**
+ * Controller for the home page UI, managing continent selection and lock status.
+ * Extends BaseController for shared functionality like continent color application.
+ */
+public class HomePageController extends BaseController {
 
-    // You will need to add an @FXML field for each continent tile you have in startadventure.fxml
     @FXML private Pane africaPane;
     @FXML private Pane asiaPane;
     @FXML private Pane northAmericaPane;
@@ -30,7 +31,6 @@ public class HomePageController {
     @FXML private Pane europePane;
     @FXML private Pane oceaniaPane;
 
-    // You will also need a label to show the locked text
     @FXML private Label africaLockedLabel;
     @FXML private Label asiaLockedLabel;
     @FXML private Label northAmericaLockedLabel;
@@ -51,46 +51,79 @@ public class HomePageController {
     @FXML private Label welcomeLabel;
     @FXML private Label subWelcomeLabel;
 
-    @FXML private SidebarController mySidebarController; // FXML loader automatically injects this.
+    @FXML private SidebarController mySidebarController;
+
+    // Consolidated maps for continent elements
+    private final Map<String, Pane> continentPanes = new HashMap<>();
+    private final Map<String, Label> continentLockLabels = new HashMap<>();
+    private final Map<String, Label> continentTextLabels = new HashMap<>();
 
     /**
-     * The initialize method should not contain business logic.
-     * It's only for setting up UI elements.
+     * Sets the stage for this controller.
+     * @param stage The JavaFX stage.
+     */
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    /**
+     * Initializes the UI with session data and continent maps.
      */
     @FXML
     public void initialize() {
-        // Get user data directly from the UserSession
-        String explorerName = UserSession.getUsername();
-        System.out.println("HomePageController: Current username = " + explorerName);
-        String explorerAvatar = UserSession.getAvatar();
+        // Populate maps to avoid repetitive code
+        continentPanes.put("Africa", africaPane);
+        continentPanes.put("Asia", asiaPane);
+        continentPanes.put("North America", northAmericaPane);
+        continentPanes.put("South America", southAmericaPane);
+        continentPanes.put("Antarctica", antarcticaPane);
+        continentPanes.put("Europe", europePane);
+        continentPanes.put("Oceania", oceaniaPane);
 
-        if (explorerName != null && !explorerName.isEmpty()) {
-            welcomeLabel.setText("Welcome back, " + explorerName + "!");
-            avatarLabel.setText(explorerAvatar != null ? explorerAvatar : "");
+        continentLockLabels.put("Africa", africaLockedLabel);
+        continentLockLabels.put("Asia", asiaLockedLabel);
+        continentLockLabels.put("North America", northAmericaLockedLabel);
+        continentLockLabels.put("South America", southAmericaLockedLabel);
+        continentLockLabels.put("Antarctica", antarcticaLockedLabel);
+        continentLockLabels.put("Europe", europeLockedLabel);
+        continentLockLabels.put("Oceania", oceaniaLockedLabel);
+
+        continentTextLabels.put("Africa", africaLockedTextLabel);
+        continentTextLabels.put("Asia", asiaLockedTextLabel);
+        continentTextLabels.put("North America", northAmericaLockedTextLabel);
+        continentTextLabels.put("South America", southAmericaLockedTextLabel);
+        continentTextLabels.put("Antarctica", antarcticaLockedTextLabel);
+        continentTextLabels.put("Europe", europeLockedTextLabel);
+        continentTextLabels.put("Oceania", oceaniaLockedTextLabel);
+
+        String explorerName = UserSession.getUsername();
+        String explorerAvatar = UserSession.getAvatar();
+        setProfileData(explorerName, explorerAvatar);
+        refreshContinentLocks();
+    }
+
+    /**
+     * Sets profile data for the welcome labels.
+     * @param username The username.
+     * @param avatar   The avatar.
+     */
+    @Override
+    public void setProfileData(String username, String avatar) {
+        if (username != null && !username.isEmpty()) {
+            welcomeLabel.setText("Welcome back, " + username + "!");
+            avatarLabel.setText(avatar != null ? avatar : "");
             subWelcomeLabel.setText("Ready to continue your adventure?");
         } else {
-            // This handles cases where no one is logged in
             welcomeLabel.setText("Welcome, Explorer!");
             avatarLabel.setText("🙂");
             subWelcomeLabel.setText("Ready for a new adventure!");
         }
-        refreshContinentLocks();
     }
 
     /**
-     * This is the new, centralized method for setting all user data.
-     * It is called by the LoginController after a successful login.
-     * @param username the user's username
-     * @param avatar the user's avatar emoji
+     * Refreshes the lock status of continents based on game state.
      */
-    public void setProfileData(String username, String avatar) {
-        // Set the labels for the HomePageController
-        this.welcomeLabel.setText("Welcome back, " + username + "!");
-        this.avatarLabel.setText(avatar);
-        this.subWelcomeLabel.setText("Ready to continue your adventure?");
-        refreshContinentLocks();
-    }
-
     public void refreshContinentLocks() {
         GameStateManager.getInstance().loadState();
         Set<String> unlockedContinents = GameStateManager.getInstance().getUnlockedContinents();
@@ -104,41 +137,10 @@ public class HomePageController {
     }
 
     /**
-     * This method is called by HomePageController to set the lock status of each continent.
-     * @param continents a map from continent name to true if locked, false if unlocked
+     * Sets the lock status for each continent using maps to avoid repetition.
+     * @param continents Map of continent names to lock status (true if locked).
      */
     public void setContinentLocks(Map<String, Boolean> continents) {
-        // Map of continent names to their corresponding panes
-        Map<String, Pane> continentPanes = new HashMap<>();
-        continentPanes.put("Antarctica", antarcticaPane);
-        continentPanes.put("Oceania", oceaniaPane);
-        continentPanes.put("South America", southAmericaPane);
-        continentPanes.put("North America", northAmericaPane);
-        continentPanes.put("Europe", europePane);
-        continentPanes.put("Asia", asiaPane);
-        continentPanes.put("Africa", africaPane);
-
-        // Map of continent names to their corresponding locked labels
-        Map<String, Label> continentLockLabels = new HashMap<>();
-        continentLockLabels.put("Antarctica", antarcticaLockedLabel);
-        continentLockLabels.put("Oceania", oceaniaLockedLabel);
-        continentLockLabels.put("South America", southAmericaLockedLabel);
-        continentLockLabels.put("North America", northAmericaLockedLabel);
-        continentLockLabels.put("Europe", europeLockedLabel);
-        continentLockLabels.put("Asia", asiaLockedLabel);
-        continentLockLabels.put("Africa", africaLockedLabel);
-
-        // Map of continent names to their corresponding lock/unlock text label.
-        Map<String, Label> continentTextLabels = new HashMap<>();
-        continentTextLabels.put("Antarctica", antarcticaLockedTextLabel);
-        continentTextLabels.put("Oceania", oceaniaLockedTextLabel);
-        continentTextLabels.put("South America", southAmericaLockedTextLabel);
-        continentTextLabels.put("North America", northAmericaLockedTextLabel);
-        continentTextLabels.put("Europe", europeLockedTextLabel);
-        continentTextLabels.put("Asia", asiaLockedTextLabel);
-        continentTextLabels.put("Africa", africaLockedTextLabel);
-
-        // Iterate through the continents and set their state based on the map
         for (Map.Entry<String, Boolean> entry : continents.entrySet()) {
             String continentName = entry.getKey();
             boolean isLocked = entry.getValue();
@@ -147,25 +149,19 @@ public class HomePageController {
             Label textLabel = continentTextLabels.get(continentName);
 
             if (pane != null && lockLabel != null && textLabel != null) {
+                pane.setOpacity(isLocked ? 0.5 : 1.0);
+                lockLabel.setVisible(isLocked);
+                textLabel.setVisible(true);
                 if (isLocked) {
-                    pane.setOpacity(0.5);
-                    lockLabel.setVisible(isLocked);
                     textLabel.setText("This continent is locked. Complete previous level to unlock.");
-                    textLabel.setVisible(true);
                     textLabel.setStyle("-fx-text-fill: red;");
-                    // Reset layoutY to default or a position suitable for locked state
-                    textLabel.setLayoutY(0); // Adjust this value based on your UI
-                    System.out.println("setContinentLocks: Locked " + continentName);
+                    textLabel.setLayoutY(0);
                 } else {
-                    pane.setOpacity(1.0);
-                    lockLabel.setVisible(false);
                     textLabel.setText("This continent is now unlocked.");
-                    textLabel.setVisible(true);
                     textLabel.setStyle("-fx-text-fill: green; -fx-padding: 5;");
-                    // Move the text lower in the pane
-                    textLabel.setLayoutY(pane.getHeight() - 10); // Adjust this value to position the text lower
-                    System.out.println("setContinentLocks: Unlocked " + continentName);
+                    textLabel.setLayoutY(pane.getHeight() - 10);
                 }
+                System.out.println("setContinentLocks: " + (isLocked ? "Locked" : "Unlocked") + " " + continentName);
             } else {
                 System.err.println("setContinentLocks: Missing pane or label for " + continentName);
             }
@@ -173,67 +169,29 @@ public class HomePageController {
     }
 
     /**
-     * Handles the click event on a continent tile.
-     * Prevents action if the tile is locked.
-     * @param event the MouseEvent corresponding to the click
+     * Handles continent tile clicks, checking lock status and navigating if unlocked.
+     * @param event The mouse event.
      */
     @FXML
     private void handleContinentClick(MouseEvent event) {
-
         Pane clickedPane = (Pane) event.getSource();
-        String continentName = null;
-
-        // Determine which pane was clicked and check its lock status.
-        if (clickedPane.getId().equals("antarcticaPane")) {
-            continentName = "Antarctica";
-        } else if (clickedPane.getId().equals("oceaniaPane")) {
-            continentName = "Oceania";
-        } else if (clickedPane.getId().equals("southAmericaPane")) {
-            continentName = "South America";
-        } else if (clickedPane.getId().equals("northAmericaPane")) {
-            continentName = "North America";
-        } else if (clickedPane.getId().equals("europePane")) {
-            continentName = "Europe";
-        } else if (clickedPane.getId().equals("asiaPane")) {
-            continentName = "Asia";
-        } else if (clickedPane.getId().equals("africaPane")) {
-            continentName = "Africa";
-        }
-
+        String continentName = getContinentNameFromPane(clickedPane.getId());
         System.out.println("handleContinentClick: continentName = " + continentName);
 
-        // Special case for Antarctica
-        if ("Antarctica".equals(continentName)) {
+        if (GameStateManager.getInstance().isContinentUnlocked(continentName)) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/antarctica.fxml"));
-                if (loader.getLocation() == null) {
-                    System.err.println("Error: antarctica.fxml resource not found");
-                    return;
-                }
-                Parent root = loader.load();
-                // Assuming AntarcticaController exists; adjust if needed
-                AntarcticaController controller = loader.getController();
-                controller.setContinentName(continentName); // Uncomment if AntarcticaController needs continentName
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Antarctica");
-                stage.show();
-            } catch (IOException e) {
-                System.err.println("Error loading antarctica.fxml: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        // Handle other continents
-        else if (GameStateManager.getInstance().isContinentUnlocked(continentName)) {
-            try {
-                loadGameModePage(event, continentName);
+                String fxml = continentName.equals("Antarctica") ? "/com/example/geoquestkidsexplorer/antarctica.fxml"
+                        : "/com/example/geoquestkidsexplorer/continentview.fxml";
+                NavigationHelper.loadSceneWithConfig((Node) event.getSource(), fxml,
+                        (BaseController controller) -> {
+                            controller.setProfileData(UserSession.getUsername(), UserSession.getAvatar());
+                            controller.setStage(stage);
+                            controller.setupContinent(continentName);
+                        });
             } catch (IOException e) {
                 System.err.println("Error loading game mode page for " + continentName + ": " + e.getMessage());
-                e.printStackTrace();
             }
         } else {
-            System.out.println("This continent is locked! Please unlock it by completing a previous challenge.");
-            // Optionally show a dialog to the user
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Continent Locked");
             alert.setHeaderText(null);
@@ -243,39 +201,34 @@ public class HomePageController {
     }
 
     /**
-     * Loads the generic game mode page and passes the continent name to its controller.
+     * Maps pane ID to continent name.
      *
-     * @param event The mouse event that triggered the method.
-     * @param continentName The name of the continent to display.
-     * @throws IOException if the FXML file cannot be loaded.
+     * @param paneId The pane ID.
+     * @return The continent name or null if invalid.
      */
-    private void loadGameModePage(MouseEvent event, String continentName) throws IOException {
-        // Default continent page
-        String fxml = "/com/example/geoquestkidsexplorer/continentview.fxml";
-
-        // Special case: Antarctica goes to its own file
-        if ("Antarctica".equalsIgnoreCase(continentName)) {
-            fxml = "/com/example/geoquestkidsexplorer/antarctica.fxml";
+    private String getContinentNameFromPane(String paneId) {
+        switch (paneId) {
+            case "antarcticaPane": return "Antarctica";
+            case "oceaniaPane": return "Oceania";
+            case "southAmericaPane": return "South America";
+            case "northAmericaPane": return "North America";
+            case "europePane": return "Europe";
+            case "asiaPane": return "Asia";
+            case "africaPane": return "Africa";
+            default: return null;
         }
+    }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-        Parent root = loader.load();
-
-        // Pass the continent to controllers that accept it (generic or Antarctica-specific)
-        Object ctl = loader.getController();
-        try {
-            ctl.getClass().getMethod("setContinentName", String.class).invoke(ctl, continentName);
-        } catch (NoSuchMethodException ignored) {
-            // Controller doesn't need/accept the continent; that's fine.
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Reuse the current window (preserves size)
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if (stage.getScene() == null) stage.setScene(new Scene(root, 1000, 700));
-        else stage.getScene().setRoot(root);
-        stage.setTitle(continentName + " Game Modes");
-        stage.show();
+    /**
+     * Implements continent-specific setup (required by BaseController).
+     * Applies continent colors if applicable.
+     *
+     * @param continentName The name of the continent.
+     */
+    @Override
+    protected void setupContinent(String continentName) {
+        Map<String, Node> nodes = new HashMap<>();
+        // Populate nodes if needed for continent-specific styling
+        applyContinentColors(continentName, nodes);
     }
 }

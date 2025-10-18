@@ -20,32 +20,57 @@ public class UserSession {
         UserSession.avatar = avatar;
     }
 
-    public static void setUsername(String name) {
-        username = name;
-    }
-
+    /**
+     * Gets the username.
+     * @return The username, or null if not set.
+     */
     public static String getUsername() {
         return username;
     }
 
-    public static void setAvatar(String av) {
-        avatar = av;
+    /**
+     * Sets the username.
+     * @param name The username to set.
+     */
+    public static void setUsername(String name) {
+        username = name;
     }
 
+    /**
+     * Gets the avatar.
+     * @return The avatar, or null if not set.
+     */
     public static String getAvatar() {
         return avatar;
     }
 
+    /**
+     * Sets the avatar.
+     * @param av The avatar to set.
+     */
+    public static void setAvatar(String av) {
+        avatar = av;
+    }
+
+    /**
+     * Gets the explorer name.
+     *
+     * @return The explorer name, or null if not set.
+     */
     public static String getExplorerName() {
         return explorerName;
     }
 
+    /**
+     * Sets the explorer name.
+     * @param name The explorer name to set.
+     */
     public static void setExplorerName(String name) {
         explorerName = name;
     }
 
     /**
-     * Clears the session.
+     * Clears all session data.
      */
     public static void clear() {
         username = null;

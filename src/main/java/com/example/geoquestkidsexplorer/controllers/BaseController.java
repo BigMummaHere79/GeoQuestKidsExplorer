@@ -1,5 +1,6 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import com.example.geoquestkidsexplorer.utils.NavigationHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,8 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract base class for all controllers, providing common navigation and UI setup methods.
- * This class encapsulates repetitive navigation logic and provides polymorphism for subclass-specific overrides.
+ * Abstract base class for all controllers, providing common UI setup methods.
+ * Encapsulates repetitive logic like continent color application and promotes polymorphism
+ * through abstract methods for subclass-specific behavior.
  */
 public abstract class BaseController {
 
@@ -21,6 +23,14 @@ public abstract class BaseController {
     private static final Map<String, Map<String, String>> CONTINENT_COLORS = new HashMap<>();
 
     static {
+        Map<String, String> antarctica = new HashMap<>();
+        antarctica.put("bg1", "#f9f9f9");
+        antarctica.put("bg2", "#B3E5FC");
+        antarctica.put("bg3", "#0288D1");
+        antarctica.put("nav-bg", "#0288D1");
+        antarctica.put("btn-bg", "#B3E5FC");
+        CONTINENT_COLORS.put("Antarctica", antarctica);
+
         Map<String, String> oceania = new HashMap<>();
         oceania.put("bg1", "#f9f9f9");
         oceania.put("bg2", "#F4BA9B");
@@ -54,6 +64,20 @@ public abstract class BaseController {
         CONTINENT_COLORS.put("Europe", europe);
     }
 
+    protected Stage stage;
+
+    /**
+     * Sets the stage for this controller.
+     * @param stage The JavaFX stage.
+     */
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Stage getStage() {
+        return this.stage;
+    }
+
     /**
      * Loads a new scene from the given FXML path and sets it on the stage.
      *
@@ -74,7 +98,6 @@ public abstract class BaseController {
     /**
      * Applies color palette styles to UI nodes based on the continent.
      * This method encapsulates color logic to avoid duplication.
-     *
      * @param continent the continent name.
      * @param nodes a map of node IDs to Node objects for styling.
      */
@@ -97,8 +120,6 @@ public abstract class BaseController {
         if (backButton != null) {
             backButton.setStyle(String.format("-btn-bg: %s;", colors.get("btn-bg")));
         }
-
-        // Add more as needed (e.g., score, timer)
     }
 
     /**
@@ -108,4 +129,13 @@ public abstract class BaseController {
      * @param continentName the name of the continent.
      */
     protected abstract void setupContinent(String continentName);
+
+    /**
+     * Abstract method for setting profile data.
+     * Enables polymorphic handling of user data across controllers.
+     *
+     * @param username The username to set.
+     * @param avatar   The avatar to set.
+     */
+    public abstract void setProfileData(String username, String avatar);
 }

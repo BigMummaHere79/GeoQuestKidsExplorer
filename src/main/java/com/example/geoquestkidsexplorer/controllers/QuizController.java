@@ -22,7 +22,6 @@ public abstract class QuizController extends BaseController {
 
     /**
      * Constructor for dependency injection of DAO.
-     *
      * @param dao the quiz question DAO.
      */
     protected QuizController(IQuizQuestionDAO dao) {

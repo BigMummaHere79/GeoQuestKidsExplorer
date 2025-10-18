@@ -36,6 +36,12 @@ public class DatabaseSchemaManager {
         }
     }
 
+    /**
+     * Creates the continents table.
+     *
+     * @param conn Database connection.
+     * @throws SQLException If creation fails.
+     */
     private static void createContinentsTable(Connection conn) throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS continents (
@@ -48,6 +54,12 @@ public class DatabaseSchemaManager {
         }
     }
 
+    /**
+     * Seeds the continents table with initial data.
+     *
+     * @param conn Database connection.
+     * @throws SQLException If seeding fails.
+     */
     private static void seedContinents(Connection conn) throws SQLException {
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery("SELECT COUNT(*) AS c FROM continents")) {
@@ -69,6 +81,12 @@ public class DatabaseSchemaManager {
         }
     }
 
+    /**
+     * Creates the countries table.
+     *
+     * @param conn Database connection.
+     * @throws SQLException If creation fails.
+     */
     private static void createCountriesTable(Connection conn) throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS countries (
@@ -85,6 +103,12 @@ public class DatabaseSchemaManager {
         }
     }
 
+    /**
+     * Creates the users table.
+     *
+     * @param conn Database connection.
+     * @throws SQLException If creation fails.
+     */
     private static void createUsersTable(Connection conn) throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS users (
@@ -103,6 +127,12 @@ public class DatabaseSchemaManager {
         }
     }
 
+    /**
+     * Creates the results table.
+     *
+     * @param conn Database connection.
+     * @throws SQLException If creation fails.
+     */
     private static void createResultsTable(Connection conn) throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS results (
@@ -122,6 +152,12 @@ public class DatabaseSchemaManager {
         }
     }
 
+    /**
+     * Creates the feedback table.
+     *
+     * @param conn Database connection.
+     * @throws SQLException If creation fails.
+     */
     private static void createFeedbackTable(Connection conn) throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS feedback (

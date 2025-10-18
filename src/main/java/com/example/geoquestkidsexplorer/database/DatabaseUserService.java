@@ -17,6 +17,16 @@ import java.util.Objects;
  */
 public class DatabaseUserService extends DatabaseService implements UserService {
 
+    /**
+     * Inserts a new user into the database.
+     *
+     * @param username Username.
+     * @param email    Email.
+     * @param password Password.
+     * @param avatar   Avatar.
+     * @param role     Role.
+     * @throws RuntimeException If username or email exists or insertion fails.
+     */
     @Override
     public void insertUser(String username, String email, String password, String avatar, String role) {
         if (userExists(username, email)) {
@@ -43,6 +53,14 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         }
     }
 
+    /**
+     * Verifies the user's level after insertion.
+     *
+     * @param conn         Database connection.
+     * @param username     Username.
+     * @param expectedLevel Expected level.
+     * @throws SQLException If verification fails.
+     */
     private void verifyUserLevel(Connection conn, String username, int expectedLevel) throws SQLException {
         try (PreparedStatement verifyPs = conn.prepareStatement("SELECT level FROM users WHERE username = ?")) {
             verifyPs.setString(1, username);
@@ -61,6 +79,13 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         }
     }
 
+    /**
+     * Checks if a user exists by username or email.
+     *
+     * @param username Username.
+     * @param email    Email.
+     * @return True if user exists, false otherwise.
+     */
     @Override
     public boolean userExists(String username, String email) {
         final String sql = "SELECT 1 FROM users WHERE username = ? OR email = ? LIMIT 1";
@@ -77,6 +102,13 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         }
     }
 
+    /**
+     * Validates login credentials.
+     *
+     * @param email    Email.
+     * @param password Password.
+     * @return True if valid, false otherwise.
+     */
     @Override
     public boolean validateLogin(String email, String password) {
         final String sql = "SELECT 1 FROM users WHERE email = ? AND password = ? LIMIT 1";
@@ -93,6 +125,12 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         }
     }
 
+    /**
+     * Retrieves a user profile by username.
+     *
+     * @param username Username.
+     * @return UserProfile or null if not found.
+     */
     @Override
     public UserProfile getUserProfileByUsername(String username) {
         final String sql = "SELECT username, email, avatar, level, role FROM users WHERE username = ? LIMIT 1";
@@ -116,6 +154,12 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         return null;
     }
 
+    /**
+     * Retrieves user details (username, avatar) by username.
+     *
+     * @param username Username.
+     * @return Array of {username, avatar} or null if not found.
+     */
     @Override
     public String[] getUserDetails(String username) {
         String sql = "SELECT username, avatar FROM users WHERE username = ?";
@@ -133,6 +177,12 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         return null;
     }
 
+    /**
+     * Gets username by email.
+     *
+     * @param email Email.
+     * @return Username or null if not found.
+     */
     @Override
     public String getUsernameByEmail(String email) {
         final String sql = "SELECT username FROM users WHERE email = ? LIMIT 1";
@@ -148,6 +198,12 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         return null;
     }
 
+    /**
+     * Gets avatar by email.
+     *
+     * @param email Email.
+     * @return Avatar or null if not found.
+     */
     @Override
     public String getAvatarByEmail(String email) {
         final String sql = "SELECT avatar FROM users WHERE email = ? LIMIT 1";
@@ -163,7 +219,36 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         return null;
     }
 
+    /**
+     * Fixes a user's level if null, setting it to 1.
+     *
+     * @param username Username.
+     */
     @Override
+    public void fixUserLevel(String username) {
+        String sql = "SELECT level FROM users WHERE username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    if (rs.getInt("level") == 0 && rs.wasNull()) {
+                        String updateSql = "UPDATE users SET level = 1 WHERE username = ?";
+                        try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+                            updatePs.setString(1, username);
+                            int rows = updatePs.executeUpdate();
+                            System.out.println("fixUserLevel: Updated level to 1 for user " + username + ", rows affected: " + rows);
+                        }
+                    }
+                } else {
+                    System.err.println("fixUserLevel: No user found for username: " + username);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("fixUserLevel error: " + e.getMessage());
+        }
+    }
+    /*@Override
     public void fixUserLevel(String username) {
         String sql = "SELECT level FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -192,8 +277,16 @@ public class DatabaseUserService extends DatabaseService implements UserService 
             System.err.println("fixUserLevel error: " + e.getMessage());
             e.printStackTrace();
         }
-    }
+    }*/
 
+    /**
+     * Saves a quiz result and updates user level if passed.
+     *
+     * @param username        Username.
+     * @param level           Current level.
+     * @param scorePercentage Score percentage.
+     * @return True if successful, false on error.
+     */
     @Override
     public boolean saveQuizResultAndUpdateLevel(String username, int level, double scorePercentage) {
         boolean isPassing = scorePercentage >= 80.0;

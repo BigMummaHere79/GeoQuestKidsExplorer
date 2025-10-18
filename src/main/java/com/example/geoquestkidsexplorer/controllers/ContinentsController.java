@@ -1,5 +1,8 @@
 package com.example.geoquestkidsexplorer.controllers;
 
+import com.example.geoquestkidsexplorer.GameStateManager;
+import com.example.geoquestkidsexplorer.models.UserSession;
+import com.example.geoquestkidsexplorer.utils.NavigationHelper;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -7,308 +10,233 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller for the generic continent game mode page.
- * This single controller handles all continents, replacing individual controllers like AfricaController, AsiaController, etc.
+ * Handles all continents, replacing individual controllers like AfricaController, AsiaController, etc.
+ * Extends BaseController for shared functionality like stage management and continent color application.
  */
-public class ContinentsController {
+public class ContinentsController extends BaseController {
 
-    @FXML
-    private Label continentLabel;
-    @FXML
-    private Button backButton;
+    @FXML private Label continentLabel;
+    @FXML private Button backButton;
     @FXML private Label gameModeWelcomeLabel;
     @FXML private javafx.scene.layout.VBox bgPane;
     @FXML private javafx.scene.layout.HBox navBar;
 
-
     private String continentName;
+    private String username;
+    private String avatar;
 
-    /**
-     * This method is called by the homepage controller to set the continent name.
-     * @param name The name of the continent (e.g., "Africa", "Asia", "Oceania").
-     */
-    public void setContinentName(String name) {
-        this.continentName = name;
-        if (continentName == null || continentName.trim().isEmpty()) {
-            System.err.println("Continent name is null or empty. Skipping quiz load.");
-            gameModeWelcomeLabel.setText("Error: No continent selected.");
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @FXML
+    public void initialize() {
+        if (continentName != null && !continentName.isBlank()) {
+            if (continentLabel != null) {
+                continentLabel.setText(continentName);
+            }
+            if (gameModeWelcomeLabel != null) {
+                gameModeWelcomeLabel.setText("Game Mode Control for " + continentName + " Continent!");
+            }
+            if (backButton != null) {
+                backButton.setText("⬅️ Back to Continents");
+            }
+            applyContinentColors();
+        } else {
+            System.err.println("initialize: continentName is null or empty, setting default UI");
+            if (gameModeWelcomeLabel != null) {
+                gameModeWelcomeLabel.setText("Error: No continent selected.");
+            }
+        }
+    }
+
+    @Override
+    public void setProfileData(String username, String avatar) {
+        this.username = username;
+        this.avatar = avatar;
+        UserSession.setUser(username, avatar);
+        System.out.println("ContinentsController.setProfileData: username=" + username + ", avatar=" + avatar);
+    }
+
+    @Override
+    protected void setupContinent(String continentName) {
+        this.continentName = continentName != null ? continentName : "";
+        System.out.println("setupContinent: continentName=" + continentName);
+        applyContinentColors();
+        initialize();
+    }
+
+    public void setContinentName(String continentName) {
+        System.out.println("setContinentName called with: " + continentName);
+        this.continentName = continentName != null ? continentName : "";
+        applyContinentColors();
+        initialize();
+    }
+
+    private void applyContinentColors() {
+        if (continentName == null || continentName.isBlank()) {
+            System.err.println("applyContinentColors: continentName is null or empty");
             return;
         }
-        gameModeWelcomeLabel.setText("Game Mode Control for " + continentName + " Continent!");
-        //continentLabel.setText(name); // Assuming you have a label to display the continent name
-        backButton.setText("⬅️ Back to Continents"); // Use a generic back button text
-
-        /**
-         * Adding switch for colour changes
-         * in different continent
-         * */
-
-        switch (name){
+        Map<String, Node> nodes = new HashMap<>();
+        if (bgPane != null) nodes.put("bgPane", bgPane);
+        if (navBar != null) nodes.put("navBar", navBar);
+        if (backButton != null) nodes.put("backButton", backButton);
+        applyContinentColors(continentName, nodes);
+        switch (continentName) {
             case "Oceania" -> {
-                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#F4BA9B ; -bg3:#F5793A ;");
-                navBar.setStyle("-nav-bg: #F5793A;");
-                backButton.setStyle("-btn-bg:#F4BA9B;");
+                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #F4BA9B; -bg3: #F5793A;");
+                if (navBar != null) navBar.setStyle("-fx-background-color: #F5793A;");
+                if (backButton != null) backButton.setStyle("-fx-background-color: #F4BA9B;");
             }
             case "South America" -> {
-                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#E488DA ; -bg3:#A95AA1 ;");
-                navBar.setStyle("-nav-bg: #A95AA1;");
-                backButton.setStyle("-btn-bg:#E488DA;");
+                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #E488DA; -bg3: #A95AA1;");
+                if (navBar != null) navBar.setStyle("-fx-background-color: #A95AA1;");
+                if (backButton != null) backButton.setStyle("-fx-background-color: #E488DA;");
             }
             case "North America" -> {
-                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#FA76A7 ; -bg3:#D81B60 ;");
-                navBar.setStyle("-nav-bg: #D81B60;");
-                backButton.setStyle("-btn-bg:#FA76A7;");
+                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #FA76A7; -bg3: #D81B60;");
+                if (navBar != null) navBar.setStyle("-fx-background-color: #D81B60;");
+                if (backButton != null) backButton.setStyle("-fx-background-color: #FA76A7;");
             }
             case "Europe" -> {
-                bgPane.setStyle("-bg1:#f9f9f9 ; -bg2:#4B66FF ; -bg3:#0F2080 ;");
-                navBar.setStyle("-nav-bg: #0F2080;");
-                backButton.setStyle("-btn-bg:#4B66FF;");
+                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #4B66FF; -bg3: #0F2080;");
+                if (navBar != null) navBar.setStyle("-fx-background-color: #0F2080;");
+                if (backButton != null) backButton.setStyle("-fx-background-color: #4B66FF;");
             }
+            default -> System.err.println("applyContinentColors: Unknown continent " + continentName);
         }
     }
 
-
-    /**
-     * Navigates back to the main continents homepage
-     *
-     * @param event the ActionEvent triggered by clicking the back button
-     */
     @FXML
-    private void backToContinents(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/geoquestkidsexplorer/homepage.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void backToContinents(ActionEvent event) throws IOException {
+        System.out.println("backToContinents: Navigating back with username=" + username);
+        NavigationHelper.loadSceneWithConfig((Node) event.getSource(), "/com/example/geoquestkidsexplorer/homepage.fxml",
+                (HomePageController controller) -> {
+                    controller.setProfileData(username, avatar);
+                    controller.setStage(stage);
+                });
     }
 
-    /**
-     * Handles the click event for the Practice Mode tile.
-     * It loads the generic practice quiz page and passes the current continent name to it.
-     * @param event the MouseEvent triggered by clicking a mode tile
-     */
     @FXML
-    private void handleGameModeClick(MouseEvent event) {
+    private void handleGameModeClick(MouseEvent event) throws IOException {
         Node n = (Node) event.getTarget();
         while (n != null && n.getId() == null) n = n.getParent();
         String tileId = (n != null) ? n.getId() : null;
         if (tileId == null) {
-            System.out.println("handleGameModeClick: no tile id found");
+            System.err.println("handleGameModeClick: No tile ID found");
             return;
         }
-
-        try {
-            if ("practiceModeTile".equals(tileId)) {
-                openPracticeQuiz(event, this.continentName);
-            }else if ("flashCardsModeTile".equals(tileId)) {
-                openFlashCardMode(event, this.continentName);
-            } else if ("testModeTile".equals(tileId)) {
-                // Similarly, you would open the generic test quiz and pass the continent name.
-                openTestQuiz(event, this.continentName);
-                System.out.println("Test Mode Quiz has been click! " + tileId);
-            } else {
-                System.out.println("handleGameModeClick: unknown tile id " + tileId);
+        if (continentName == null || continentName.isBlank()) {
+            System.err.println("handleGameModeClick: continentName is null or empty");
+            if (gameModeWelcomeLabel != null) {
+                gameModeWelcomeLabel.setText("Error: No continent selected.");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            return;
+        }
+        System.out.println("handleGameModeClick: tileId=" + tileId + ", continentName=" + continentName);
+        switch (tileId) {
+            case "practiceModeTile" -> openPracticeQuiz(event, continentName);
+            case "flashCardsModeTile" -> openFlashCardMode(event, continentName);
+            case "testModeTile" -> {
+                openTestQuiz(event, continentName);
+                System.out.println("Test Mode Quiz has been clicked! " + tileId);
+            }
+            default -> System.err.println("handleGameModeClick: Unknown tile ID " + tileId);
         }
     }
 
-
-    /**
-     * Opens the practice quiz view for the given continent.
-     *
-     * @param event     the MouseEvent that triggered navigation
-     * @param continent the name of the continent
-     * @throws IOException if the practice quiz FXML cannot be loaded
-     */
     private void openPracticeQuiz(MouseEvent event, String continent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/practicequiz.fxml"));
-        Parent root = loader.load();
-
-        //Input colour pallete within different continents
-        //Through css and fxml
-        // Can be found in practisequiz.fxml and styles.css
-
-        Node navBar = root.lookup("#navBar");
-        Node backBtn = root.lookup("#backButton");
-        Node score = root.lookup("#scoreLabel");
-
-        if(navBar != null && backBtn != null){
-            switch (continent){
-                case "Oceania" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
-                    if (score != null)score.setStyle("-score-bg:#F4BA9B;");
-                }
-                case "South America" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#E488DA;");
-                    if (score != null)score.setStyle("-score-bg:#E488DA;");
-                }
-                case "North America" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#FA76A7;");
-                    if (score != null)score.setStyle("-score-bg:#FA76A7;");
-
-                }
-                case "Europe" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#4B66FF;");
-                    if (score != null)score.setStyle("-score-bg:#4B66FF;");
-                }
-            }
+        if (continent == null || continent.isBlank()) {
+            System.err.println("openPracticeQuiz: Continent is null or empty");
+            return;
         }
-
-        //Practise Quiz
-        // Get the controller and set the continent name
-        PracticeQuizController quizController = loader.getController();
-        quizController.setContinentName(continent);
-
-        // Switch the scene to the new quiz view
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Practice Quiz for: " + continent);
-        stage.show();
+        System.out.println("openPracticeQuiz: Loading for continent=" + continent + ", username=" + username);
+        NavigationHelper.loadSceneWithConfig((Node) event.getSource(), "/com/example/geoquestkidsexplorer/practicequiz.fxml",
+                (PracticeQuizController controller) -> {
+                    controller.setContinentName(continent);
+                    controller.setProfileData(username, avatar);
+                    controller.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    applyQuizStyles(controller, continent);
+                });
     }
 
-    /**
-     * Opens the flashcards view for the given continent.
-     *
-     * @param event     the MouseEvent that triggered navigation
-     * @param continent the name of the continent
-     * @throws IOException if the flashcards FXML cannot be loaded
-     */
-    @FXML
     private void openFlashCardMode(MouseEvent event, String continent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/FlashcardsPage.fxml"));
-        Parent root = loader.load();
+        if (continent == null || continent.isBlank()) {
+            System.err.println("openFlashCardMode: Continent is null or empty");
+            return;
+        }
+        System.out.println("openFlashCardMode: Loading for continent=" + continent + ", username=" + username);
+        NavigationHelper.loadSceneWithConfig((Node) event.getSource(), "/com/example/geoquestkidsexplorer/FlashcardsPage.fxml",
+                (FlashcardsController controller) -> {
+                    controller.setRegion(continent);
+                    controller.setProfileData(username, avatar);
+                    controller.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    applyQuizStyles(controller, continent);
+                });
+    }
 
-        //Input colour pallete within different continents
-        //Through css and fxml
-        // Can be found in flashcard.fxml and styles.css
+    private void openTestQuiz(Event event, String continent) throws IOException {
+        if (continent == null || continent.isBlank()) {
+            System.err.println("openTestQuiz: Continent is null or empty");
+            return;
+        }
+        System.out.println("openTestQuiz: Loading for continent=" + continent + ", username=" + username);
+        NavigationHelper.loadSceneWithConfig((Node) event.getSource(), "/com/example/geoquestkidsexplorer/testmode.fxml",
+                (TestModeController controller) -> {
+                    controller.setContinentName(continent);
+                    controller.setProfileData(username, avatar);
+                    controller.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    applyQuizStyles(controller, continent);
+                });
+    }
 
+    private void applyQuizStyles(BaseController controller, String continent) {
+        Parent root = controller.getStage().getScene().getRoot();
         Node navBar = root.lookup("#navBar");
         Node backBtn = root.lookup("#backButton");
         Node score = root.lookup("#scoreLabel");
-        Node timer = root.lookup("timerLabel");
-
-        if(navBar != null && backBtn != null) {
+        Node timer = root.lookup("#timerLabel");
+        if (navBar != null && backBtn != null) {
             switch (continent) {
                 case "Oceania" -> {
-                    if (navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
-                    if (backBtn != null) backBtn.setStyle("-btn-bg:#F4BA9B;");
+                    if (navBar != null) navBar.setStyle("-fx-background-color: #F5793A;");
+                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #F4BA9B;");
+                    if (score != null) score.setStyle("-fx-background-color: #F4BA9B;");
+                    if (timer != null) timer.setStyle("-fx-background-color: #F4BA9B;");
                 }
                 case "South America" -> {
-                    if (navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
-                    if (backBtn != null) backBtn.setStyle("-btn-bg:#E488DA;");
+                    if (navBar != null) navBar.setStyle("-fx-background-color: #A95AA1;");
+                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #E488DA;");
+                    if (score != null) score.setStyle("-fx-background-color: #E488DA;");
+                    if (timer != null) timer.setStyle("-fx-background-color: #E488DA;");
                 }
                 case "North America" -> {
-                    if (navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
-                    if (backBtn != null) backBtn.setStyle("-btn-bg:#FA76A7;");
+                    if (navBar != null) navBar.setStyle("-fx-background-color: #D81B60;");
+                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #FA76A7;");
+                    if (score != null) score.setStyle("-fx-background-color: #FA76A7;");
+                    if (timer != null) timer.setStyle("-fx-background-color: #FA76A7;");
                 }
                 case "Europe" -> {
-                    if (navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
-                    if (backBtn != null) backBtn.setStyle("-btn-bg:#4B66FF;");
+                    if (navBar != null) navBar.setStyle("-fx-background-color: #0F2080;");
+                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #4B66FF;");
+                    if (score != null) score.setStyle("-fx-background-color: #4B66FF;");
+                    if (timer != null) timer.setStyle("-fx-background-color: #4B66FF;");
                 }
+                default -> System.err.println("applyQuizStyles: Unknown continent " + continent);
             }
         }
-
-        // Get the controller and set the continent name
-        FlashcardsController controller = loader.getController();
-        controller.setRegion(continent);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Flash Cards Mode for:" + continent);
-        stage.show();
-    }
-
-    /**
-     * Opens the test quiz view for the given continent.
-     *
-     * @param event     the event triggering navigation (MouseEvent or ActionEvent)
-     * @param continent the name of the continent
-     * @throws IOException if the test mode FXML cannot be loaded
-     */
-    private void openTestQuiz(Event event, String continent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/geoquestkidsexplorer/testmode.fxml"));
-        Parent root = loader.load();
-
-        //Input colour pallete within different continents
-        //Through css and fxml
-        // Can be found in testmode.fxml and styles.css
-
-        Node navBar = root.lookup("#navBar");
-        Node backBtn = root.lookup("#backButton");
-        Node score = root.lookup("#scoreLabel");
-        Node timer = root.lookup("timerLabel");
-
-        if(navBar != null && backBtn != null){
-            switch (continent){
-                case "Oceania" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #F5793A;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#F4BA9B;");
-                    if (score != null)score.setStyle("-score-bg:#F4BA9B;");
-                    if (timer != null) timer.setStyle("-timer-bg:#F4BA9B;");
-                }
-                case "South America" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #A95AA1;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#E488DA;");
-                    if (score != null)score.setStyle("-score-bg:#E488DA;");
-                    if (timer != null) timer.setStyle("-timer-bg:#E488DA;");
-                }
-                case "North America" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #D81B60;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#FA76A7;");
-                    if (score != null)score.setStyle("-score-bg:#FA76A7;");
-                    if (timer != null) timer.setStyle("-timer-bg:#FA76A7;");
-
-                }
-                case "Europe" -> {
-                    if(navBar != null) navBar.setStyle("-nav-bg: #0F2080;");
-                    if(backBtn !=null) backBtn.setStyle("-btn-bg:#4B66FF;");
-                    if (score != null)score.setStyle("-score-bg:#4B66FF;");
-                    if (timer != null) timer.setStyle("-timer-bg:#4B66FF;");
-                }
-            }
-        }
-        TestModeController quizController = loader.getController();
-        quizController.setContinentName(continent);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Quiz - " + continent);
-        stage.show();
-    }
-
-    /**
-     * Helper method to load an FXML scene into the current window.
-     *
-     * @param fxmlPath the FXML file path to load
-     * @param event    the triggering event used to get the current window
-     * @throws IOException if loading fails
-     */
-    private void loadScene(String fxmlPath, Event event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
     }
 }
