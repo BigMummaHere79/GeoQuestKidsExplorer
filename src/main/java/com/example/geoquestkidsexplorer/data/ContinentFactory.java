@@ -19,6 +19,11 @@ public class ContinentFactory {
         continents.put("Antarctica", new Continents("Antarctica", "antarcticaflags/", "#ffffff", new AntarcticaFunFacts().getCountries()));
     }
 
+    /**
+     * Builder for {@link org.controlsfx.control.WorldMapView.Country} with its fun
+     * fact pairs
+     * */
+
     public static Continents getContinent(String name) {
         return continents.getOrDefault(name, null);
     }

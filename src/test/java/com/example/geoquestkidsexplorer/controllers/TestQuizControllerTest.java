@@ -15,45 +15,51 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestQuizControllerTest {
 
-    private TestModeController controller;
+   // public TestModeController controller;
 
-    @BeforeEach
-    void startUp(){
-        controller = new TestModeController(new FakeQuizDao());
-    }
+    //@BeforeEach
+    //void startUp(){
+        //controller = new TestModeController(new FakeQuizDao());
+   // }
 
     @Test
     void testReturnsNotNull(){
+        var controller = new TestModeController(new FakeQuizDao());
         TestQuizQuestions questions = controller.fetchTest("Oceania");
         assertNotNull(questions);
     }
 
     @Test
     void returnsExpectedQuestionText(){
+        var controller = new TestModeController(new FakeQuizDao());
         TestQuizQuestions questions = controller.fetchTest("Oceania");
         assertEquals("What country is this?", questions.getQuestionText());
     }
 
     @Test
     void  testCorrectAnswer(){
+        var controller = new TestModeController(new FakeQuizDao());
         TestQuizQuestions questions = controller.fetchTest("Oceania");
         assertEquals("Australia",questions.getCorrectAnswer());
     }
 
     @Test
     void testAnswerCorrectTrue(){
+        var controller = new TestModeController(new FakeQuizDao());
         TestQuizQuestions questions = controller.fetchTest("Oceania");
         assertTrue(controller.evaluateAnswer("Australia"));
     }
 
     @Test
     void incorrectAnswer(){
+        var controller = new TestModeController(new FakeQuizDao());
         TestQuizQuestions questions = controller.fetchTest("Oceania");
         assertFalse(controller.evaluateAnswer("New Zealand"));
     }
 
     @Test
     void evaluateAnswerNullForFalse() {
+        var controller = new TestModeController(new FakeQuizDao());
         controller.fetchTest("Oceania");
         assertFalse(controller.evaluateAnswer(null));
     }

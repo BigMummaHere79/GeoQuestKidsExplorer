@@ -6,6 +6,11 @@ import com.example.geoquestkidsexplorer.repositories.FunFactsProvider;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class provides curated funfacts for the continents "Oceania"
+ * @returns a list of entries for Oceania dataset used by the UI
+ * */
+
 public class OceaniaFunFacts implements FunFactsProvider {
     @Override
     public List<Country> getCountries() {
