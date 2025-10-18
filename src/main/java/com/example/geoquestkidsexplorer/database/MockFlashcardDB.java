@@ -5,6 +5,14 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * For Mocking
+ * In-memory fake datasource for quiz questions
+ * Designed for unit tests where the real database is undesriable
+ * @see QuizDataSource
+ * @see RealQuizDataSource
+ * */
+
 // Created a mock for unit testing in order to match the FlashController Logic
 // Week 6.1 - 6.3 - Modules
 

@@ -101,6 +101,11 @@ public class FeedbackController {
         }
     }
 
+    /**
+     * loadFeedbacks() Method should retrieve the comments/feedback loaded within the database and
+     * display it within the UI
+     * */
+
     private void loadFeedbacks() {
         feedbacksVBox.getChildren().clear();
         try {

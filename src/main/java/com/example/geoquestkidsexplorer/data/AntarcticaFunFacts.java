@@ -6,6 +6,11 @@ import com.example.geoquestkidsexplorer.repositories.FunFactsProvider;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This class provides curated funfacts for the continents "Antartica"
+ * @returns a list of entries for Antarctica dataset used by the UI
+ * */
+
 public class AntarcticaFunFacts implements FunFactsProvider {
     @Override
     public List<Country> getCountries() {
