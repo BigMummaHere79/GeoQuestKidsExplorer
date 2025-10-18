@@ -23,7 +23,7 @@ class UserProfileTest {
     // Using defaults, test that username is correct
     @Test
     void testCorrectUsername(){
-        assertEquals("Tori",make().getExplorerName());
+        assertEquals("Tori",make().getUsername());
     }
 
     // Test that Avatar is correct
