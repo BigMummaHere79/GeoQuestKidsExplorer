@@ -14,8 +14,8 @@ class UserProfileTest {
     private  UserProfile make(){
         return new UserProfile(
                 "Tori",
-                "👦 Explorer Boy",
                 null,
+                "👦 Explorer Boy",
                 1,
                 "Student");
     }
@@ -60,5 +60,4 @@ class UserProfileTest {
         assertEquals("👦 Explorer Boy",avatar.getAvatar());
 
     }
-
 }
