@@ -1,4 +1,6 @@
-package com.example.geoquestkidsexplorer.models;
+package com.example.geoquestkidsexplorer.repositories;
+import com.example.geoquestkidsexplorer.models.FlashCard;
+
 import java.util.List;
 
 /** One small interface for the flash card so

@@ -1,6 +1,6 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
+import com.example.geoquestkidsexplorer.repositories.IQuizQuestionDAO;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;

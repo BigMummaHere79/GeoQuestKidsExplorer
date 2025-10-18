@@ -2,7 +2,7 @@ package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
-import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
+import com.example.geoquestkidsexplorer.repositories.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

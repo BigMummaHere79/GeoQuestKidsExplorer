@@ -3,7 +3,7 @@ package com.example.geoquestkidsexplorer.controllers;
 import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.database.DatabaseAdapter;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
-import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
+import com.example.geoquestkidsexplorer.repositories.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import javafx.animation.Animation;

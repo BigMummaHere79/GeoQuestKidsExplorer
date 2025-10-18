@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.database;
 
 import com.example.geoquestkidsexplorer.models.CountryQuestion;
+import com.example.geoquestkidsexplorer.repositories.QuizDataSource;
 
 /**
  *
@@ -10,7 +11,7 @@ import com.example.geoquestkidsexplorer.models.CountryQuestion;
 **/
 
 // Use Implements -> Derived from the Modules week 9 I believe for more info
-public final class RealQuizDataSource implements QuizDataSource{
+public final class RealQuizDataSource implements QuizDataSource {
 
     @Override
     public CountryQuestion getRandomCountryByContinent(String continent) {

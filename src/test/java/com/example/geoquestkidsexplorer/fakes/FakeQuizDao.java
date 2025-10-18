@@ -1,6 +1,6 @@
 package com.example.geoquestkidsexplorer.fakes;
 
-import com.example.geoquestkidsexplorer.database.IQuizQuestionDAO;
+import com.example.geoquestkidsexplorer.repositories.IQuizQuestionDAO;
 import com.example.geoquestkidsexplorer.models.PracticeQuizQuestions;
 import com.example.geoquestkidsexplorer.models.TestQuizQuestions;
 

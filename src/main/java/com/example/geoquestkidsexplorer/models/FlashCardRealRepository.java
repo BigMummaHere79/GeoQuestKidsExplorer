@@ -1,4 +1,5 @@
 package com.example.geoquestkidsexplorer.models;
+import com.example.geoquestkidsexplorer.repositories.FlashCardRepository;
 import javafx.scene.image.Image;
 import java.io.ByteArrayInputStream;
 import java.sql.*;

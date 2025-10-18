@@ -14,6 +14,8 @@ module com.example.geoquestkidsexplorer {
     exports com.example.geoquestkidsexplorer.controllers;
     exports com.example.geoquestkidsexplorer.database;
     exports com.example.geoquestkidsexplorer.models;
+    opens com.example.geoquestkidsexplorer.repositories;
+    exports com.example.geoquestkidsexplorer.repositories;
     opens com.example.geoquestkidsexplorer.models;
     opens com.example.geoquestkidsexplorer.database to javafx.fxml;
 }
