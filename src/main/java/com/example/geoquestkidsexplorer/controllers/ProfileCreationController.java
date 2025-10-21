@@ -53,7 +53,7 @@ public class ProfileCreationController extends BaseController {
     @FXML
     public void initialize() {
         String sessionAvatar = UserSession.getAvatar();
-        String sessionExplorerName = UserSession.getExplorerName();
+        String sessionExplorerName = UserSession.getInstance().getUsername();
 
         selectedAvatarEmoji = (sessionAvatar != null && !sessionAvatar.isBlank()) ? sessionAvatar : "🙂";
         if (previewAvatarLabel != null) previewAvatarLabel.setText(selectedAvatarEmoji);
@@ -127,8 +127,8 @@ public class ProfileCreationController extends BaseController {
             return;
         }
 
-        UserSession.setExplorerName(explorerName.trim());
-        UserSession.setAvatar(selectedAvatarEmoji);
+        UserSession.getInstance().setUsername(explorerName.trim());
+        UserSession.getInstance().setAvatar(selectedAvatarEmoji);
 
         String username = UserSession.getUsername();
         if (username != null && !username.isBlank()) {
@@ -169,8 +169,8 @@ public class ProfileCreationController extends BaseController {
      */
     @Override
     public void setProfileData(String username, String avatar) {
-        UserSession.setUsername(username);
-        UserSession.setAvatar(avatar);
+        UserSession.getInstance().setUsername(username);
+        UserSession.getInstance().setAvatar(avatar);
         if (previewNameLabel != null) previewNameLabel.setText(username != null ? username : "Choose your name!");
         if (previewAvatarLabel != null) previewAvatarLabel.setText(avatar != null ? avatar : "🙂");
         if (explorerNameField != null) explorerNameField.setText(username != null ? username : "");

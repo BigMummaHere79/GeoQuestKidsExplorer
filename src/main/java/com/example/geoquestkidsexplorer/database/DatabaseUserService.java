@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.database;
 
 import com.example.geoquestkidsexplorer.models.UserProfile;
+import com.example.geoquestkidsexplorer.models.UserProfileBuilder;
 import com.example.geoquestkidsexplorer.repositories.UserService;
 import com.example.geoquestkidsexplorer.utils.DatabaseService;
 
@@ -11,15 +12,14 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 /**
- * Concrete implementation of UserService using SQLite database.
- * Extends AbstractDatabaseService for shared connection logic.
- * Encapsulates all user-specific queries.
+ * Concrete implementation of {@link UserService} using SQLite database.
+ * Extends {@link DatabaseService} for shared connection logic.
+ * Encapsulates user-specific queries and uses {@link UserProfileBuilder} for profile creation.
  */
 public class DatabaseUserService extends DatabaseService implements UserService {
 
     /**
      * Inserts a new user into the database.
-     *
      * @param username Username.
      * @param email    Email.
      * @param password Password.
@@ -47,15 +47,13 @@ public class DatabaseUserService extends DatabaseService implements UserService 
             // Verify insertion (retained logic)
             verifyUserLevel(conn, username, 1);
         } catch (SQLException e) {
-            System.err.println("insertUser: Error inserting user " + username + ": " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("insertUser error: " + e.getMessage());
             throw new RuntimeException("Failed to insert user: " + e.getMessage());
         }
     }
 
     /**
      * Verifies the user's level after insertion.
-     *
      * @param conn         Database connection.
      * @param username     Username.
      * @param expectedLevel Expected level.
@@ -81,14 +79,13 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Checks if a user exists by username or email.
-     *
      * @param username Username.
      * @param email    Email.
      * @return True if user exists, false otherwise.
      */
     @Override
     public boolean userExists(String username, String email) {
-        final String sql = "SELECT 1 FROM users WHERE username = ? OR email = ? LIMIT 1";
+        String sql = "SELECT 1 FROM users WHERE username = ? OR email = ? LIMIT 1";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
@@ -104,14 +101,13 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Validates login credentials.
-     *
      * @param email    Email.
      * @param password Password.
      * @return True if valid, false otherwise.
      */
     @Override
     public boolean validateLogin(String email, String password) {
-        final String sql = "SELECT 1 FROM users WHERE email = ? AND password = ? LIMIT 1";
+        String sql = "SELECT 1 FROM users WHERE email = ? AND password = ? LIMIT 1";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -127,25 +123,24 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Retrieves a user profile by username.
-     *
      * @param username Username.
      * @return UserProfile or null if not found.
      */
     @Override
     public UserProfile getUserProfileByUsername(String username) {
-        final String sql = "SELECT username, email, avatar, level, role FROM users WHERE username = ? LIMIT 1";
+        String sql = "SELECT username, email, avatar, level, role FROM users WHERE username = ? LIMIT 1";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new UserProfile(
-                            rs.getString("username"),
-                            rs.getString("email"),
-                            rs.getString("avatar"),
-                            rs.getInt("level"),
-                            rs.getString("role")
-                    );
+                    return new UserProfileBuilder()
+                            .withUsername(rs.getString("username"))
+                            .withEmail(rs.getString("email"))
+                            .withAvatar(rs.getString("avatar"))
+                            .withLevel(rs.getInt("level"))
+                            .withRole(rs.getString("role"))
+                            .build();
                 }
             }
         } catch (SQLException e) {
@@ -156,36 +151,34 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Retrieves user details (username, avatar) by username.
-     *
      * @param username Username.
      * @return Array of {username, avatar} or null if not found.
      */
     @Override
     public String[] getUserDetails(String username) {
-        String sql = "SELECT username, avatar FROM users WHERE username = ?";
+        String sql = "SELECT username, avatar FROM users WHERE username = ? LIMIT 1";
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            try (ResultSet rs = pstmt.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new String[]{rs.getString("username"), rs.getString("avatar")};
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("getUserDetails error: " + e.getMessage());
         }
         return null;
     }
 
     /**
      * Gets username by email.
-     *
      * @param email Email.
      * @return Username or null if not found.
      */
     @Override
     public String getUsernameByEmail(String email) {
-        final String sql = "SELECT username FROM users WHERE email = ? LIMIT 1";
+        String sql = "SELECT username FROM users WHERE email = ? LIMIT 1";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -200,13 +193,12 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Gets avatar by email.
-     *
      * @param email Email.
      * @return Avatar or null if not found.
      */
     @Override
     public String getAvatarByEmail(String email) {
-        final String sql = "SELECT avatar FROM users WHERE email = ? LIMIT 1";
+        String sql = "SELECT avatar FROM users WHERE email = ? LIMIT 1";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -221,13 +213,33 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Fixes a user's level if null, setting it to 1.
-     *
      * @param username Username.
      */
     @Override
     public void fixUserLevel(String username) {
         String sql = "SELECT level FROM users WHERE username = ?";
         try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int level = rs.getInt("level");
+                    if (rs.wasNull() || level < 1) {
+                        String updateSql = "UPDATE users SET level = 1 WHERE username = ?";
+                        try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+                            updatePs.setString(1, username);
+                            int rows = updatePs.executeUpdate();
+                            System.out.println("fixUserLevel: Updated level to 1 for user " + username + ", rows affected: " + rows);
+                        }
+                    }
+                } else {
+                    System.err.println("fixUserLevel: No user found for username: " + username);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("fixUserLevel error: " + e.getMessage());
+        }
+        /*try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
@@ -246,7 +258,7 @@ public class DatabaseUserService extends DatabaseService implements UserService 
             }
         } catch (SQLException e) {
             System.err.println("fixUserLevel error: " + e.getMessage());
-        }
+        }*/
     }
     /*@Override
     public void fixUserLevel(String username) {
@@ -281,7 +293,6 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
     /**
      * Saves a quiz result and updates user level if passed.
-     *
      * @param username        Username.
      * @param level           Current level.
      * @param scorePercentage Score percentage.
@@ -294,7 +305,31 @@ public class DatabaseUserService extends DatabaseService implements UserService 
 
         // Insert result
         String resultSql = "INSERT INTO results (username, level, grades, status) VALUES (?, ?, ?, ?)";
-        try (Connection conn = getConnection();
+        try (Connection conn = getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement ps = conn.prepareStatement(resultSql)) {
+                ps.setString(1, username);
+                ps.setInt(2, level);
+                ps.setDouble(3, scorePercentage);
+                ps.setString(4, status);
+                ps.executeUpdate();
+            }
+            if (isPassing) {
+                String updateSql = "UPDATE users SET level = ? WHERE username = ?";
+                try (PreparedStatement ps = conn.prepareStatement(updateSql)) {
+                    ps.setInt(1, level + 1);
+                    ps.setString(2, username);
+                    ps.executeUpdate();
+                }
+            }
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("saveQuizResultAndUpdateLevel error: " + e.getMessage());
+            return false;
+        }
+
+        /*try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(resultSql)) {
             ps.setString(1, username);
             ps.setInt(2, level);
@@ -327,6 +362,6 @@ public class DatabaseUserService extends DatabaseService implements UserService 
                 return false;
             }
         }
-        return true;
+        return true;*/
     }
 }

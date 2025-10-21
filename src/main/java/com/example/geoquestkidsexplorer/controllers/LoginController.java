@@ -1,7 +1,10 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-import com.example.geoquestkidsexplorer.database.DatabaseManager;
+import com.example.geoquestkidsexplorer.models.UserProfile;
 import com.example.geoquestkidsexplorer.models.UserSession;
+import com.example.geoquestkidsexplorer.repositories.UserService;
+import com.example.geoquestkidsexplorer.repositories.UserSessionObserver;
+import com.example.geoquestkidsexplorer.utils.LoginService;
 import com.example.geoquestkidsexplorer.utils.NavigationHelper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -18,10 +21,11 @@ import java.io.IOException;
 
 /**
  * Controller for the login and registration UI.
- * Manages user authentication, validation, and navigation.
- * Extends BaseController for shared functionality.
+ * Manages user authentication, validation, and navigation using Dependency Injection for services.
+ * Implements UserSessionObserver to react to session changes.
  */
-public class LoginController extends BaseController {
+public class LoginController extends BaseController implements UserSessionObserver {
+    private final UserService userService;
 
     @FXML private VBox loginForm;
     @FXML private VBox registerForm;
@@ -40,6 +44,15 @@ public class LoginController extends BaseController {
     @FXML private ComboBox<String> avatarCombo;
 
     private Stage stage;
+
+    /**
+     * Constructor with dependency injection for UserService.
+     * @param userService The UserService to handle user operations.
+     */
+    public LoginController(UserService userService) {
+        this.userService = userService;
+        UserSession.getInstance().addObserver(this);
+    }
 
     /**
      * Sets the stage for this controller.
@@ -77,11 +90,7 @@ public class LoginController extends BaseController {
                 ));
             }
         } catch (Exception e) {
-            System.err.println("Error in initialize: " + e.getMessage());
-            if (messageLabel != null) {
-                messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                messageLabel.setText("Initialization error. Please try again.");
-            }
+            displayError("Initialization error: " + e.getMessage());
         }
     }
 
@@ -96,29 +105,27 @@ public class LoginController extends BaseController {
 
         String err = validateLoginInputs(email, password);
         if (err != null) {
-            error(err);
+            displayError(err);
             return;
         }
 
-        if (DatabaseManager.validateLogin(email, password)) {
-            String username = DatabaseManager.getUsernameByEmail(email);
-            String avatar = DatabaseManager.getAvatarByEmail(email);
-            if (username == null) {
-                error("User not found.");
+        if (LoginService.validateLogin(userService, email, password)) {
+            UserProfile profile = userService.getUserProfileByUsername(userService.getUsernameByEmail(email));
+            if (profile == null) {
+                displayError("User not found.");
                 return;
             }
-            UserSession.setUser(username, avatar);
-            System.out.println("handleLogin: Logged in user: " + username + ", avatar: " + avatar);
-            DatabaseManager.fixUserLevel(username);
+            UserSession.getInstance().setUser(profile.getUsername(), profile.getAvatar());
+            userService.fixUserLevel(profile.getUsername());
             try {
                 NavigationHelper.loadSceneWithConfig((Node) event.getSource(),
                         "/com/example/geoquestkidsexplorer/homepage.fxml",
-                        (HomePageController controller) -> controller.setProfileData(username, avatar));
+                        (HomePageController controller) -> controller.setProfileData(profile.getUsername(), profile.getAvatar()));
             } catch (IOException e) {
-                error("Navigation error: " + e.getMessage());
+                displayError("Navigation error: " + e.getMessage());
             }
         } else {
-            error("Invalid email or password.");
+            displayError("Invalid email or password.");
         }
     }
 
@@ -128,14 +135,8 @@ public class LoginController extends BaseController {
      * @param password The password input.
      * @return Error message or null if valid.
      */
-    protected String validateLoginInputs(String email, String password) {
-        String mail = (email == null) ? "" : email.trim();
-        String pass = (password == null) ? "" : password.trim();
-
-        if (mail.isBlank() || pass.isBlank()) {
-            return "Please enter both email and password";
-        }
-        return null;
+    public String validateLoginInputs(String email, String password) {
+        return LoginService.validateLoginInputs(email, password);
     }
 
     /**
@@ -145,10 +146,7 @@ public class LoginController extends BaseController {
      * @return True if valid, false otherwise.
      */
     public boolean validateLogin(String email, String password) {
-        if (email == null || email.isBlank() || password == null || password.isBlank()) {
-            return false;
-        }
-        return DatabaseManager.validateLogin(email, password);
+        return LoginService.validateLogin(userService, email, password);
     }
 
     /**
@@ -159,60 +157,52 @@ public class LoginController extends BaseController {
     private void handleRegister(ActionEvent event) {
         String username = text(registerUsernameField);
         String email = text(registerEmailField);
-        String role = roleCombo == null ? "" : String.valueOf(roleCombo.getValue());
+        String role = roleCombo == null ? "user" : roleCombo.getValue();
         String password = text(registerPasswordField);
         String confirm = text(confirmPasswordField);
         String avatarDisplay = avatarCombo == null ? null : avatarCombo.getValue();
 
         String err = validateRegistrationInputs(username, email, role, password, confirm, avatarDisplay);
         if (err != null) {
-            error(err);
+            displayError(err);
             return;
         }
 
         String avatarEmoji = extractAvatarEmoji(avatarDisplay);
 
         try {
-            if (DatabaseManager.userExists(username, email)) {
-                error("Username or email already exists.");
-                return;
-            }
-
-            DatabaseManager.insertUser(username, email, password, avatarEmoji, role);
-            success("Registration successful! Please login.");
+            userService.insertUser(username, email, password, avatarEmoji, role);
+            displaySuccess("Registration successful! Please login.");
             clearRegisterFields();
             switchToLogin(event);
         } catch (RuntimeException e) {
-            error("Registration error: " + e.getMessage());
+            displayError("Registration error: " + e.getMessage());
         }
     }
 
     /**
      * Validates registration inputs.
-     * @param username      The username input.
-     * @param email         The email input.
-     * @param role          The role input.
-     * @param password      The password input.
-     * @param confirm       The "confirm" password input.
+     * @param username The username input.
+     * @param email The email input.
+     * @param role The role input.
+     * @param password The password input.
+     * @param confirm The "confirm" password input.
      * @param avatarDisplay The avatar display text.
      * @return Error message or null if valid.
      */
     public String validateRegistrationInputs(String username, String email, String role,
                                              String password, String confirm, String avatarDisplay) {
-        if (username.isBlank() && email.isBlank() && role.isBlank() && password.isBlank() && confirm.isBlank()) {
+        if (username.isBlank() || email.isBlank() || role.isBlank() || password.isBlank() || confirm.isBlank()) {
             return "Please fill in all the fields";
         }
         if (!password.equals(confirm)) {
             return "Passwords do not match";
         }
-        if (username.isBlank()) return "Username is blank or invalid";
-        if (email.isBlank()) return "Email is blank or invalid";
-
-        String avatarEmoji = extractAvatarEmoji(avatarDisplay);
-        if (avatarEmoji == null || avatarEmoji.isBlank()) {
-            return "Please pick an avatar";
+        if (userService.userExists(username, email)) {
+            return "Username or email already exists.";
         }
-        return null;
+        String avatarEmoji = extractAvatarEmoji(avatarDisplay);
+        return (avatarEmoji == null || avatarEmoji.isBlank()) ? "Please pick an avatar" : null;
     }
 
     /**
@@ -223,10 +213,10 @@ public class LoginController extends BaseController {
     private void switchToRegister(ActionEvent event) {
         togglePanels(true);
         clearMessage();
-        registerWelcomeMessage.setVisible(true);
+        /*registerWelcomeMessage.setVisible(true);
         registerWelcomeMessage.setManaged(true);
         loginWelcomeMessage.setVisible(false);
-        loginWelcomeMessage.setManaged(false);
+        loginWelcomeMessage.setManaged(false);*/
     }
 
     /**
@@ -237,10 +227,10 @@ public class LoginController extends BaseController {
     private void switchToLogin(ActionEvent event) {
         togglePanels(false);
         clearMessage();
-        loginWelcomeMessage.setVisible(true);
+        /*loginWelcomeMessage.setVisible(true);
         loginWelcomeMessage.setManaged(true);
         registerWelcomeMessage.setVisible(false);
-        registerWelcomeMessage.setManaged(false);
+        registerWelcomeMessage.setManaged(false);*/
     }
 
     /**
@@ -255,6 +245,14 @@ public class LoginController extends BaseController {
         if (registerForm != null) {
             registerForm.setVisible(showRegister);
             registerForm.setManaged(showRegister);
+        }
+        if (loginWelcomeMessage != null) {
+            loginWelcomeMessage.setVisible(!showRegister);
+            loginWelcomeMessage.setManaged(!showRegister);
+        }
+        if (registerWelcomeMessage != null) {
+            registerWelcomeMessage.setVisible(showRegister);
+            registerWelcomeMessage.setManaged(showRegister);
         }
     }
 
@@ -294,7 +292,7 @@ public class LoginController extends BaseController {
      * Displays an error message.
      * @param msg The error message.
      */
-    private void error(String msg) {
+    private void displayError(String msg) {
         if (messageLabel != null) {
             messageLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
             messageLabel.setText(msg);
@@ -305,7 +303,7 @@ public class LoginController extends BaseController {
      * Displays a success message.
      * @param msg The success message.
      */
-    private void success(String msg) {
+    private void displaySuccess(String msg) {
         if (messageLabel != null) {
             messageLabel.setStyle("-fx-text-fill: #16a34a; -fx-font-size: 14px;");
             messageLabel.setText(msg);
@@ -337,5 +335,24 @@ public class LoginController extends BaseController {
     @Override
     public void setProfileData(String username, String avatar) {
         // No-op for this controller
+    }
+
+    /**
+     * Handles session update notifications.
+     * @param username The new username.
+     * @param avatar The new avatar.
+     */
+    @Override
+    public void onSessionUpdated(String username, String avatar) {
+        // Update UI if needed
+    }
+
+    /**
+     * Handles session clear notifications.
+     */
+    @Override
+    public void onSessionCleared() {
+        clearMessage();
+        togglePanels(false);
     }
 }

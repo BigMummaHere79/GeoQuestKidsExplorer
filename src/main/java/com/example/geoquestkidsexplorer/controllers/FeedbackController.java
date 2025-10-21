@@ -59,7 +59,7 @@ public class FeedbackController {
             showAlert("Information", "Please log in to leave feedback.");
         } else {
             // Set avatar for current user
-            String[] userDetails = DatabaseManager.getUserDetails(currentUsername);
+            String[] userDetails = DatabaseManager.getInstance().getUserDetails(currentUsername);
             if (userDetails != null) {
                 avatarLabel.setText(userDetails[1]); // Avatar
             } else {
@@ -86,7 +86,7 @@ public class FeedbackController {
         String comment = commentArea.getText().trim();
         if (rating > 0 && !comment.isEmpty()) {
             try {
-                DatabaseManager.addFeedback(currentUsername, rating, comment, null);
+                DatabaseManager.getInstance().addFeedback(currentUsername, rating, comment, null);
                 commentArea.clear();
                 ratingControl.setRating(0);
                 ratingControl.setDisable(true);
@@ -109,7 +109,7 @@ public class FeedbackController {
     private void loadFeedbacks() {
         feedbacksVBox.getChildren().clear();
         try {
-            List<FeedbackRatings> topLevelFeedbacks = DatabaseManager.getTopLevelFeedbacks();
+            List<FeedbackRatings> topLevelFeedbacks = DatabaseManager.getInstance().getTopLevelFeedbacks();
             for (FeedbackRatings fb : topLevelFeedbacks) {
                 VBox feedbackBox = createFeedbackBox(fb, false, 0);
                 feedbacksVBox.getChildren().add(feedbackBox);
@@ -173,7 +173,7 @@ public class FeedbackController {
         // Check if it has replies
         boolean hasReplies = false;
         try {
-            hasReplies = !DatabaseManager.getReplies(fb.getFeedbackId()).isEmpty();
+            hasReplies = !DatabaseManager.getInstance().getReplies(fb.getFeedbackId()).isEmpty();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -189,7 +189,7 @@ public class FeedbackController {
         box.getChildren().addAll(header, commentLbl, actions);
         // Load replies recursively
         try {
-            List<FeedbackRatings> replies = DatabaseManager.getReplies(fb.getFeedbackId());
+            List<FeedbackRatings> replies = DatabaseManager.getInstance().getReplies(fb.getFeedbackId());
             for (FeedbackRatings reply : replies) {
                 VBox replyBox = createFeedbackBox(reply, true, level + 1);
                 box.getChildren().add(replyBox);
@@ -235,7 +235,7 @@ public class FeedbackController {
             String comment = replyComment.getText().trim();
             if (rating > 0 && !comment.isEmpty()) {
                 try {
-                    DatabaseManager.addFeedback(currentUsername, rating, comment, parentId);
+                    DatabaseManager.getInstance().addFeedback(currentUsername, rating, comment, parentId);
                     loadFeedbacks();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -283,7 +283,7 @@ public class FeedbackController {
             String newComment = editComment.getText().trim();
             if (newRating > 0 && !newComment.isEmpty()) {
                 try {
-                    DatabaseManager.updateFeedback(fb.getFeedbackId(), newRating, newComment, currentUsername);
+                    DatabaseManager.getInstance().updateFeedback(fb.getFeedbackId(), newRating, newComment, currentUsername);
                     loadFeedbacks();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -315,7 +315,7 @@ public class FeedbackController {
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                DatabaseManager.deleteFeedback(fb.getFeedbackId(), currentUsername);
+                DatabaseManager.getInstance().deleteFeedback(fb.getFeedbackId(), currentUsername);
                 loadFeedbacks();
             } catch (SQLException e) {
                 e.printStackTrace();

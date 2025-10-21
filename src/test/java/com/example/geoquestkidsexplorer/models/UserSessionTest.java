@@ -10,7 +10,7 @@ class UserSessionTest {
     // Always reset after every test to avoid errors or problems
     void reset() {
         try {
-            UserSession.clear();
+            UserSession.getInstance().clear();
         } catch (Throwable ignored) {}
     }
 
@@ -37,7 +37,7 @@ class UserSessionTest {
     // test that Avatar is updated
     @Test
     void setAvatarUpdates(){
-        UserSession.setAvatar("👧 Explorer Girl");
+        UserSession.getInstance().setAvatar("👧 Explorer Girl");
         assertEquals("👧 Explorer Girl",UserSession.getAvatar());
     }
 
@@ -59,10 +59,10 @@ class UserSessionTest {
     @Test
     void testClearUsername(){
         //UserSession.setUserId(100);
-        UserSession.setUsername("Tori");
-        UserSession.setAvatar("👧 Explorer Girl");
+        UserSession.getInstance().setUsername("Tori");
+        UserSession.getInstance().setAvatar("👧 Explorer Girl");
 
-        UserSession.clear();
+        UserSession.getInstance().clear();
         assertNull(UserSession.getUsername());
     }
 
@@ -70,27 +70,28 @@ class UserSessionTest {
     @Test
     void testClearAvatar(){
         //UserSession.setUserId(100);
-        UserSession.setUsername("Tori");
-        UserSession.setAvatar("👧 Explorer Girl");
+        UserSession.getInstance().setUsername("Tori");
+        UserSession.getInstance().setAvatar("👧 Explorer Girl");
 
-        UserSession.clear();
+        UserSession.getInstance().clear();
         assertNull(UserSession.getAvatar());
     }
 
     //Test the set user test
     @Test
     void testSetUser(){
-        UserSession.setUser("Tom", "👧  Girl");
+        UserSession.getInstance().setUser("Tom", "👧  Girl");
         //UserSession.getUsername();
         assertEquals("Tom", UserSession.getUsername());
 
     }
 
+    //NOTE: Not needed anymore as we will keep the default username for the whole entire app  -- Glenda --
     //Test the set Explorer name
-    @Test
+    /*@Test
     void testSetExplorerName(){
         UserSession.setExplorerName("Tommy");
         assertEquals("Tommy", UserSession.getExplorerName());
-    }
+    }*/
     //Test the get Explorer name
 }

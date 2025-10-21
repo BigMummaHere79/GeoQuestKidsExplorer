@@ -68,7 +68,7 @@ public class AntarcticaController extends BaseController {
     public void setProfileData(String username, String avatar) {
         this.username = username;
         this.avatar = avatar;
-        UserSession.setUser(username, avatar);
+        UserSession.getInstance().setUser(username, avatar);
     }
 
     /**
@@ -115,7 +115,7 @@ public class AntarcticaController extends BaseController {
         }
 
         // Simulate completing Antarctica (level 1) with 100% score
-        boolean updated = DatabaseManager.saveQuizResultAndUpdateLevel(username, 1, 100.0);
+        boolean updated = DatabaseManager.getInstance().saveQuizResultAndUpdateLevel(username, 1, 100.0);
         if (updated) {
             String nextContinent = GameStateManager.getInstance().getNextContinent(continentName);
             if (nextContinent != null) {

@@ -91,7 +91,7 @@ public class TestModeController extends BaseController {
     public void setProfileData(String username, String avatar) {
         this.username = username;
         this.avatar = avatar;
-        UserSession.setUser(username, avatar);
+        UserSession.getInstance().setUser(username, avatar);
         System.out.println("TestModeController.setProfileData: username=" + username + ", avatar=" + avatar);
     }
 
@@ -106,7 +106,7 @@ public class TestModeController extends BaseController {
         }
         this.questions = new ArrayList<>();
         for (int i = 0; i < QUESTIONS_PER_QUIZ; i++) {
-            TestQuizQuestions question = DatabaseManager.getTestQuizQuestion(continent);
+            TestQuizQuestions question = DatabaseManager.getInstance().getTestQuizQuestion(continent);
             if (question != null) {
                 this.questions.add(question);
             }
@@ -394,7 +394,8 @@ public class TestModeController extends BaseController {
                 return;
             }
 
-            boolean levelUpdated = DatabaseManager.saveQuizResultAndUpdateLevel(effectiveUsername, currentLevel, scorePercentage);
+            boolean levelUpdated = DatabaseManager.getInstance().saveQuizResultAndUpdateLevel(
+                    effectiveUsername, currentLevel, scorePercentage);
             boolean passed = scorePercentage >= 80.0;
             System.out.println("showResults: username=" + effectiveUsername + ", scorePercentage=" + scorePercentage + ", " +
                     "passed=" + passed + ", levelUpdated=" + levelUpdated);

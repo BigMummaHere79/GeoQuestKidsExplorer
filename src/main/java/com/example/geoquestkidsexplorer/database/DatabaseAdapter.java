@@ -12,11 +12,11 @@ import com.example.geoquestkidsexplorer.repositories.IQuizQuestionDAO;
 public class DatabaseAdapter implements IQuizQuestionDAO {
     @Override
     public PracticeQuizQuestions getPractiseQuizQuestion(String continent) {
-        return DatabaseManager.getPracticeQuizQuestion(continent);
+        return DatabaseManager.getInstance().getPracticeQuizQuestion(continent);
     }
 
     @Override
     public TestQuizQuestions getTestQuizQuestion(String continent) {
-        return DatabaseManager.getTestQuizQuestion(continent);
+        return DatabaseManager.getInstance().getTestQuizQuestion(continent);
     }
 }

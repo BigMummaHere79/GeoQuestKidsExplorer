@@ -64,7 +64,7 @@ public class GameStateManager {
                     } else {
                         System.out.println("loadState: User " + username + " found with level: " + level);
                         for (int i = 1; i <= level; i++) {
-                            String continent = DatabaseManager.getContinentByLevel(i);
+                            String continent = DatabaseManager.getInstance().getContinentByLevel(i);
                             if (continent != null) {
                                 unlockedContinents.add(continent);
                             } else {

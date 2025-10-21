@@ -14,7 +14,7 @@ public class DatabaseSchemaManager {
     /**
      * Creates the database schema and seeds initial data (continents).
      * Note: Countries table is created but not seeded here—implement seedCountries if needed.
-     * Also, add ALTER TABLE for missing columns like fun_facts if required by queries.
+     * Also, add ALTER TABLE for missing columns like fun_facts if required by queries (for now we leave this at it is).
      */
     public static void createDatabase() {
         try (Connection conn = DatabaseUtils.getConnection()) {
@@ -38,7 +38,6 @@ public class DatabaseSchemaManager {
 
     /**
      * Creates the continents table.
-     *
      * @param conn Database connection.
      * @throws SQLException If creation fails.
      */
@@ -56,7 +55,6 @@ public class DatabaseSchemaManager {
 
     /**
      * Seeds the continents table with initial data.
-     *
      * @param conn Database connection.
      * @throws SQLException If seeding fails.
      */
@@ -83,7 +81,6 @@ public class DatabaseSchemaManager {
 
     /**
      * Creates the countries table.
-     *
      * @param conn Database connection.
      * @throws SQLException If creation fails.
      */
@@ -105,7 +102,6 @@ public class DatabaseSchemaManager {
 
     /**
      * Creates the users table.
-     *
      * @param conn Database connection.
      * @throws SQLException If creation fails.
      */
@@ -129,7 +125,6 @@ public class DatabaseSchemaManager {
 
     /**
      * Creates the results table.
-     *
      * @param conn Database connection.
      * @throws SQLException If creation fails.
      */
@@ -154,7 +149,6 @@ public class DatabaseSchemaManager {
 
     /**
      * Creates the feedback table.
-     *
      * @param conn Database connection.
      * @throws SQLException If creation fails.
      */

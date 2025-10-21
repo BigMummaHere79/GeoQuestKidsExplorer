@@ -26,7 +26,7 @@ public class CountryImageController {
         this.stage = stage;
         countryNameLabel.setText(countryName);
 
-        Image img = DatabaseManager.getCountryImage(countryName);
+        Image img = DatabaseManager.getInstance().getCountryImage(countryName);
         if (img != null) {
             countryImageView.setImage(img);
         } else {

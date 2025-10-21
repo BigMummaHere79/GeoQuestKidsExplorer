@@ -101,7 +101,7 @@ public class PracticeQuizController extends BaseController {
     public void setProfileData(String username, String avatar) {
         this.username = username;
         this.avatar = avatar;
-        UserSession.setUser(username, avatar);
+        UserSession.getInstance().setUser(username, avatar);
     }
 
     public void setContinentName(String continent) {
@@ -160,7 +160,7 @@ public class PracticeQuizController extends BaseController {
         }
         questions.clear();
         for (int i = 0; i < NUMBER_OF_PRACTICE_QUESTIONS; i++) {
-            PracticeQuizQuestions q = DatabaseManager.getPracticeQuizQuestion(continentName);
+            PracticeQuizQuestions q = DatabaseManager.getInstance().getPracticeQuizQuestion(continentName);
             if (q != null) {
                 questions.add(q);
             }

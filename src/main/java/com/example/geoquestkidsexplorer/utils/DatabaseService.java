@@ -12,7 +12,6 @@ import java.sql.SQLException;
 public abstract class DatabaseService {
     /**
      * Acquires a database connection and enables foreign key constraints.
-     *
      * @return A configured Connection object.
      * @throws SQLException If a connection error occurs.
      */

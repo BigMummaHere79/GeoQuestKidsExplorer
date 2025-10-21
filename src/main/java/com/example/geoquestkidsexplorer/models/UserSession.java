@@ -1,23 +1,65 @@
 package com.example.geoquestkidsexplorer.models;
 
+import com.example.geoquestkidsexplorer.repositories.UserSessionObserver;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Singleton-like static class managing current user session data.
- * Encapsulates username and avatar using private static fields with public static accessors.
- * Use static methods for session management (no instance needed).
+ * Singleton class managing current user session data.
+ * Implements the Singleton pattern to ensure a single instance and the Observer pattern
+ * to notify subscribers of session changes.
  */
 public class UserSession {
+    private static UserSession instance;
     private static String username;
     private static String avatar;
-    private static String explorerName;
+    //private static String explorerName;
+    private final List<UserSessionObserver> observers;
 
     /**
-     * Sets the current user session data.
-     * @param username Username.
-     * @param avatar Avatar.
+     * Private constructor to enforce singleton pattern.
      */
-    public static void setUser(String username, String avatar) {
-        UserSession.username = username;
-        UserSession.avatar = avatar;
+    private UserSession() {
+        this.observers = new ArrayList<>();
+    }
+
+    /**
+     * Gets the singleton instance of UserSession.
+     * @return The singleton instance.
+     */
+    public static UserSession getInstance() {
+        if (instance == null) {
+            instance = new UserSession();
+        }
+        return instance;
+    }
+
+    /**
+     * Adds an observer to be notified of session changes.
+     * @param observer The observer to add.
+     */
+    public void addObserver(UserSessionObserver observer) {
+        observers.add(observer);
+    }
+
+    /**
+     * Removes an observer from the notification list.
+     * @param observer The observer to remove.
+     */
+    public void removeObserver(UserSessionObserver observer) {
+        observers.remove(observer);
+    }
+
+    /**
+     * Sets the current user session data and notifies observers.
+     * @param username The username to set.
+     * @param avatar The avatar to set.
+     */
+    public void setUser(String username, String avatar) {
+        this.username = username;
+        this.avatar = avatar;
+        notifyObservers();
     }
 
     /**
@@ -29,11 +71,12 @@ public class UserSession {
     }
 
     /**
-     * Sets the username.
-     * @param name The username to set.
+     * Sets the username and notifies observers.
+     * @param username The username to set.
      */
-    public static void setUsername(String name) {
-        username = name;
+    public void setUsername(String username) {
+        this.username = username;
+        notifyObservers();
     }
 
     /**
@@ -45,36 +88,54 @@ public class UserSession {
     }
 
     /**
-     * Sets the avatar.
-     * @param av The avatar to set.
+     * Sets the avatar and notifies observers.
+     * @param avatar The avatar to set.
      */
-    public static void setAvatar(String av) {
-        avatar = av;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+        notifyObservers();
     }
 
     /**
      * Gets the explorer name.
-     *
      * @return The explorer name, or null if not set.
      */
-    public static String getExplorerName() {
+    /*public static String getExplorerName() {
         return explorerName;
-    }
+    }*/
 
     /**
      * Sets the explorer name.
      * @param name The explorer name to set.
      */
-    public static void setExplorerName(String name) {
+    /*public static void setExplorerName(String name) {
         explorerName = name;
+    }*/
+
+    /**
+     * Clears all session data and notifies observers.
+     */
+    public void clear() {
+        this.username = null;
+        this.avatar = null;
+        notifyCleared();
     }
 
     /**
-     * Clears all session data.
+     * Notifies all observers of a session update.
      */
-    public static void clear() {
-        username = null;
-        avatar = null;
-        explorerName = null;
+    private void notifyObservers() {
+        for (UserSessionObserver observer : observers) {
+            observer.onSessionUpdated(username, avatar);
+        }
+    }
+
+    /**
+     * Notifies all observers of a session clear.
+     */
+    private void notifyCleared() {
+        for (UserSessionObserver observer : observers) {
+            observer.onSessionCleared();
+        }
     }
 }

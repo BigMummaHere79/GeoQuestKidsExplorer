@@ -3,7 +3,7 @@ package com.example.geoquestkidsexplorer.models;
 /**
  * Model for a user's profile, matching database schema.
  * Encapsulates user data with private fields and public getters/setters.
- * Supports basic construction and DB-loaded construction.
+ * Supports construction via {@link UserProfileBuilder} for flexibility.
  */
 public class UserProfile {
     private String username;  // Fixed: was explorerName
@@ -15,21 +15,24 @@ public class UserProfile {
     private int levelsCompleted;  // Default/computed (e.g., query results table)
 
     /**
-     * Full constructor from DB query.
-     * @param username Username.
-     * @param email Email.
-     * @param avatar Avatar.
-     * @param level Current level.
-     * @param role Role.
+     * Constructor for creating a user profile with all fields.
+     * Use {@link UserProfileBuilder} for a fluent API.
+     * @param username The username.
+     * @param email The email, nullable.
+     * @param avatar The avatar.
+     * @param level The current level.
+     * @param role The role.
+     * @param score The score.
+     * @param levelsCompleted The number of levels completed.
      */
-    public UserProfile(String username, String email, String avatar, int level, String role) {
+    protected UserProfile(String username, String email, String avatar, int level, String role, int score, int levelsCompleted) {
         this.username = username;
         this.email = email;
         this.avatar = avatar;
         this.level = level;
         this.role = role;
-        this.score = 0;
-        this.levelsCompleted = 0;  // Compute via service if needed
+        this.score = score;
+        this.levelsCompleted = levelsCompleted;
     }
 
     /**
@@ -37,9 +40,9 @@ public class UserProfile {
      * @param username Username.
      * @param avatar Avatar.
      */
-    public UserProfile(String username, String avatar) {
+    /*public UserProfile(String username, String avatar) {
         this(username, null, avatar, 1, "user");
-    }
+    }*/
 
     /**
      * Gets the username.

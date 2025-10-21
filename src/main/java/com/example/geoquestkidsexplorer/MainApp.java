@@ -2,6 +2,9 @@ package com.example.geoquestkidsexplorer;
 
 import com.example.geoquestkidsexplorer.controllers.LoginController;
 import com.example.geoquestkidsexplorer.database.DatabaseManager;
+import com.example.geoquestkidsexplorer.database.DatabaseServiceFactory;
+import com.example.geoquestkidsexplorer.repositories.UserService;
+import com.example.geoquestkidsexplorer.utils.ControllerFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,18 +22,27 @@ public class MainApp extends Application {
 
     /**
      * Starts the application by creating the DB and loading login FXML.
+     * @param stage The primary stage for the application.
+     * @throws IOException If the FXML file cannot be loaded.
      */
     @Override
     public void start(Stage stage) throws IOException {
         DatabaseManager.createNewDatabase();  // Uses facade, delegates to SchemaManager
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("loginview.fxml"));
+        ControllerFactory controllerFactory = new ControllerFactory();
+        // Create UserService using the factory
+        UserService userService = DatabaseServiceFactory.createUserService();
+
+        // Set up FXMLLoader with a controller factory
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(
+                "/com/example/geoquestkidsexplorer/loginview.fxml"));
+        fxmlLoader.setControllerFactory(controllerFactory::createController);
         Scene scene = new Scene(fxmlLoader.load(), INITIAL_WIDTH, INITIAL_HEIGHT);
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource(
+                "/com/example/geoquestkidsexplorer/style.css").toExternalForm());
 
         LoginController controller = fxmlLoader.getController();
         controller.setStage(stage);
-
         stage.setTitle("GeoQuest Kids Explorer");
         stage.setScene(scene);
         stage.setResizable(false);

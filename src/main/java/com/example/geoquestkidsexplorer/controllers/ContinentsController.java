@@ -66,7 +66,7 @@ public class ContinentsController extends BaseController {
     public void setProfileData(String username, String avatar) {
         this.username = username;
         this.avatar = avatar;
-        UserSession.setUser(username, avatar);
+        UserSession.getInstance().setUser(username, avatar);
         System.out.println("ContinentsController.setProfileData: username=" + username + ", avatar=" + avatar);
     }
 

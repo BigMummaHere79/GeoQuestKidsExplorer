@@ -4,7 +4,8 @@ import com.example.geoquestkidsexplorer.models.UserProfile;
 
 /**
  * Interface defining operations for user management.
- * Abstracts user-related database interactions for polymorphism (e.g., mock implementations for testing).
+ * Abstracts user-related database interactions for polymorphism and dependency injection
+ * (e.g., mock implementations for testing).
  */
 public interface UserService {
     /**

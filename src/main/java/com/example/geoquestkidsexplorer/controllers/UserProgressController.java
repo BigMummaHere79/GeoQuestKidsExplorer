@@ -40,7 +40,6 @@ public class UserProgressController extends BaseController {
 
     /**
      * Sets the stage for this controller.
-     *
      * @param stage The JavaFX stage.
      */
     @Override
@@ -53,12 +52,19 @@ public class UserProgressController extends BaseController {
      */
     @FXML
     public void initialize() {
-        setAvatarOnUI(avatar != null ? avatar : UserSession.getAvatar() != null ? UserSession.getAvatar() : "🙂");
+        String sessionUsername = UserSession.getInstance().getUsername();
+        String sessionAvatar = UserSession.getInstance().getAvatar();
+        setAvatarOnUI(avatar != null ? avatar : sessionAvatar != null ? sessionAvatar : "🙂");
         if (username != null && !username.isBlank()) {
             if (welcomeLabel != null) {
                 welcomeLabel.setText(username);
             }
             loadAndRenderProgress(username);
+        } else if (sessionUsername != null && !sessionUsername.isBlank()) {
+            if (welcomeLabel != null) {
+                welcomeLabel.setText(sessionUsername);
+            }
+            loadAndRenderProgress(sessionUsername);
         } else {
             System.err.println("initialize: No logged-in username, using defaults");
             if (welcomeLabel != null) {
@@ -66,13 +72,11 @@ public class UserProgressController extends BaseController {
             }
             loadAndRenderProgress(null);
         }
-        // Apply default continent colors (e.g., Oceania for consistency)
         applyContinentColors();
     }
 
     /**
      * Sets profile data for the controller.
-     *
      * @param username The username to set.
      * @param avatar   The avatar to set.
      */
@@ -80,14 +84,13 @@ public class UserProgressController extends BaseController {
     public void setProfileData(String username, String avatar) {
         this.username = username;
         this.avatar = avatar;
-        UserSession.setUser(username, avatar);
+        UserSession.getInstance().setUser(username, avatar);
         initialize();
     }
 
     /**
      * Implements continent-specific setup.
      * Applies default colors (e.g., Oceania) as this page is not continent-specific.
-     *
      * @param continentName The name of the continent (unused).
      */
     @Override
@@ -108,7 +111,6 @@ public class UserProgressController extends BaseController {
 
     /**
      * Navigates to the profile creation page to change the avatar.
-     *
      * @param event The action event triggered by the button click.
      * @throws IOException If scene loading fails.
      */
@@ -123,20 +125,7 @@ public class UserProgressController extends BaseController {
     }
 
     /**
-     * Handles logout, clears UserSession, and navigates to the login page.
-     *
-     * @param event The action event triggered by the button click.
-     * @throws IOException If scene loading fails.
-     */
-    @FXML
-    private void handleLogoutButtonAction(ActionEvent event) throws IOException {
-        UserSession.clear();
-        NavigationHelper.loadScene((Node) event.getSource(), "/com/example/geoquestkidsexplorer/loginview.fxml");
-    }
-
-    /**
      * Sets the avatar on the UI, updating the avatar button or label.
-     *
      * @param emoji The avatar emoji to display.
      */
     private void setAvatarOnUI(String emoji) {
@@ -150,7 +139,6 @@ public class UserProgressController extends BaseController {
 
     /**
      * Loads and renders the user's progress data.
-     *
      * @param username The username of the currently logged-in user.
      */
     private void loadAndRenderProgress(String username) {
@@ -215,7 +203,6 @@ public class UserProgressController extends BaseController {
 
     /**
      * Updates the user's level in the database.
-     *
      * @param username The username.
      * @param level    The new level.
      */
@@ -228,6 +215,21 @@ public class UserProgressController extends BaseController {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("updateUserLevel error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles logout, clears UserSession, and navigates to the login page.
+     * @param event The action event triggered by the button click.
+     */
+    @FXML
+    private void handleLogoutButtonAction(ActionEvent event) {
+        try {
+            UserSession.getInstance().clear();
+            NavigationHelper.loadScene((Node) event.getSource(), "/com/example/geoquestkidsexplorer/loginview.fxml");
+        } catch (IOException e) {
+            System.err.println("Logout navigation error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

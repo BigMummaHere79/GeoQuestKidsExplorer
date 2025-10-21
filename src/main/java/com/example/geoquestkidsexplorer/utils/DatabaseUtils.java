@@ -15,7 +15,6 @@ public class DatabaseUtils {
 
     /**
      * Establishes a connection to the SQLite database.
-     *
      * @return A Connection object to the database.
      * @throws SQLException If a database access error occurs.
      */
@@ -25,7 +24,6 @@ public class DatabaseUtils {
 
     /**
      * Enables foreign key constraints on the given connection.
-     *
      * @param conn The database connection.
      * @throws SQLException If an error occurs while executing the PRAGMA statement.
      */
