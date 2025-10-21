@@ -17,7 +17,9 @@ class UserProfileTest {
                 null,
                 "👦 Explorer Boy",
                 1,
-                "Student");
+                "Student",
+                0,
+                0);
     }
 
     // Using defaults, test that username is correct

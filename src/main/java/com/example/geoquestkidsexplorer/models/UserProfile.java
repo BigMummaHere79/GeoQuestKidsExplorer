@@ -36,15 +36,6 @@ public class UserProfile {
     }
 
     /**
-     * Basic constructor for new profiles.
-     * @param username Username.
-     * @param avatar Avatar.
-     */
-    /*public UserProfile(String username, String avatar) {
-        this(username, null, avatar, 1, "user");
-    }*/
-
-    /**
      * Gets the username.
      * @return The username.
      */
