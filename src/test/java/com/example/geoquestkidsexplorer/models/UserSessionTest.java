@@ -2,9 +2,30 @@ package com.example.geoquestkidsexplorer.models;
 
 //import static com.example.geoquestkidsexplorer.models.UserSession.username;
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.example.geoquestkidsexplorer.repositories.UserSessionObserver;
 import org.junit.jupiter.api.*;
 
 class UserSessionTest {
+
+
+    private static final class CountingObserver implements UserSessionObserver{
+        int updates = 0;
+        int clears = 0;
+        String lastUser, lastAvatar;
+
+        @Override
+        public void onSessionUpdated(String username, String avatar) {
+            updates++;
+            lastUser = username;
+            lastAvatar = avatar;
+        }
+
+        @Override
+        public void onSessionCleared() {
+            clears++;
+        }
+    }
 
     @AfterEach
     // Always reset after every test to avoid errors or problems
@@ -20,14 +41,6 @@ class UserSessionTest {
         assertNull(UserSession.getUsername());
     }
 
-    // Test that user id updates to a specific number
-   /* @Test
-    void testSetUsernamepdates(){
-        UserSession.setUsername("update_user");
-        String username = "";
-        assertEquals("update_user",UserSession.setUsername(username));
-    }*/
-
     // Test that default username is null
     @Test
     void setDefaultUsernameIsNull(){
@@ -40,20 +53,6 @@ class UserSessionTest {
         UserSession.getInstance().setAvatar("👧 Explorer Girl");
         assertEquals("👧 Explorer Girl",UserSession.getAvatar());
     }
-
-    //NOTE: Had to comment out as i am currently doing the user progress saving state, and we dont have id in user's table
-    // we use username instead for primary key. Sorry Tori for modifying some of your method. Glenda!
-    // test that Id is cleared
-    /*@Test
-    void testClearUserId(){
-        UserSession.setUserId(100);
-        UserSession.setUsername("Tori");
-        UserSession.setAvatar("👧 Explorer Girl");
-
-        UserSession.clear();
-
-        assertEquals(-1, UserSession.getUserId());
-    }*/
 
     // test username is cleared
     @Test
@@ -86,12 +85,34 @@ class UserSessionTest {
 
     }
 
-    //NOTE: Not needed anymore as we will keep the default username for the whole entire app  -- Glenda --
-    //Test the set Explorer name
-    /*@Test
-    void testSetExplorerName(){
-        UserSession.setExplorerName("Tommy");
-        assertEquals("Tommy", UserSession.getExplorerName());
-    }*/
-    //Test the get Explorer name
+    @Test
+    void testAddObserver(){
+        var session = UserSession.getInstance();
+        session.clear();
+
+        var obs = new CountingObserver();
+        session.addObserver(obs);
+        session.setUser("Tori","👧  Girl");
+        session.clear();
+
+        assertEquals(1, obs.updates);
+        assertEquals(1, obs.clears);
+        assertEquals("Tori", obs.lastUser);
+        assertEquals("👧  Girl", obs.lastAvatar);
+    }
+
+    @Test
+    void testRemoveobserver(){
+        var session = UserSession.getInstance();
+        session.clear();
+
+        var obs = new CountingObserver();
+        session.addObserver(obs);
+        session.removeObserver(obs);
+        session.setUser("Tori","👧  Girl");
+        session.clear();
+
+        assertEquals(0,obs.updates);
+        assertEquals(0,obs.clears);
+    }
 }

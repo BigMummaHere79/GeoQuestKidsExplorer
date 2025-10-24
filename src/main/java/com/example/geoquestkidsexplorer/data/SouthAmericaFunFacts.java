@@ -8,10 +8,14 @@ import java.util.List;
 
 /**
  * This class provides curated funfacts for the continents "South America"
- * @returns a list of entries for South America dataset used by the UI
  * */
 
 public class SouthAmericaFunFacts implements FunFactsProvider {
+
+    /**
+     * @return a list of entries for Asia dataset used by the UI
+     * */
+
     @Override
     public List<Country> getCountries() {
         return Arrays.asList(
