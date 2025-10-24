@@ -13,7 +13,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- *Unified handler for continent clicks. Determines which continent was clicked and loads the corresponding facts screen.
+ *Unified handler for continent clicks.
+ * Determines which continent was clicked and loads the corresponding facts screen.
  * */
 
 public class FunFactsController {
