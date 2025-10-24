@@ -34,6 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Main controller for the practise quiz. Holds both UI and logic for
+ * TestModeQuiz
+ * */
+
 public class TestModeController extends BaseController {
 
     @FXML private VBox quizBox;

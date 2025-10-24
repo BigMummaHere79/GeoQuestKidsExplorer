@@ -8,6 +8,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
+/**
+ * Sets and handles Country images
+ * */
+
 public class CountryImageController {
 
     @FXML private Label countryNameLabel;

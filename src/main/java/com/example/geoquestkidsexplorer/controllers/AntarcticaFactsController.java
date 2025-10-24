@@ -18,6 +18,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Stores and initialises the funfacts for continents Antarctica
+ * */
+
 public class AntarcticaFactsController {
 
     @FXML

@@ -24,6 +24,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Main controller for the practise quiz. Holds both UI and logic for
+ * PractiseQuiz
+ * */
+
 public class PracticeQuizController extends BaseController {
 
     @FXML private Label questionNumberLabel;

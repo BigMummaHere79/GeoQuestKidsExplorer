@@ -23,6 +23,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Sets and retrieves the countries funfacts specific for each continent
+ * */
+
 public class CountriesFunFactsController {
 
     @FXML private FlowPane countryTilesContainer;

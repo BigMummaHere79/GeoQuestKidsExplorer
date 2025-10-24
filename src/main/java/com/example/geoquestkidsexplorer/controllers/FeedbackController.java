@@ -15,6 +15,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Displays Feedback UI and stores the logic/functionality of the feedback page
+ *
+ * */
+
 public class FeedbackController {
 
     @FXML
