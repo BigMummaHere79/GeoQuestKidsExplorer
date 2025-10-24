@@ -12,10 +12,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ *Unified handler for continent clicks. Determines which continent was clicked and loads the corresponding facts screen.
+ * */
+
 public class FunFactsController {
 
     /**
-     * Unified handler for continent clicks. Determines which continent was clicked and loads the corresponding facts screen.
      * @param event the MouseEvent triggered by clicking a continent tile
      * @throws IOException if loading the FXML for the target facts view fails
      */
