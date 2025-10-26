@@ -19,9 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -45,6 +43,8 @@ public class PracticeQuizController extends BaseController {
     @FXML private Label quizWelcomeLabel;
     @FXML private VBox option1Tile, option2Tile, option3Tile, option4Tile;
     @FXML private Button hintButton;
+    @FXML private javafx.scene.layout.VBox bgPane;
+    @FXML private javafx.scene.layout.HBox navBar;
 
     private boolean hintUsed = false;
     private String continentName;
@@ -88,6 +88,12 @@ public class PracticeQuizController extends BaseController {
     @Override
     protected void setupContinent(String continent) {
         this.continentName = continent;
+        Map<String, Node> nodes = new HashMap<>();
+        if (bgPane != null) nodes.put("bgPane", bgPane);
+        if (navBar != null) nodes.put("navBar", navBar);
+        if (backButton != null) nodes.put("backButton", backButton);
+        if (scoreLabel != null) nodes.put("scoreLabel", scoreLabel);
+        applyContinentColors(continentName, nodes);
         if (quizWelcomeLabel != null) {
             quizWelcomeLabel.setText("Flashcards for " + continentName + " Continent!");
         }
@@ -124,6 +130,7 @@ public class PracticeQuizController extends BaseController {
         if (backButton != null) {
             backButton.setText("⬅️ Back to " + continentName + " Game Mode");
         }
+        setupContinent(continent);
         loadQuizQuestions();
     }
 

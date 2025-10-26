@@ -239,57 +239,7 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         } catch (SQLException e) {
             System.err.println("fixUserLevel error: " + e.getMessage());
         }
-        /*try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    if (rs.getInt("level") == 0 && rs.wasNull()) {
-                        String updateSql = "UPDATE users SET level = 1 WHERE username = ?";
-                        try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
-                            updatePs.setString(1, username);
-                            int rows = updatePs.executeUpdate();
-                            System.out.println("fixUserLevel: Updated level to 1 for user " + username + ", rows affected: " + rows);
-                        }
-                    }
-                } else {
-                    System.err.println("fixUserLevel: No user found for username: " + username);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("fixUserLevel error: " + e.getMessage());
-        }*/
     }
-    /*@Override
-    public void fixUserLevel(String username) {
-        String sql = "SELECT level FROM users WHERE username = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username);
-            System.out.println("fixUserLevel: Checking level for username: " + username);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    int level = rs.getInt("level");
-                    if (rs.wasNull()) {
-                        System.out.println("fixUserLevel: User " + username + " has null level, updating to 1");
-                        String updateSql = "UPDATE users SET level = 1 WHERE username = ?";
-                        try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
-                            updatePs.setString(1, username);
-                            int rows = updatePs.executeUpdate();
-                            System.out.println("fixUserLevel: Updated level to 1 for user " + username + ", rows affected: " + rows);
-                        }
-                    } else {
-                        System.out.println("fixUserLevel: User " + username + " has level: " + level);
-                    }
-                } else {
-                    System.err.println("fixUserLevel: No user found for username: " + username);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("fixUserLevel error: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }*/
 
     /**
      * Saves a quiz result and updates user level if passed.
@@ -303,65 +253,56 @@ public class DatabaseUserService extends DatabaseService implements UserService 
         boolean isPassing = scorePercentage >= 80.0;
         String status = isPassing ? "Pass" : "Fail";
 
-        // Insert result
-        String resultSql = "INSERT INTO results (username, level, grades, status) VALUES (?, ?, ?, ?)";
+        String selectSql = "SELECT grades, status FROM results WHERE username = ? AND level = ?";
+        Double oldGrade = null;
+        String oldStatus = null;
+
         try (Connection conn = getConnection()) {
             conn.setAutoCommit(false);
-            try (PreparedStatement ps = conn.prepareStatement(resultSql)) {
-                ps.setString(1, username);
-                ps.setInt(2, level);
-                ps.setDouble(3, scorePercentage);
-                ps.setString(4, status);
-                ps.executeUpdate();
-            }
-            if (isPassing) {
-                String updateSql = "UPDATE users SET level = ? WHERE username = ?";
-                try (PreparedStatement ps = conn.prepareStatement(updateSql)) {
-                    ps.setInt(1, level + 1);
-                    ps.setString(2, username);
-                    ps.executeUpdate();
+
+            // Check existing
+            try (PreparedStatement selectPs = conn.prepareStatement(selectSql)) {
+                selectPs.setString(1, username);
+                selectPs.setInt(2, level);
+                try (ResultSet rs = selectPs.executeQuery()) {
+                    if (rs.next()) {
+                        oldGrade = rs.getDouble("grades");
+                        oldStatus = rs.getString("status");
+                    }
                 }
             }
+
+            // Decide if update needed
+            boolean shouldUpdate = oldGrade == null || scorePercentage > oldGrade;
+            boolean shouldIncrementLevel = isPassing && (oldStatus == null || !oldStatus.equals("Pass"));
+
+            if (shouldUpdate) {
+                String upsertSql = """
+                INSERT OR REPLACE INTO results (username, level, grades, status)
+                VALUES (?, ?, ?, ?)
+            """;
+                try (PreparedStatement upsertPs = conn.prepareStatement(upsertSql)) {
+                    upsertPs.setString(1, username);
+                    upsertPs.setInt(2, level);
+                    upsertPs.setDouble(3, scorePercentage);
+                    upsertPs.setString(4, status);
+                    upsertPs.executeUpdate();
+                }
+            }
+
+            if (shouldIncrementLevel) {
+                String updateLevelSql = "UPDATE users SET level = level + 1 WHERE username = ?";
+                try (PreparedStatement updatePs = conn.prepareStatement(updateLevelSql)) {
+                    updatePs.setString(1, username);
+                    updatePs.executeUpdate();
+                }
+            }
+
             conn.commit();
             return true;
         } catch (SQLException e) {
             System.err.println("saveQuizResultAndUpdateLevel error: " + e.getMessage());
             return false;
         }
-
-        /*try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(resultSql)) {
-            ps.setString(1, username);
-            ps.setInt(2, level);
-            ps.setDouble(3, scorePercentage);
-            ps.setString(4, status);
-            int rows = ps.executeUpdate();
-            System.out.println("saveQuizResultAndUpdateLevel: Inserted result for user " + username + ", level "
-                    + level + ", score " + scorePercentage + ", status " + status + ", rows affected: " + rows);
-        } catch (SQLException e) {
-            System.err.println("saveQuizResultAndUpdateLevel: Error inserting result for user " + username + ": " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-
-        // Update level if passing
-        if (isPassing) {
-            String updateSql = "UPDATE users SET level = ? WHERE username = ?";
-            try (Connection conn = getConnection();
-                 PreparedStatement ps = conn.prepareStatement(updateSql)) {
-                ps.setInt(1, level + 1);
-                ps.setString(2, username);
-                int rows = ps.executeUpdate();
-                System.out.println("saveQuizResultAndUpdateLevel: Updated level to " + (level + 1) + " for user "
-                        + username + ", rows affected: " + rows);
-                return rows > 0;
-            } catch (SQLException e) {
-                System.err.println("saveQuizResultAndUpdateLevel: Error updating level for user " + username + ": "
-                        + e.getMessage());
-                e.printStackTrace();
-                return false;
-            }
-        }
-        return true;*/
     }
 }

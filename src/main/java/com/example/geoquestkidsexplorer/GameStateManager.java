@@ -20,17 +20,6 @@ public class GameStateManager {
     private static GameStateManager instance;
     private final Set<String> unlockedContinents;
 
-    // Define the progression order of the continents
-    private static final List<String> CONTINENT_ORDER = Arrays.asList(
-            "Antarctica",
-            "Oceania",
-            "South America",
-            "North America",
-            "Europe",
-            "Asia",
-            "Africa"
-    );
-
     private GameStateManager() {
         this.unlockedContinents = new HashSet<>();
         // Load state from database
@@ -63,13 +52,9 @@ public class GameStateManager {
                         unlockedContinents.add("Antarctica");
                     } else {
                         System.out.println("loadState: User " + username + " found with level: " + level);
-                        for (int i = 1; i <= level; i++) {
-                            String continent = DatabaseManager.getInstance().getContinentByLevel(i);
-                            if (continent != null) {
-                                unlockedContinents.add(continent);
-                            } else {
-                                System.err.println("loadState: No continent found for level: " + i);
-                            }
+                        List<String> allContinents = DatabaseManager.getInstance().getAllContinentsInOrder();
+                        for (int i = 0; i < Math.min(level, allContinents.size()); i++) {
+                            unlockedContinents.add(allContinents.get(i));
                         }
                     }
                 } else {

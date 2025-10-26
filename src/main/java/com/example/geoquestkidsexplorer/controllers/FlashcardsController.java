@@ -12,11 +12,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for the flashcards UI.
@@ -32,6 +36,8 @@ public class FlashcardsController extends BaseController {
     @FXML private Button backButton;
     @FXML private Button flipCardButton;
     @FXML private Button nextCardButton;
+    @FXML private VBox bgPane;
+    @FXML private HBox navBar;
 
     private final FlashCardRepository repository;
     private FlashCardDeck deck;
@@ -51,6 +57,12 @@ public class FlashcardsController extends BaseController {
     @Override
     protected void setupContinent(String continentName) {
         this.continentName = continentName;
+        Map<String, Node> nodes = new HashMap<>();
+        if (bgPane != null) nodes.put("bgPane", bgPane);
+        if (navBar != null) nodes.put("navBar", navBar);
+        if (backButton != null) nodes.put("backButton", backButton);
+        // Add any flashcard-specific nodes
+        applyContinentColors(continentName, nodes);
     }
 
     public FlashcardsController() {
@@ -79,6 +91,7 @@ public class FlashcardsController extends BaseController {
         }
         List<FlashCard> cards = repository.loadByRegion(region);
         deck = new FlashCardDeck(cards);
+        setupContinent(region);
         render();
     }
 

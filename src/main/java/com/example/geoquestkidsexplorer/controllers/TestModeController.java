@@ -30,9 +30,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Main controller for the practise quiz. Holds both UI and logic for
@@ -54,6 +52,8 @@ public class TestModeController extends BaseController {
     @FXML private Button nextQuestionButton;
     @FXML private Button backButton;
     @FXML private Label timerLabel;
+    @FXML private javafx.scene.layout.VBox bgPane;
+    @FXML private javafx.scene.layout.HBox navBar;
 
     private Timeline timeline;
     private final IQuizQuestionDAO quizDao;
@@ -103,6 +103,13 @@ public class TestModeController extends BaseController {
     @Override
     protected void setupContinent(String continent) {
         this.continentName = continent;
+        Map<String, Node> nodes = new HashMap<>();
+        if (bgPane != null) nodes.put("bgPane", bgPane);
+        if (navBar != null) nodes.put("navBar", navBar);
+        if (backButton != null) nodes.put("backButton", backButton);
+        if (scoreLabel != null) nodes.put("scoreLabel", scoreLabel);
+        if (timerLabel != null) nodes.put("timerLabel", timerLabel);
+        applyContinentColors(continentName, nodes);
         if (quizWelcomeLabel != null) {
             quizWelcomeLabel.setText("Practice your knowledge with the " + continentName + " Continent!");
         }

@@ -73,4 +73,9 @@ public interface QuizService {
     static String normalize(String s) {
         return s == null ? "" : s.trim().toLowerCase();
     }
+
+    /**
+     * Will be used to make sure continents is being fetch from the database.
+     **/
+    List<String> getAllContinentsInOrder();
 }

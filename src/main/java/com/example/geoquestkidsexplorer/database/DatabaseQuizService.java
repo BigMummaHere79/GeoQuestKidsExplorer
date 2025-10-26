@@ -177,4 +177,19 @@ public class DatabaseQuizService extends DatabaseService implements QuizService 
         }
         return null;
     }
+
+    public List<String> getAllContinentsInOrder() {
+        List<String> continents = new ArrayList<>();
+        String sql = "SELECT continent FROM continents ORDER BY level ASC";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                continents.add(rs.getString("continent"));
+            }
+        } catch (SQLException e) {
+            System.err.println("getAllContinentsInOrder error: " + e.getMessage());
+        }
+        return continents;
+    }
 }

@@ -199,6 +199,14 @@ public class DatabaseManager {
     }
 
     /**
+     * Gets the continent from the database directly instead of hardcoding.
+     * @return Continent name.
+     */
+    public List<String> getAllContinentsInOrder() {
+        return quizService.getAllContinentsInOrder();
+    }
+
+    /**
      * Normalizes a string for consistent comparison.
      * @param s String to normalize.
      * @return Normalized string.

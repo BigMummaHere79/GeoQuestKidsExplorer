@@ -97,22 +97,6 @@ public class UserSession {
     }
 
     /**
-     * Gets the explorer name.
-     * @return The explorer name, or null if not set.
-     */
-    /*public static String getExplorerName() {
-        return explorerName;
-    }*/
-
-    /**
-     * Sets the explorer name.
-     * @param name The explorer name to set.
-     */
-    /*public static void setExplorerName(String name) {
-        explorerName = name;
-    }*/
-
-    /**
      * Clears all session data and notifies observers.
      */
     public void clear() {

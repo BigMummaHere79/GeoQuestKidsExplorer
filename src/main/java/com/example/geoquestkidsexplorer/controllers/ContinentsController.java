@@ -1,15 +1,11 @@
 package com.example.geoquestkidsexplorer.controllers;
 
-import com.example.geoquestkidsexplorer.GameStateManager;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import com.example.geoquestkidsexplorer.utils.NavigationHelper;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -43,23 +39,6 @@ public class ContinentsController extends BaseController {
 
     @FXML
     public void initialize() {
-        if (continentName != null && !continentName.isBlank()) {
-            if (continentLabel != null) {
-                continentLabel.setText(continentName);
-            }
-            if (gameModeWelcomeLabel != null) {
-                gameModeWelcomeLabel.setText("Game Mode Control for " + continentName + " Continent!");
-            }
-            if (backButton != null) {
-                backButton.setText("⬅️ Back to Continents");
-            }
-            applyContinentColors();
-        } else {
-            System.err.println("initialize: continentName is null or empty, setting default UI");
-            if (gameModeWelcomeLabel != null) {
-                gameModeWelcomeLabel.setText("Error: No continent selected.");
-            }
-        }
     }
 
     @Override
@@ -75,14 +54,32 @@ public class ContinentsController extends BaseController {
         this.continentName = continentName != null ? continentName : "";
         System.out.println("setupContinent: continentName=" + continentName);
         applyContinentColors();
-        initialize();
+        updateUI();
     }
 
     public void setContinentName(String continentName) {
         System.out.println("setContinentName called with: " + continentName);
         this.continentName = continentName != null ? continentName : "";
         applyContinentColors();
-        initialize();
+        updateUI();
+    }
+
+    private void updateUI() {
+        if (continentName != null && !continentName.isBlank()) {
+            if (continentLabel != null) {
+                continentLabel.setText(continentName);
+            }
+            if (gameModeWelcomeLabel != null) {
+                gameModeWelcomeLabel.setText("Game Mode Control for " + continentName + " Continent!");
+            }
+            if (backButton != null) {
+                backButton.setText("⬅️ Back to Continents");
+            }
+        } else {
+            if (gameModeWelcomeLabel != null) {
+                gameModeWelcomeLabel.setText("Error: No continent selected.");
+            }
+        }
     }
 
     private void applyContinentColors() {
@@ -94,30 +91,7 @@ public class ContinentsController extends BaseController {
         if (bgPane != null) nodes.put("bgPane", bgPane);
         if (navBar != null) nodes.put("navBar", navBar);
         if (backButton != null) nodes.put("backButton", backButton);
-        applyContinentColors(continentName, nodes);
-        switch (continentName) {
-            case "Oceania" -> {
-                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #F4BA9B; -bg3: #F5793A;");
-                if (navBar != null) navBar.setStyle("-fx-background-color: #F5793A;");
-                if (backButton != null) backButton.setStyle("-fx-background-color: #F4BA9B;");
-            }
-            case "South America" -> {
-                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #E488DA; -bg3: #A95AA1;");
-                if (navBar != null) navBar.setStyle("-fx-background-color: #A95AA1;");
-                if (backButton != null) backButton.setStyle("-fx-background-color: #E488DA;");
-            }
-            case "North America" -> {
-                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #FA76A7; -bg3: #D81B60;");
-                if (navBar != null) navBar.setStyle("-fx-background-color: #D81B60;");
-                if (backButton != null) backButton.setStyle("-fx-background-color: #FA76A7;");
-            }
-            case "Europe" -> {
-                if (bgPane != null) bgPane.setStyle("-fx-background-color: #f9f9f9; -bg2: #4B66FF; -bg3: #0F2080;");
-                if (navBar != null) navBar.setStyle("-fx-background-color: #0F2080;");
-                if (backButton != null) backButton.setStyle("-fx-background-color: #4B66FF;");
-            }
-            default -> System.err.println("applyContinentColors: Unknown continent " + continentName);
-        }
+        applyContinentColors(continentName, nodes);  // Calls super; remove the switch
     }
 
     @FXML
@@ -166,10 +140,10 @@ public class ContinentsController extends BaseController {
         System.out.println("openPracticeQuiz: Loading for continent=" + continent + ", username=" + username);
         NavigationHelper.loadSceneWithConfig((Node) event.getSource(), "/com/example/geoquestkidsexplorer/practicequiz.fxml",
                 (PracticeQuizController controller) -> {
-                    controller.setContinentName(continent);
+                    controller.setContinentName(continentName);
                     controller.setProfileData(username, avatar);
                     controller.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
-                    applyQuizStyles(controller, continent);
+                    controller.setupContinent(continent);
                 });
     }
 
@@ -184,7 +158,7 @@ public class ContinentsController extends BaseController {
                     controller.setRegion(continent);
                     controller.setProfileData(username, avatar);
                     controller.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
-                    applyQuizStyles(controller, continent);
+                    controller.setupContinent(continentName);
                 });
     }
 
@@ -196,47 +170,10 @@ public class ContinentsController extends BaseController {
         System.out.println("openTestQuiz: Loading for continent=" + continent + ", username=" + username);
         NavigationHelper.loadSceneWithConfig((Node) event.getSource(), "/com/example/geoquestkidsexplorer/testmode.fxml",
                 (TestModeController controller) -> {
-                    controller.setContinentName(continent);
+                    controller.setContinentName(continentName);
                     controller.setProfileData(username, avatar);
                     controller.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
-                    applyQuizStyles(controller, continent);
+                    controller.setupContinent(continent);
                 });
-    }
-
-    private void applyQuizStyles(BaseController controller, String continent) {
-        Parent root = controller.getStage().getScene().getRoot();
-        Node navBar = root.lookup("#navBar");
-        Node backBtn = root.lookup("#backButton");
-        Node score = root.lookup("#scoreLabel");
-        Node timer = root.lookup("#timerLabel");
-        if (navBar != null && backBtn != null) {
-            switch (continent) {
-                case "Oceania" -> {
-                    if (navBar != null) navBar.setStyle("-fx-background-color: #F5793A;");
-                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #F4BA9B;");
-                    if (score != null) score.setStyle("-fx-background-color: #F4BA9B;");
-                    if (timer != null) timer.setStyle("-fx-background-color: #F4BA9B;");
-                }
-                case "South America" -> {
-                    if (navBar != null) navBar.setStyle("-fx-background-color: #A95AA1;");
-                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #E488DA;");
-                    if (score != null) score.setStyle("-fx-background-color: #E488DA;");
-                    if (timer != null) timer.setStyle("-fx-background-color: #E488DA;");
-                }
-                case "North America" -> {
-                    if (navBar != null) navBar.setStyle("-fx-background-color: #D81B60;");
-                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #FA76A7;");
-                    if (score != null) score.setStyle("-fx-background-color: #FA76A7;");
-                    if (timer != null) timer.setStyle("-fx-background-color: #FA76A7;");
-                }
-                case "Europe" -> {
-                    if (navBar != null) navBar.setStyle("-fx-background-color: #0F2080;");
-                    if (backBtn != null) backBtn.setStyle("-fx-background-color: #4B66FF;");
-                    if (score != null) score.setStyle("-fx-background-color: #4B66FF;");
-                    if (timer != null) timer.setStyle("-fx-background-color: #4B66FF;");
-                }
-                default -> System.err.println("applyQuizStyles: Unknown continent " + continent);
-            }
-        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.geoquestkidsexplorer.controllers;
 
 import com.example.geoquestkidsexplorer.GameStateManager;
+import com.example.geoquestkidsexplorer.database.DatabaseManager;
 import com.example.geoquestkidsexplorer.models.UserSession;
 import com.example.geoquestkidsexplorer.utils.NavigationHelper;
 import javafx.fxml.FXML;
@@ -12,10 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Controller for the home page UI, managing continent selection and lock status.
@@ -129,8 +127,10 @@ public class HomePageController extends BaseController {
         Set<String> unlockedContinents = GameStateManager.getInstance().getUnlockedContinents();
         System.out.println("refreshContinentLocks: Unlocked continents = " + unlockedContinents);
 
+        // Fetch from DB
+        List<String> allContinents = DatabaseManager.getInstance().getAllContinentsInOrder();
         Map<String, Boolean> continents = new HashMap<>();
-        for (String continent : Arrays.asList("Antarctica", "Oceania", "South America", "North America", "Europe", "Asia", "Africa")) {
+        for (String continent : allContinents) {
             continents.put(continent, !unlockedContinents.contains(continent));
         }
         setContinentLocks(continents);
